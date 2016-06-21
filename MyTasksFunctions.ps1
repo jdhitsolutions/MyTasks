@@ -120,6 +120,80 @@ End {
 } #Set-MyTask
 
 Function Remove-MyTask {
+[cmdletbinding(SupportsShouldProcess,DefaultParameterSetName = "Name")]
+Param(
+[Parameter(
+Position = 0,
+Mandatory,
+HelpMessage = "Enter task name",
+ValueFromPipeline,
+ParameterSetName = "Name"
+)]
+[ValidateNotNullorEmpty()]
+[string]$Name,
+
+[Parameter(
+Position = 0,
+Mandatory,
+HelpMessage = "Enter task guid id",
+ValueFromPipelinebyPropertyName,
+ParameterSetName = "Guid"
+)]
+[ValidateNotNullorEmpty()]
+[Guid]$TaskID
+)
+
+
+Begin {
+    Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+    #display PSBoundparameters formatted nicely for Verbose output  
+    [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
+    Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+
+    #load tasks from XML
+    [xml]$In = Get-Content -Path $Path
+} #begin
+
+Process {
+     Write-Verbose "[PROCESS] Using parameter set: $($PSCmdlet.parameterSetname)"
+
+     if ($Name) {
+        Try {
+            $taskID = (Get-MyTask -Name $Name -ErrorAction Stop).TaskID
+        }
+        Catch {
+            Write-Warning "Failed to find a task with a name of $Name"
+            #abort and bail out
+            return
+        }
+        
+     }
+
+     #select node by TaskID (GUID)
+     $node = ($in | select-xml -XPath "//Object/Property[text()='$TaskID']").node.ParentNode
+
+     if ($node) {
+         #remove it
+         write-Verbose "[PROCESS] Removing: $($node.Property | Out-String)"
+
+         if ($PSCmdlet.ShouldProcess($TaskID)) {
+         $node.parentNode.RemoveChild($node) | Out-Null
+
+         $node.ParentNode.objects
+         #save file
+         Write-Verbose "[PROCESS] Updating $MyTaskPath"
+         $in.Save($mytaskPath)
+         } #should process
+     }
+     else {
+        Write-Warning "Failed to find a matching task with an id of $TaskID"
+        Return
+     }
+} #process
+
+End {
+    Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+} #end
 
 } #Remove-MyTask
 
