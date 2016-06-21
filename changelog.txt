@@ -1,0 +1,14 @@
+Changelog for MyTasks
+
+
+v0.0.2
+Import tasks from XML file
+Get tasks from XML file with options
+separated functions into their own file
+modified class so that OverDue and ID values are 
+calculated at runtime.
+Added changelog
+
+v0.0.1
+added core module files
+
