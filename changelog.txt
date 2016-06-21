@@ -1,5 +1,7 @@
 Changelog for MyTasks
 
+v0.0.3
+Added Show-MyTask function
 
 v0.0.2
 Import tasks from XML file

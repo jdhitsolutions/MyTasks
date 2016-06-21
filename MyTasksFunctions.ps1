@@ -99,7 +99,7 @@ Process {
     #remove Task object from PSBoundParameters
     $PSBoundParameters.Remove("Task") | Out-Null   
     $PSBoundParameters.keys | foreach {
-      Write-Verbose "[PROGRESS] Updating $_ = $($psboundParameters.item($_))"
+    Write-Verbose "[PROGRESS] Updating $_ = $($psboundParameters.item($_))"
 
       $task.$($_) = $psboundParameters.item($_)
     }
@@ -193,12 +193,31 @@ Write-Verbose "Ending: $($MyInvocation.Mycommand)"
 } #Get-MyTask
 
 Function Show-MyTask {
+
+#colorize output using Write-Host
+
 [cmdletbinding()]
 Param([switch]$All)
 
 #run Get-MyTask
+$tasks = Get-MyTask @PSBoundParameters
 
-#colorize output using Write-Host
+#convert tasks to a text table
+$table = ($tasks | Format-Table | Out-String).split("`n")
+
+Write-Host "`n"
+Write-Host $table[1] -ForegroundColor Cyan
+Write-Host $table[2] -ForegroundColor Cyan
+$table[3..$table.count] | foreach {
+    #select a different color for over due tasks
+    if ($_ -match "\bTrue\b") {
+        $c = "Red"
+    }
+    else {
+        $c = $host.ui.RawUI.ForegroundColor
+    }
+    Write-Host $_ -ForegroundColor $c
+} #foreach
 
 } #Show-MyTask
 
