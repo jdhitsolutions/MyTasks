@@ -2,7 +2,7 @@
 
 Function New-MyTask {
 
-[cmdletbinding()]
+[cmdletbinding(SupportsShouldProcess)]
 Param(
 [Parameter(
 Position = 0, 
@@ -34,7 +34,9 @@ ValueFromPipelineByPropertyName
 $task = New-Object -TypeName MyTask -ArgumentList $Name,$DueDate,$Description,$Category
 
 #convert to xml
-$newXML = $task | Select *,TaskCreated,TaskModified,TaskID,Completed -ExcludeProperty ID | ConvertTo-Xml
+$newXML = $task | 
+Select Name,Description,DueDate,Category,Progress,TaskCreated,TaskModified,TaskID,Completed  | 
+ConvertTo-Xml
 
 #add task to disk via XML file
 if (Test-Path -Path $mytaskPath) {
@@ -42,26 +44,39 @@ if (Test-Path -Path $mytaskPath) {
     #import xml file
     [xml]$in = Get-Content -Path $mytaskPath
 
-    #check if TaskID already exists in file and skip
-    $id = $task.TaskID
-    $result = $in | Select-XML -XPath "//Object/Property[text()='$id']"
-    if (-Not $result.node) {
-        #if not,import node
-        $imp = $in.ImportNode($newXML.objects.object,$true)
+    #continue of there are existing objects in the file
+    if ($in.objects) {
+        #check if TaskID already exists in file and skip
+        $id = $task.TaskID
+        $result = $in | Select-XML -XPath "//Object/Property[text()='$id']"
+        if (-Not $result.node) {
+            #if not,import node
+            $imp = $in.ImportNode($newXML.objects.object,$true)
 
-        #append node
-        $in.Objects.AppendChild($imp) | Out-Null
-        #update file
+            #append node
+            $in.Objects.AppendChild($imp) | Out-Null
+            #update file
 
-        $in.Save($mytaskPath)
+            if ($PSCmdlet.ShouldProcess($task.name)) {
+                $in.Save($mytaskPath)
+            }
+        }
+        else {
+            Write-Verbose "Skipping $id"
+        }
     }
     else {
-        Write-Verbose "Skipping $id"
+        #must be an empty XML file
+        if ($PSCmdlet.ShouldProcess($task.name)) {
+            $newxml.Save($mytaskPath)
+        }
     }
 }
 else {
     #If file doesn't exist create task and save to a file
-    $newxml.Save($mytaskPath)
+    if ($PSCmdlet.ShouldProcess($task.name)) {
+        $newxml.Save($mytaskPath)
+    }
 }
 
 If ($Passthru) {
@@ -363,16 +378,86 @@ $table[3..$table.count] | foreach {
 } #Show-MyTask
 
 Function Complete-MyTask {
-[cmdletbinding(SupportsShouldProcess)]
-Param()
+
+[cmdletbinding(SupportsShouldProcess,DefaultParameterSetName="Name")]
+Param (
+[Parameter(
+ParameterSetName = "Task",
+ValueFromPipeline)]
+[MyTask]$Task,
+
+[Parameter(
+Position = 0,
+Mandatory,
+HelpMessage = "Enter the name of a task",
+ParameterSetName = "Name"
+)]
+[ValidateNotNullorEmpty()]
+[string]$Name,
+
+[switch]$Passthru
+)
+
 
 Begin {
     Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+    #display PSBoundparameters formatted nicely for Verbose output  
+    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    Write-Verbose "[BEGIN  ] PSBoundParameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+
 } #begin
 
 Process {
+    #display PSBoundparameters formatted nicely for Verbose output  
+    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    Write-Verbose "[PROCESS] PSBoundParameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
+    if ($Name) {
+        #get the task
+        Try {
+            $Task = Get-MyTask -Name $Name -ErrorAction Stop
+        }
+        Catch {
+            Write-Error $_
+            #bail out
+            Return
+        }
+    }
 
+    If ($Task) {
+        #invoke CompleteTask() method
+        $task.CompleteTask()
+        Write-Verbose "[PROCESS] $($task | Select *,Completed,TaskModified,TaskID | Out-String)"
+        
+        #find matching XML node and replace it
+
+        #convert current task to XML
+        $new = ($task | Select Name,Descriptiong,DueDate,Category,Progress,TaskID,TaskCreated,TaskModified,Completed | ConvertTo-Xml).Objects.Object
+
+        #load tasks from XML
+        [xml]$In = Get-Content -Path $MyTaskPath
+
+        #select node by TaskID (GUID)
+        $node = ($in | select-xml -XPath "//Object/Property[text()='$($task.TaskID)']").node.ParentNode
+
+        #import the new node
+        $imp = $in.ImportNode($new,$true)
+
+        #replace node
+        $node.ParentNode.ReplaceChild($imp,$node) | Out-Null
+
+        #save
+        If ($PSCmdlet.ShouldProcess($task.name)) {
+            $in.Save($MyTaskPath)
+
+            if ($Passthru) {
+                Get-MyTask -Name $task.name
+            }
+        }
+    }
+    else {
+        Write-Warning "Failed to find a matching task."
+    }
 } #process
 
 
