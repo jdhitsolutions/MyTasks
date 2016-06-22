@@ -30,58 +30,83 @@ ValueFromPipelineByPropertyName
 [switch]$Passthru
 )
 
-#create the new task
-$task = New-Object -TypeName MyTask -ArgumentList $Name,$DueDate,$Description,$Category
+Begin {
+    Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"
+    #display PSBoundparameters formatted nicely for Verbose output  
+    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+}
 
-#convert to xml
-$newXML = $task | 
-Select Name,Description,DueDate,Category,Progress,TaskCreated,TaskModified,TaskID,Completed  | 
-ConvertTo-Xml
+Process {
+    #display PSBoundparameters formatted nicely for Verbose output  
+    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    Write-Verbose "[PROCESS] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+   
+    Write-Verbose "[PROCESS] Using Parameter set: $($pscmdlet.parameterSetName)"
 
-#add task to disk via XML file
-if (Test-Path -Path $mytaskPath) {
+    #create the new task
+    Write-Verbose "[PROCESS] Creating new task $Name"
 
-    #import xml file
-    [xml]$in = Get-Content -Path $mytaskPath
+    $task = New-Object -TypeName MyTask -ArgumentList $Name,$DueDate,$Description,$Category
 
-    #continue of there are existing objects in the file
-    if ($in.objects) {
-        #check if TaskID already exists in file and skip
-        $id = $task.TaskID
-        $result = $in | Select-XML -XPath "//Object/Property[text()='$id']"
-        if (-Not $result.node) {
-            #if not,import node
-            $imp = $in.ImportNode($newXML.objects.object,$true)
+    #convert to xml
+    Write-Verbose "[PROCESS] Converting to XML"
+    $newXML = $task | 
+    Select Name,Description,DueDate,Category,Progress,TaskCreated,TaskModified,TaskID,Completed  | 
+    ConvertTo-Xml
 
-            #append node
-            $in.Objects.AppendChild($imp) | Out-Null
-            #update file
+    Write-Verbose "[PROCESS] Saving task"
+    #add task to disk via XML file
+    if (Test-Path -Path $mytaskPath) {
 
-            if ($PSCmdlet.ShouldProcess($task.name)) {
-                $in.Save($mytaskPath)
+        #import xml file
+        [xml]$in = Get-Content -Path $mytaskPath
+
+        #continue of there are existing objects in the file
+        if ($in.objects) {
+            #check if TaskID already exists in file and skip
+            $id = $task.TaskID
+            $result = $in | Select-XML -XPath "//Object/Property[text()='$id']"
+            if (-Not $result.node) {
+                #if not,import node
+                $imp = $in.ImportNode($newXML.objects.object,$true)
+
+                #append node
+                $in.Objects.AppendChild($imp) | Out-Null
+                #update file
+
+                if ($PSCmdlet.ShouldProcess($task.name)) {
+                    $in.Save($mytaskPath)
+                }
+            }
+            else {
+                Write-Verbose "Skipping $id"
             }
         }
         else {
-            Write-Verbose "Skipping $id"
+            #must be an empty XML file
+            if ($PSCmdlet.ShouldProcess($task.name)) {
+                $newxml.Save($mytaskPath)
+            }
         }
     }
     else {
-        #must be an empty XML file
+        #If file doesn't exist create task and save to a file
         if ($PSCmdlet.ShouldProcess($task.name)) {
             $newxml.Save($mytaskPath)
         }
     }
-}
-else {
-    #If file doesn't exist create task and save to a file
-    if ($PSCmdlet.ShouldProcess($task.name)) {
-        $newxml.Save($mytaskPath)
-    }
-}
 
-If ($Passthru) {
-    $task
-}
+    If ($Passthru) {
+        Write-Verbose "[PROCESS] Passing object to the pipeline."
+        $task
+    }
+
+} #Process
+
+End {
+    Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+} #end
 
 } #New-MyTask
 
@@ -136,6 +161,7 @@ Process {
     [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
     Write-Verbose "[PROCESS] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
+    Write-Verbose "[PROCESS] Processing XML"
     Try {
         [xml]$In = Get-Content -Path $MyTaskPath -ErrorAction Stop
     }
@@ -183,15 +209,16 @@ Process {
    
      If ($PSCmdlet.ShouldProcess($TaskName)) {
          #update source
+         Write-Verbose "[PROCESS] Saving task file"
          $in.Save($MyTaskPath)
      
         #pass object to the pipeline
         if ($Passthru) {
-         Get-MyTask -Name $taskName
+            Write-Verbose "[PROCESS] Passing object to the pipeline"
+            Get-MyTask -Name $taskName
         }
     } #should process
 } #process
-
 
 End {
     Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
@@ -237,6 +264,7 @@ Process {
      Write-Verbose "[PROCESS] Using parameter set: $($PSCmdlet.parameterSetname)"
 
      if ($Name) {
+        Write-Verbose "[PROCESS] Retrieving task: $Name"
         Try {
             $taskID = (Get-MyTask -Name $Name -ErrorAction Stop).TaskID
         }
@@ -244,11 +272,11 @@ Process {
             Write-Warning "Failed to find a task with a name of $Name"
             #abort and bail out
             return
-        }
-        
-     }
+        }        
+     } #if $name
 
      #select node by TaskID (GUID)
+     Write-Verbose "[PROCESS] Identifying task id: $TaskID"
      $node = ($in | select-xml -XPath "//Object/Property[text()='$TaskID']").node.ParentNode
 
      if ($node) {
@@ -290,7 +318,9 @@ ParameterSetName="Name"
 [Parameter(ParameterSetName="All")]
 [switch]$All,
 [Parameter(ParameterSetName="Completed")]
-[switch]$Completed
+[switch]$Completed,
+[Parameter(ParameterSetName="Category")]
+[TaskCategory]$Category
 
 )
 
@@ -342,6 +372,10 @@ Switch ($PSCmdlet.ParameterSetName) {
         $tasks.Where({$_.Completed})
 }
 
+"Category" {
+        Write-Verbose "Retrieving tasks for category $Category"
+        $tasks.Where({$_.Category -eq $Category})
+}
 } #switch
 
 
@@ -355,25 +389,41 @@ Function Show-MyTask {
 [cmdletbinding()]
 Param([switch]$All)
 
+Write-Verbose "Starting: $($MyInvocation.Mycommand)"
+
 #run Get-MyTask
 $tasks = Get-MyTask @PSBoundParameters
 
 #convert tasks to a text table
 $table = ($tasks | Format-Table | Out-String).split("`n")
 
+#define a regular expression pattern to match the due date
+[regex]$rx = "\d{1,2}\/\d{1,2}\/\d{4}.*M"
+
 Write-Host "`n"
 Write-Host $table[1] -ForegroundColor Cyan
 Write-Host $table[2] -ForegroundColor Cyan
 $table[3..$table.count] | foreach {
+
+    #test if DueDate is within 24 hours
+    if ($rx.IsMatch($_)) {
+        $hours = (($rx.Match($_).Value -as [datetime]) - (Get-Date)).totalhours
+    }
     #select a different color for over due tasks
     if ($_ -match "\bTrue\b") {
         $c = "Red"
+    }
+    elseif ($hours -le 24 ) {
+        $c = "Yellow"
+        $hours = 999
     }
     else {
         $c = $host.ui.RawUI.ForegroundColor
     }
     Write-Host $_ -ForegroundColor $c
 } #foreach
+
+Write-Verbose "Ending: $($MyInvocation.Mycommand)"
 
 } #Show-MyTask
 
@@ -415,6 +465,7 @@ Process {
     if ($Name) {
         #get the task
         Try {
+            Write-Verbose "[PROCESS] Retrieving task: $Name"
             $Task = Get-MyTask -Name $Name -ErrorAction Stop
         }
         Catch {
@@ -425,12 +476,13 @@ Process {
     }
 
     If ($Task) {
+        Write-Verbose "[PROCESS] Marking task as completed"
         #invoke CompleteTask() method
         $task.CompleteTask()
         Write-Verbose "[PROCESS] $($task | Select *,Completed,TaskModified,TaskID | Out-String)"
         
         #find matching XML node and replace it
-
+        Write-Verbose "[PROCESS] Updating task file"
         #convert current task to XML
         $new = ($task | Select Name,Descriptiong,DueDate,Category,Progress,TaskID,TaskCreated,TaskModified,Completed | ConvertTo-Xml).Objects.Object
 
@@ -451,6 +503,7 @@ Process {
             $in.Save($MyTaskPath)
 
             if ($Passthru) {
+                Write-Verbose "[PROCESS] Passing task back to the pipeline"
                 Get-MyTask -Name $task.name
             }
         }
@@ -472,7 +525,6 @@ Function _ImportTasks {
 [cmdletbinding()]
 Param([string]$Path = $myTaskpath)
 
-
 [xml]$In = Get-Content -Path $Path
 
 foreach ($obj in $in.Objects.object) {
@@ -480,8 +532,6 @@ foreach ($obj in $in.Objects.object) {
     $propHash.Add($_.name,$_.'#text')
   } 
   
-  #write-host ($propHash | out-string) -ForegroundColor Cyan
-
   Try {
       $tmp = New-Object -TypeName MyTask -ArgumentList $propHash.Name, $propHash.DueDate, $propHash.Description, $propHash.Category
       $tmp.TaskID = $prophash.TaskID

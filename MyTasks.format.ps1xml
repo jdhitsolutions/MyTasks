@@ -20,17 +20,17 @@ Any changes made to this file may be overwritten in future module updates
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Name</Label>
-                        <Width>15</Width>
+                        <Width>20</Width>
                         <Alignment>Left</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Description</Label>
-                        <Width>18</Width>
+                        <Width>22</Width>
                         <Alignment>Left</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>DueDate</Label>
-                        <Width>20</Width>
+                        <Width>19</Width>
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -64,6 +64,7 @@ Any changes made to this file may be overwritten in future module updates
                             </TableColumnItem>
                               <TableColumnItem>
                                 <PropertyName>DueDate</PropertyName>
+                                <FormatString>{0:d} {0:hh:mm tt}</FormatString>
                             </TableColumnItem>
                                 <TableColumnItem>
                                 <PropertyName>OverDue</PropertyName>
@@ -80,6 +81,67 @@ Any changes made to this file may be overwritten in future module updates
             </TableControl>
         </View>    
         <View>
+          <Name>Category</Name>            
+            <ViewSelectedBy>
+                <TypeName>MyTask</TypeName>
+            </ViewSelectedBy>
+            <GroupBy>
+                <PropertyName>Category</PropertyName>
+            </GroupBy>
+               <TableControl>
+                <TableHeaders>                    
+                    <TableColumnHeader>
+                        <Label>Name</Label>
+                        <Width>25</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Description</Label>
+                        <Width>22</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>DueDate</Label>
+                        <Width>19</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>OverDue</Label>
+                        <Width>7</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Progress</Label>
+                        <Width>8</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <Wrap/>
+                        <TableColumnItems>                          
+                            <TableColumnItem>
+                                <PropertyName>Name</PropertyName>
+                            </TableColumnItem>
+                              <TableColumnItem>
+                                <PropertyName>Description</PropertyName>
+                            </TableColumnItem>
+                              <TableColumnItem>
+                                <PropertyName>DueDate</PropertyName>
+                                <FormatString>{0:d} {0:hh:mm tt}</FormatString>
+                            </TableColumnItem>
+                                <TableColumnItem>
+                                <PropertyName>OverDue</PropertyName>                           
+                            </TableColumnItem>
+                             <TableColumnItem>
+                                <PropertyName>Progress</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+        <View>    
             <Name>default</Name>
             <ViewSelectedBy>
                 <TypeName>MyTask</TypeName>

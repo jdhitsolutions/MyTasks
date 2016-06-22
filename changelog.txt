@@ -1,8 +1,16 @@
 Changelog for MyTasks
 
+v0.0.8
+updated format.ps1xml file with new views
+updated format.ps1xml to format DueDate
+added verbose output to commands
+Modified Get-MyTask to support filtering by Category
+Modified Show-MyTask to display in yellow if due date is 24 hours or less
+
 v0.0.7
 added format.ps1xml
 fixed a bug in Set-MyTask when there was an empty value
+updated module files
 
 v0.0.6
 added Complete-MyTask function
