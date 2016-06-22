@@ -1,5 +1,11 @@
 Changelog for MyTasks
 
+v0.0.5
+Added Set-MyTask function
+Modified Get-Mytask to take name as a positional parameter
+added command aliases
+Updated module files
+
 v0.0.4
 Added Remove-MyTask function
 

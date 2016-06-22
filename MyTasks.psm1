@@ -6,10 +6,9 @@ $myTaskCategory = Join-Path -Path $home\Documents\WindowsPowerShell -ChildPath m
 
 $mytaskPath = Join-Path -Path "$home\Documents\" -ChildPath myTasks.xml
 
-#define a global variable to track task id
-$myTaskID = 0 
+#endregion
 
-$myTasks = @()
+#region class definition
 
 if (Test-Path -Path $myTaskCategory) {
     #dot source user list
@@ -31,8 +30,7 @@ Class MyTask {
 A class to define a task or to-do item
 #>
 
-#region Properties
-
+#Properties
 # ID and OverDue values are calcuated at run time.
 
 [int]$ID
@@ -47,10 +45,7 @@ hidden[datetime]$TaskCreated = (Get-Date)
 hidden[datetime]$TaskModified
 hidden[guid]$TaskID = (New-Guid)
 
-
-#endregion
-
-#region Methods
+#Methods
 
 #set task as completed
 
@@ -61,18 +56,20 @@ hidden[guid]$TaskID = (New-Guid)
     $this.TaskModified = Get-Date
 }
 
+#check if task is overdue and update
 hidden [void]Refresh() {
   
   if ((Get-Date) -gt $this.DueDate) {
     $this.Overdue = $True 
   } 
+  else {
+    $this.Overdue = $False
+  }
 
 } #refresh
 
 
-#endRegion
-
-#region constructor
+#Constructors
 MyTask([string]$Name) {
     $this.Name = $Name
     $this.DueDate = (Get-Date).AddDays(7)
@@ -86,21 +83,22 @@ MyTask([string]$Name,[datetime]$DueDate,[string]$Description,[TaskCategory]$Cate
     $this.Description = $Description
     $this.Category = $Category
     $this.TaskModified = $this.TaskCreated
-
     $this.Refresh()
 }
 
-#endregion
-
 } #end class definition
+
+#endregion
 
 #dot source functions
 . $psscriptroot\myTasksFunctions.ps1
 
-#if existing task XML file is found, import it and create MyTask objects
+#define some aliases
+Set-Alias -Name gmt -Value Get-MyTask
+Set-Alias -Name smt -Value Set-MyTask
+Set-Alias -Name shmt -Value Show-MyTask
+Set-Alias -Name rmt -Value Remove-MyTask
+Set-Alias -Name cmt -Value Complete-MyTask
+Set-Alias -Name nmt -Value New-MyTask
 
-#saving imported objects to variable
-
-#otherwise don't do anything
-
-Export-ModuleMember -Variable myTaskCategory,myTaskPath,MyTaskID,myTasks -Function "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask","Show-MyTask"
+Export-ModuleMember -Variable myTaskCategory,myTaskPath,MyTaskID,myTasks -Function "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask","Show-MyTask","Complete-MyTask" -Alias gmt,rmt,shmt,smt,cmt,nmt

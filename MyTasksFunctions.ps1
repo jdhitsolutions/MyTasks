@@ -72,16 +72,28 @@ If ($Passthru) {
 
 Function Set-MyTask {
 
-[cmdletbinding(SupportsShouldProcess)]
+[cmdletbinding(SupportsShouldProcess,DefaultParameterSetName="Name")]
 Param (
-[Parameter(ValueFromPipeline)]
+[Parameter(
+ParameterSetName = "Task",
+ValueFromPipeline)]
 [MyTask]$Task,
+
+[Parameter(
+Position = 0,
+Mandatory,
+HelpMessage = "Enter the name of a task",
+ParameterSetName = "Name"
+)]
+[ValidateNotNullorEmpty()]
 [string]$Name,
+[string]$NewName,
 [string]$Description,
 [datetime]$DueDate,
 [ValidateRange(0,100)]
 [int]$Progress,
-[TaskCategory]$Category
+[TaskCategory]$Category,
+[switch]$Passthru
 
 )
 
@@ -89,28 +101,80 @@ Begin {
     Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
     #display PSBoundparameters formatted nicely for Verbose output  
     [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
-    Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | out-string) `n" 
+    Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
-    $PSBoundParameters.Remove("Verbose") | Out-Null
+    Write-Verbose "[BEGIN  ] Cleaning PSBoundparameters"
+    $PSBoundParameters.Remove("Verbose")  | Out-Null
+    $PSBoundParameters.Remove("WhatIf")   | Out-Null
+    $PSBoundParameters.Remove("Confirm")  | Out-Null
+    $PSBoundParameters.Remove("Passthru") | Out-Null
+    
+
  } #begin
 
 Process {
-    Write-Verbose "[PROGRESS] Updating task $($task.Name)"
-    #remove Task object from PSBoundParameters
-    $PSBoundParameters.Remove("Task") | Out-Null   
-    $PSBoundParameters.keys | foreach {
-    Write-Verbose "[PROGRESS] Updating $_ = $($psboundParameters.item($_))"
+    Write-Verbose "[PROCESS] Using parameter set: $($PSCmdlet.ParameterSetName)"
 
-      $task.$($_) = $psboundParameters.item($_)
+    #remove this as a bound parameter
+    $PSBoundParameters.Remove("Task")     | Out-Null
+
+    [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
+    Write-Verbose "[PROCESS] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+
+    Try {
+        [xml]$In = Get-Content -Path $MyTaskPath -ErrorAction Stop
     }
-    #update object
-    $task.Refresh()
+    Catch {
+        Write-Error "There was a problem loading task data from $myTaskPath."
+        #abort and bail out
+        return
+    }
 
-    #update source
+    #if using a name get the task from the XML file
+    if ($Name) {
+        $node = ($in | Select-xml -XPath "//Object/Property[@Name='Name' and contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'$($name.toLower())')]").Node.ParentNode
+    }
+    else {
+        $node = ($in | Select-xml -XPath "//Object/Property[@Name='TaskID' and text()='$($task.taskid)']").Node.ParentNode
+    }
 
-    #pass object to the pipeline
-    $task
+    if (-Not $Node) {
+        Write-Warning "Failed to find task: $Name"
+        #abort and bail out
+        return
+    } 
+    
+    $taskName = $node.SelectNodes("Property[@Name='Name']").'#text'
+    Write-Verbose "[PROCESS] Updating task $taskName"
+    Write-Verbose "[PROCESS] $($node.property | Out-String)"
 
+    #go through all PSBoundParameters other than Name or NewName
+
+    #$node.SelectSingleNode("Property[@Name='Category']").'#text' = "Work"
+
+    $PSBoundParameters.keys | where {$_ -notMatch 'name'} | foreach {
+     #update the task property
+     Write-Verbose "[PROCESS] Updating $_ to $($PSBoundParameters.item($_))"
+     $node.SelectSingleNode("Property[@Name='$_']").'#text' = $PSBoundParameters.item($_) -as [string]
+     }   
+       
+     If ($NewName) {
+        Write-Verbose "[PROCESS] Updating to new name: $NewName"
+       $node.SelectSingleNode("Property[@Name='Name']").'#text' = $NewName
+     }
+     
+     #update TaskModified
+     $node.SelectSingleNode("Property[@Name='TaskModified']").'#text' = (Get-Date).ToString()
+   
+     If ($PSCmdlet.ShouldProcess($TaskName)) {
+         #update source
+         $in.Save($MyTaskPath)
+     
+        #pass object to the pipeline
+        if ($Passthru) {
+         Get-MyTask -Name $taskName
+        }
+    } #should process
 } #process
 
 
@@ -151,7 +215,7 @@ Begin {
     Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
     #load tasks from XML
-    [xml]$In = Get-Content -Path $Path
+    [xml]$In = Get-Content -Path $MyTaskPath
 } #begin
 
 Process {
@@ -201,7 +265,10 @@ Function Get-MyTask {
 [cmdletbinding(DefaultParameterSetName="Name")]
 Param(
 
-[Parameter(ParameterSetName="Name")]
+[Parameter(
+Position = 0,
+ParameterSetName="Name"
+)]
 [string]$Name,
 [Parameter(ParameterSetName="ID")]
 [int]$ID,
@@ -295,6 +362,25 @@ $table[3..$table.count] | foreach {
 
 } #Show-MyTask
 
+Function Complete-MyTask {
+[cmdletbinding(SupportsShouldProcess)]
+Param()
+
+Begin {
+    Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+} #begin
+
+Process {
+
+
+} #process
+
+
+End {
+    Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+} #end
+
+}
 
 #this is a private function to the module
 Function _ImportTasks {
