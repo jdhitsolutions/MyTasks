@@ -1,5 +1,9 @@
 Changelog for MyTasks
 
+v0.0.7
+added format.ps1xml
+fixed a bug in Set-MyTask when there was an empty value
+
 v0.0.6
 added Complete-MyTask function
 fixed a bug in New-MyTask when XML file exists but has no objects

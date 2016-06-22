@@ -131,7 +131,7 @@ Process {
     Write-Verbose "[PROCESS] Using parameter set: $($PSCmdlet.ParameterSetName)"
 
     #remove this as a bound parameter
-    $PSBoundParameters.Remove("Task")     | Out-Null
+    $PSBoundParameters.Remove("Task") | Out-Null
 
     [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
     Write-Verbose "[PROCESS] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
@@ -165,12 +165,12 @@ Process {
 
     #go through all PSBoundParameters other than Name or NewName
 
-    #$node.SelectSingleNode("Property[@Name='Category']").'#text' = "Work"
-
     $PSBoundParameters.keys | where {$_ -notMatch 'name'} | foreach {
      #update the task property
      Write-Verbose "[PROCESS] Updating $_ to $($PSBoundParameters.item($_))"
-     $node.SelectSingleNode("Property[@Name='$_']").'#text' = $PSBoundParameters.item($_) -as [string]
+     $setting = $node.SelectSingleNode("Property[@Name='$_']")
+     $setting.InnerText = $PSBoundParameters.item($_) -as [string]
+     
      }   
        
      If ($NewName) {
@@ -465,7 +465,7 @@ End {
     Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
 } #end
 
-}
+} #Complete-MyTask
 
 #this is a private function to the module
 Function _ImportTasks {
