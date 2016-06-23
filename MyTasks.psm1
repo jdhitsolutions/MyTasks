@@ -50,7 +50,9 @@ hidden[guid]$TaskID = (New-Guid)
 #check if task is overdue and update
 hidden [void]Refresh() {
   
-  if ((Get-Date) -gt $this.DueDate) {
+  #only mark as overdue if not completed and today is
+  #greater than the due date
+  if (((Get-Date) -gt $this.DueDate) -AND (-Not $this.completed)) {
     $this.Overdue = $True 
   } 
   else {

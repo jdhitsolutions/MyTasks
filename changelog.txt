@@ -1,5 +1,12 @@
 Changelog for MyTasks
 
+v0.0.10
+Modified Get-MyTask to support filtering by number of days due
+Modified Refresh() method to not mark a task as overdue if it
+is completed.
+Modified Show-MyTask to not flag Completed tasks.
+Modified Get-MyTask to automatically sort on DueDate
+
 v0.0.9
 Added comment based help
 Changed TaskCategory to a string and used dynamic parameters

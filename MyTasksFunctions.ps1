@@ -380,7 +380,9 @@ ParameterSetName="Name"
 [Parameter(ParameterSetName="All")]
 [switch]$All,
 [Parameter(ParameterSetName="Completed")]
-[switch]$Completed
+[switch]$Completed,
+[Parameter(ParameterSetName="Days")]
+[int]$DaysDue
 )
 
 DynamicParam {
@@ -420,18 +422,18 @@ DynamicParam {
 
 } 
 Begin {
-Write-Verbose "Starting: $($MyInvocation.Mycommand)"
-$Category = $PsBoundParameters[$ParameterName]
-Write-Verbose "Using parameter set $($PSCmdlet.ParameterSetName)"
-#display PSBoundparameters formatted nicely for Verbose output  
-[string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
-Write-Verbose "PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+    Write-Verbose "Starting: $($MyInvocation.Mycommand)"
+    $Category = $PsBoundParameters[$ParameterName]
+    Write-Verbose "Using parameter set $($PSCmdlet.ParameterSetName)"
+    #display PSBoundparameters formatted nicely for Verbose output  
+    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    Write-Verbose "PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
-#import from the XML file
-Write-Verbose "Importing tasks from $mytaskPath"
-$tasks = _ImportTasks | Sort TaskCreated
+    #import from the XML file
+    Write-Verbose "Importing tasks from $mytaskPath"
+    $tasks = _ImportTasks | Sort DueDate
 
-Write-Verbose "Imported $($tasks.count) tasks"
+    Write-Verbose "Imported $($tasks.count) tasks"
 }
 
 Process {
@@ -476,6 +478,11 @@ Switch ($PSCmdlet.ParameterSetName) {
         $tasks.Where({$_.Category -eq $Category})
 } #category
 
+"Days" {
+        Write-Verbose "Retrieving tasks due in $DaysDue days or before"
+        $tasks.Where({$_.DueDate -le (Get-Date).AddDays($DaysDue)})
+
+}
 } #switch
 } #process
 
@@ -557,11 +564,19 @@ $table[3..$table.count] | foreach {
     if ($rx.IsMatch($_)) {
         $hours = (($rx.Match($_).Value -as [datetime]) - (Get-Date)).totalhours
     }
+
+    #test if task is complete
+    if ($_ -match '\b100\b$') {
+        $complete = $True
+    }
+    else {
+        $complete = $False
+    }
     #select a different color for over due tasks
     if ($_ -match "\bTrue\b") {
         $c = "Red"
     }
-    elseif ($hours -le 24 ) {
+    elseif ($hours -le 24 -AND (-Not $complete)) {
         $c = "Yellow"
         $hours = 999
     }
@@ -596,7 +611,6 @@ ParameterSetName = "Name"
 
 [switch]$Passthru
 )
-
 
 Begin {
     Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
