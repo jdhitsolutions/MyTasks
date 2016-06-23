@@ -1,5 +1,12 @@
 Changelog for MyTasks
 
+v0.0.9
+Added comment based help
+Changed TaskCategory to a string and used dynamic parameters
+in functions.
+Modified Show-MyTask to support -Category
+Adjusted settings in format.ps1xml file
+
 v0.0.8
 updated format.ps1xml file with new views
 updated format.ps1xml to format DueDate

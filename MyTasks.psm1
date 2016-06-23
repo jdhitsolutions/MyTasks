@@ -2,27 +2,18 @@
 
 #region variables
 
-$myTaskCategory = Join-Path -Path $home\Documents\WindowsPowerShell -ChildPath myTaskCatgory.ps1
+#path to user defined categories
+$myTaskCategory = Join-Path -Path $home\Documents\ -ChildPath myTaskCategory.txt
 
+#path to stored tasks
 $mytaskPath = Join-Path -Path "$home\Documents\" -ChildPath myTasks.xml
+
+#default task categories
+$myTaskDefaultCategories = "Work","Personal","Other","Customer"
 
 #endregion
 
 #region class definition
-
-if (Test-Path -Path $myTaskCategory) {
-    #dot source user list
-    . $userTaskCategory
-}
-else {
-    #define default categories
-    enum TaskCategory {
-    Work
-    Personal
-    Customer
-    Other
-  }
-}
 
 Class MyTask {
 
@@ -38,7 +29,7 @@ A class to define a task or to-do item
 [string]$Description
 [datetime]$DueDate
 [bool]$Overdue
-[TaskCategory]$Category
+[String]$Category
 [ValidateRange(0,100)][int]$Progress
 hidden[bool]$Completed
 hidden[datetime]$TaskCreated = (Get-Date)
@@ -77,7 +68,7 @@ MyTask([string]$Name) {
     $this.Refresh()
 }
 
-MyTask([string]$Name,[datetime]$DueDate,[string]$Description,[TaskCategory]$Category) {
+MyTask([string]$Name,[datetime]$DueDate,[string]$Description,[string]$Category) {
     $this.Name = $Name
     $this.DueDate = $DueDate
     $this.Description = $Description
@@ -101,4 +92,11 @@ Set-Alias -Name rmt -Value Remove-MyTask
 Set-Alias -Name cmt -Value Complete-MyTask
 Set-Alias -Name nmt -Value New-MyTask
 
-Export-ModuleMember -Variable myTaskCategory,myTaskPath,MyTaskID,myTasks -Function "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask","Show-MyTask","Complete-MyTask" -Alias gmt,rmt,shmt,smt,cmt,nmt
+#define a hashtable of parameters to splat to Export-ModuleMember
+$exportParams = @{
+Variable = "myTaskPath","myTaskDefaultCategories"
+Function = "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask","Show-MyTask","Complete-MyTask"
+Alias = "gmt","rmt","shmt","smt","cmt","nmt"
+}
+
+Export-ModuleMember @exportParams

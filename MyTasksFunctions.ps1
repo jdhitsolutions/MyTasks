@@ -12,14 +12,6 @@ ValueFromPipelineByPropertyName
 )]
 [string]$Name,
 
-[Parameter(
-Mandatory,
-HelpMessage = "Select a task category",
-ValueFromPipelineByPropertyName
-)]
-[ValidateNotNullorEmpty()]
-[TaskCategory]$Category,
-
 [Parameter(ValueFromPipelineByPropertyName)]
 [ValidateNotNullorEmpty()]
 [dateTime]$DueDate = (Get-Date).AddDays(7),
@@ -30,7 +22,44 @@ ValueFromPipelineByPropertyName
 [switch]$Passthru
 )
 
-Begin {
+DynamicParam {
+    # Set the dynamic parameters' name
+    $ParameterName = 'Category'           
+    # Create the dictionary 
+    $RuntimeParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+
+    # Create the collection of attributes
+    $AttributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
+            
+    # Create and set the parameters' attributes
+    $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
+    $ParameterAttribute.Mandatory = $true
+    $ParameterAttribute.ValueFromPipelineByPropertyName = $True
+    
+    # Add the attributes to the attributes collection
+    $AttributeCollection.Add($ParameterAttribute)
+
+    # Generate and set the ValidateSet 
+    if (Test-Path -Path $myTaskCategory) {           
+        $arrSet = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
+    }
+    else {
+        $arrSet = $myTaskDefaultCategories
+    }
+    $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($arrSet)
+
+    # Add the ValidateSet to the attributes collection
+    $AttributeCollection.Add($ValidateSetAttribute)
+
+    # Create and return the dynamic parameter
+    $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [string], $AttributeCollection)
+    $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
+    return $RuntimeParameterDictionary
+  } #Dynamic Param
+
+
+Begin { 
+    $Category = $PsBoundParameters[$ParameterName]
     Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"
     #display PSBoundparameters formatted nicely for Verbose output  
     [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
@@ -132,10 +161,44 @@ ParameterSetName = "Name"
 [datetime]$DueDate,
 [ValidateRange(0,100)]
 [int]$Progress,
-[TaskCategory]$Category,
+#[TaskCategory]$Category,
 [switch]$Passthru
 
 )
+
+DynamicParam {
+    # Set the dynamic parameters' name
+    $ParameterName = "Category"
+    # Create the dictionary 
+    $RuntimeParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+
+    # Create the collection of attributes
+    $AttributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
+            
+    # Create and set the parameters' attributes
+    $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
+    $ParameterAttribute.Mandatory = $False
+    
+    # Add the attributes to the attributes collection
+    $AttributeCollection.Add($ParameterAttribute)
+
+    # Generate and set the ValidateSet 
+    if (Test-Path -Path $myTaskCategory) {          
+        $arrSet = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
+    }
+    else {
+        $arrSet = $myTaskDefaultCategories
+    }
+    $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($arrSet)
+
+    # Add the ValidateSet to the attributes collection
+    $AttributeCollection.Add($ValidateSetAttribute)
+
+    # Create and return the dynamic parameter
+    $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [string], $AttributeCollection)
+    $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
+    return $RuntimeParameterDictionary
+  } #Dynamic Param
 
 Begin {
     Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
@@ -149,7 +212,6 @@ Begin {
     $PSBoundParameters.Remove("Confirm")  | Out-Null
     $PSBoundParameters.Remove("Passthru") | Out-Null
     
-
  } #begin
 
 Process {
@@ -306,8 +368,8 @@ End {
 
 Function Get-MyTask {
 [cmdletbinding(DefaultParameterSetName="Name")]
-Param(
 
+Param(
 [Parameter(
 Position = 0,
 ParameterSetName="Name"
@@ -318,13 +380,48 @@ ParameterSetName="Name"
 [Parameter(ParameterSetName="All")]
 [switch]$All,
 [Parameter(ParameterSetName="Completed")]
-[switch]$Completed,
-[Parameter(ParameterSetName="Category")]
-[TaskCategory]$Category
-
+[switch]$Completed
 )
 
+DynamicParam {
+    # Set the dynamic parameters' name
+    $ParameterName = "Category"
+    # Create the dictionary 
+    $RuntimeParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+
+    # Create the collection of attributes
+    $AttributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
+            
+    # Create and set the parameters' attributes
+    $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
+    $ParameterAttribute.Mandatory = $False
+    $ParameterAttribute.ParameterSetName = "Category"
+    
+    # Add the attributes to the attributes collection
+    $AttributeCollection.Add($ParameterAttribute)
+
+    # Generate and set the ValidateSet 
+    if (Test-Path -Path $myTaskCategory) {           
+        $arrSet = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
+    }
+    else {
+        $arrSet = $myTaskDefaultCategories
+    }
+
+    $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($arrSet)
+
+    # Add the ValidateSet to the attributes collection
+    $AttributeCollection.Add($ValidateSetAttribute)
+
+    # Create and return the dynamic parameter
+    $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [string], $AttributeCollection)
+    $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
+    return $RuntimeParameterDictionary
+
+} 
+Begin {
 Write-Verbose "Starting: $($MyInvocation.Mycommand)"
+$Category = $PsBoundParameters[$ParameterName]
 Write-Verbose "Using parameter set $($PSCmdlet.ParameterSetName)"
 #display PSBoundparameters formatted nicely for Verbose output  
 [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
@@ -335,7 +432,9 @@ Write-Verbose "Importing tasks from $mytaskPath"
 $tasks = _ImportTasks | Sort TaskCreated
 
 Write-Verbose "Imported $($tasks.count) tasks"
+}
 
+Process {
 #initialize counter
 $counter=0
 foreach ($task in $tasks ) {
@@ -355,42 +454,91 @@ Switch ($PSCmdlet.ParameterSetName) {
             Write-Verbose "Retrieving all incomplete tasks"
             $tasks.Where({-Not $_.Completed})
         }
-}
+} #name
 
 "ID" {
         Write-Verbose "Retrieving Task by ID: $ID"
         $tasks.where({$_.id -eq $ID})
-}
+} #id
 
 "All" { 
         Write-Verbose "Retrieving all tasks"
          $Tasks
-}
+} #all
 
 "Completed" {
         Write-Verbose "Retrieving completed tasks"
         $tasks.Where({$_.Completed})
-}
+} #completed
 
 "Category" {
         Write-Verbose "Retrieving tasks for category $Category"
         $tasks.Where({$_.Category -eq $Category})
-}
+} #category
+
 } #switch
+} #process
 
+End {
+    Write-Verbose "Ending: $($MyInvocation.Mycommand)"
+} #end
 
-Write-Verbose "Ending: $($MyInvocation.Mycommand)"
 } #Get-MyTask
 
 Function Show-MyTask {
 
 #colorize output using Write-Host
 
-[cmdletbinding()]
-Param([switch]$All)
+[cmdletbinding(DefaultParameterSetName="none")]
+Param(
+[Parameter(ParameterSetName="all")]
+[switch]$All
+)
 
+DynamicParam {
+    # Set the dynamic parameters' name
+    $ParameterName = 'Category'           
+    # Create the dictionary 
+    $RuntimeParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+
+    # Create the collection of attributes
+    $AttributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
+            
+    # Create and set the parameters' attributes
+    $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
+    $ParameterAttribute.Mandatory = $false
+    $ParameterAttribute.ParameterSetName = "Category"
+    # Add the attributes to the attributes collection
+    $AttributeCollection.Add($ParameterAttribute)
+
+    # Generate and set the ValidateSet 
+    if (Test-Path -Path $myTaskCategory) {           
+        $arrSet = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
+    }
+    else {
+        $arrSet = $myTaskDefaultCategories
+    }
+    $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($arrSet)
+
+    # Add the ValidateSet to the attributes collection
+    $AttributeCollection.Add($ValidateSetAttribute)
+
+    # Create and return the dynamic parameter
+    $RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [string], $AttributeCollection)
+    $RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
+    return $RuntimeParameterDictionary
+  } #Dynamic Param
+
+Begin {
+$Category = $PsBoundParameters[$ParameterName]
 Write-Verbose "Starting: $($MyInvocation.Mycommand)"
 
+#display PSBoundparameters formatted nicely for Verbose output  
+[string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+Write-Verbose "PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+}
+
+Process {
 #run Get-MyTask
 $tasks = Get-MyTask @PSBoundParameters
 
@@ -422,9 +570,10 @@ $table[3..$table.count] | foreach {
     }
     Write-Host $_ -ForegroundColor $c
 } #foreach
-
-Write-Verbose "Ending: $($MyInvocation.Mycommand)"
-
+}
+End {
+    Write-Verbose "Ending: $($MyInvocation.Mycommand)"
+}
 } #Show-MyTask
 
 Function Complete-MyTask {
@@ -458,6 +607,7 @@ Begin {
 } #begin
 
 Process {
+    Write-Verbose "[PROCESS] Using parameter set: $($PSCmdlet.ParameterSetName)"
     #display PSBoundparameters formatted nicely for Verbose output  
     [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
     Write-Verbose "[PROCESS] PSBoundParameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 

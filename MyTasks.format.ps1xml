@@ -25,7 +25,7 @@ Any changes made to this file may be overwritten in future module updates
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Description</Label>
-                        <Width>22</Width>
+                        <Width>20</Width>
                         <Alignment>Left</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -40,7 +40,7 @@ Any changes made to this file may be overwritten in future module updates
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Category</Label>
-                        <Width>9</Width>
+                        <Width>12</Width>
                         <Alignment>Left</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
