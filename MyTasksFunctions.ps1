@@ -475,13 +475,12 @@ Switch ($PSCmdlet.ParameterSetName) {
 
 "Category" {
         Write-Verbose "Retrieving tasks for category $Category"
-        $tasks.Where({$_.Category -eq $Category})
+        $tasks.Where({$_.Category -eq $Category -AND (-Not $_.Completed)})
 } #category
 
 "Days" {
         Write-Verbose "Retrieving tasks due in $DaysDue days or before"
-        $tasks.Where({$_.DueDate -le (Get-Date).AddDays($DaysDue)})
-
+        $tasks.Where({($_.DueDate -le (Get-Date).AddDays($DaysDue)) -AND (-Not $_.Completed)})
 }
 } #switch
 } #process
@@ -714,3 +713,107 @@ foreach ($obj in $in.Objects.object) {
 } #foreach
 
 } #_ImportTasks
+
+
+Function Get-MyTaskCategory {
+[cmdletbinding()]
+Param()
+
+Write-Verbose "Starting: $($MyInvocation.Mycommand)"
+If (Test-Path -Path $myTaskCategory) {
+    Write-Verbose "Retrieving user categories from $myTaskCategory"
+    Get-Content -Path $myTaskCategory | Where {$_ -match "\w+"}
+}
+else {
+    #Display the defaults
+    Write-Verbose "Retrieving module default categories"
+    $myTaskDefaultCategories
+}
+
+Write-Verbose "Ending: $($MyInvocation.Mycommand)"
+}
+
+Function Add-MyTaskCategory {
+
+[cmdletbinding(SupportsShouldProcess)]
+Param(
+[Parameter(
+Position = 0,
+Mandatory,
+HelpMessage = "Enter a new task category",
+ValueFromPipeline
+)]
+[ValidateNotNullorEmpty()]
+[string[]]$Category
+)
+
+Begin {
+    Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+    #test if user category file already exists and if not, then 
+    #create it
+    if (-Not (Test-Path -Path $myTaskCategory)) {
+        Write-Verbose "[BEGIN  ] Creating new user category file $myTaskCategory"
+        Set-Content -Value "" -Path $myTaskCategory
+    }
+    #get current contents
+    $current = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"}
+} #begin
+
+Process {
+    foreach ($item in $Category) {
+        if ($current -contains $($item.trim())) {
+            Write-Verbose "[PROCESS] Skipping duplicate item $item"
+        }
+        else {
+            Write-Verbose "[PROCESS] Adding $item"
+            Add-Content -Value $item.Trim() -Path $myTaskCategory
+        }
+    }
+
+} #process
+
+End {
+    Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+} #end
+}
+
+Function Remove-MyTaskCategory {
+
+[cmdletbinding(SupportsShouldProcess)]
+Param(
+[Parameter(
+Position = 0,
+Mandatory,
+HelpMessage = "Enter a task category to remove",
+ValueFromPipeline
+)]
+[ValidateNotNullorEmpty()]
+[string[]]$Category
+)
+
+Begin {
+    Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+
+    #get current contents
+    $current = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"}
+    #create backup 
+    $back = Join-Path -path $home\Documents -ChildPath MyTaskCategory.bak
+    Write-Verbose "[BEGIN  ] Creating backup copy $back"
+    Copy-Item -Path $myTaskCategory -Destination $back -Force
+} #begin
+
+Process {
+    foreach ($item in $Category) {
+        Write-Verbose "[PROCESS] Removing category $item"
+       $current = ($current).Where({$_ -notcontains $item})
+    }
+
+} #process
+
+End {
+    #update file
+    Write-Verbose "[END    ] Updating: $myTaskCategory"
+    Set-Content -Value $current -Path $myTaskCategory
+    Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+} #end
+}

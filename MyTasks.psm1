@@ -97,7 +97,9 @@ Set-Alias -Name nmt -Value New-MyTask
 #define a hashtable of parameters to splat to Export-ModuleMember
 $exportParams = @{
 Variable = "myTaskPath","myTaskDefaultCategories"
-Function = "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask","Show-MyTask","Complete-MyTask"
+Function = "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask",
+"Show-MyTask","Complete-MyTask","Get-MyTaskCategory","Add-MyTaskCategory",
+"Remove-MyTaskCategory"
 Alias = "gmt","rmt","shmt","smt","cmt","nmt"
 }
 
