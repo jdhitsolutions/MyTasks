@@ -20,7 +20,7 @@ Any changes made to this file may be overwritten in future module updates
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Name</Label>
-                        <Width>20</Width>
+                        <Width>25</Width>
                         <Alignment>Left</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -30,7 +30,7 @@ Any changes made to this file may be overwritten in future module updates
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>DueDate</Label>
-                        <Width>19</Width>
+                        <Width>10</Width>
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -64,7 +64,7 @@ Any changes made to this file may be overwritten in future module updates
                             </TableColumnItem>
                               <TableColumnItem>
                                 <PropertyName>DueDate</PropertyName>
-                                <FormatString>{0:d} {0:hh:mm tt}</FormatString>
+                                <FormatString>{0:d}</FormatString>
                             </TableColumnItem>
                                 <TableColumnItem>
                                 <PropertyName>OverDue</PropertyName>
@@ -92,17 +92,17 @@ Any changes made to this file may be overwritten in future module updates
                 <TableHeaders>                    
                     <TableColumnHeader>
                         <Label>Name</Label>
-                        <Width>25</Width>
+                        <Width>28</Width>
                         <Alignment>Left</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Description</Label>
-                        <Width>22</Width>
+                        <Width>25</Width>
                         <Alignment>Left</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>DueDate</Label>
-                        <Width>19</Width>
+                        <Width>10</Width>
                         <Alignment>Right</Alignment>
                     </TableColumnHeader>
                     <TableColumnHeader>
@@ -128,7 +128,7 @@ Any changes made to this file may be overwritten in future module updates
                             </TableColumnItem>
                               <TableColumnItem>
                                 <PropertyName>DueDate</PropertyName>
-                                <FormatString>{0:d} {0:hh:mm tt}</FormatString>
+                                <FormatString>{0:d}</FormatString>
                             </TableColumnItem>
                                 <TableColumnItem>
                                 <PropertyName>OverDue</PropertyName>                           

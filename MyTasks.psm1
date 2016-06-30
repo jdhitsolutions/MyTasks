@@ -99,7 +99,7 @@ $exportParams = @{
 Variable = "myTaskPath","myTaskDefaultCategories"
 Function = "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask",
 "Show-MyTask","Complete-MyTask","Get-MyTaskCategory","Add-MyTaskCategory",
-"Remove-MyTaskCategory"
+"Remove-MyTaskCategory","Backup-MyTaskFile"
 Alias = "gmt","rmt","shmt","smt","cmt","nmt"
 }
 

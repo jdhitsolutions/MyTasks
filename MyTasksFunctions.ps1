@@ -1,8 +1,40 @@
 #requires -version 5.0
 
+#this is a private function to the module
+Function _ImportTasks {
+[cmdletbinding()]
+Param([string]$Path = $myTaskpath)
+
+[xml]$In = Get-Content -Path $Path
+
+foreach ($obj in $in.Objects.object) {
+  $obj.Property | foreach -Begin {$propHash = [ordered]@{}} -Process {
+    $propHash.Add($_.name,$_.'#text')
+  } 
+  
+  Try {
+      $tmp = New-Object -TypeName MyTask -ArgumentList $propHash.Name, $propHash.DueDate, $propHash.Description, $propHash.Category
+      $tmp.TaskID = $prophash.TaskID
+      $tmp.Progress = $prophash.Progress -as [int]
+      $tmp.TaskCreated = $prophash.TaskCreated -as [datetime]
+      $tmp.TaskModified = $prophash.TaskModified -as [datetime]
+      $tmp.Completed = [Convert]::ToBoolean($prophash.Completed)
+
+      $tmp.Refresh()
+      $tmp
+  }
+  Catch {
+    Write-Error $_
+  }
+
+} #foreach
+
+} #_ImportTasks
+
+#exported functions 
 Function New-MyTask {
 
-[cmdletbinding(SupportsShouldProcess)]
+[cmdletbinding(SupportsShouldProcess,DefaultParameterSetName="Date")]
 Param(
 [Parameter(
 Position = 0, 
@@ -12,9 +44,12 @@ ValueFromPipelineByPropertyName
 )]
 [string]$Name,
 
-[Parameter(ValueFromPipelineByPropertyName)]
+[Parameter(ValueFromPipelineByPropertyName,ParameterSetName="Date")]
 [ValidateNotNullorEmpty()]
 [dateTime]$DueDate = (Get-Date).AddDays(7),
+
+[Parameter(ParameterSetName="Days")]
+[int]$Days,
 
 [Parameter(ValueFromPipelineByPropertyName)]
 [string]$Description,
@@ -76,6 +111,10 @@ Process {
     #create the new task
     Write-Verbose "[PROCESS] Creating new task $Name"
 
+    If ($Days) {
+        Write-Verbose "[PROCESS] Calculating due date in $Days days"
+        $DueDate = (Get-Date).AddDays($Days)
+    }
     $task = New-Object -TypeName MyTask -ArgumentList $Name,$DueDate,$Description,$Category
 
     #convert to xml
@@ -309,8 +348,8 @@ ParameterSetName = "Guid"
 )]
 [ValidateNotNullorEmpty()]
 [Guid]$TaskID
-)
 
+)
 
 Begin {
     Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
@@ -318,7 +357,11 @@ Begin {
     [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
     Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
+    Write-Verbose "[BEGIN  ] Creating a backup copy of $myTaskPath"
+    Backup-MyTaskFile
+
     #load tasks from XML
+    Write-Verbose "[BEGIN  ] Loading tasks from XML"
     [xml]$In = Get-Content -Path $MyTaskPath
 } #begin
 
@@ -540,7 +583,7 @@ $Category = $PsBoundParameters[$ParameterName]
 Write-Verbose "Starting: $($MyInvocation.Mycommand)"
 
 #display PSBoundparameters formatted nicely for Verbose output  
-[string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+[string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
 Write-Verbose "PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 }
 
@@ -683,38 +726,6 @@ End {
 
 } #Complete-MyTask
 
-#this is a private function to the module
-Function _ImportTasks {
-[cmdletbinding()]
-Param([string]$Path = $myTaskpath)
-
-[xml]$In = Get-Content -Path $Path
-
-foreach ($obj in $in.Objects.object) {
-  $obj.Property | foreach -Begin {$propHash = [ordered]@{}} -Process {
-    $propHash.Add($_.name,$_.'#text')
-  } 
-  
-  Try {
-      $tmp = New-Object -TypeName MyTask -ArgumentList $propHash.Name, $propHash.DueDate, $propHash.Description, $propHash.Category
-      $tmp.TaskID = $prophash.TaskID
-      $tmp.Progress = $prophash.Progress -as [int]
-      $tmp.TaskCreated = $prophash.TaskCreated -as [datetime]
-      $tmp.TaskModified = $prophash.TaskModified -as [datetime]
-      $tmp.Completed = [Convert]::ToBoolean($prophash.Completed)
-
-      $tmp.Refresh()
-      $tmp
-  }
-  Catch {
-    Write-Error $_
-  }
-
-} #foreach
-
-} #_ImportTasks
-
-
 Function Get-MyTaskCategory {
 [cmdletbinding()]
 Param()
@@ -798,7 +809,7 @@ Begin {
     $current = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"}
     #create backup 
     $back = Join-Path -path $home\Documents -ChildPath MyTaskCategory.bak
-    Write-Verbose "[BEGIN  ] Creating backup copy $back"
+    Write-Verbose "[BEGIN  ] Creating backup copy"
     Copy-Item -Path $myTaskCategory -Destination $back -Force
 } #begin
 
@@ -816,4 +827,59 @@ End {
     Set-Content -Value $current -Path $myTaskCategory
     Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
 } #end
+}
+
+#create a backup copy of task xml file
+Function Backup-MyTaskFile {
+
+[cmdletbinding(SupportsShouldProcess)]
+Param(
+[Parameter(
+Position = 0,
+HelpMessage = "Enter the filename and path for the backup xml file"
+)]
+[ValidateNotNullorEmpty()]
+[string]$Destination = (Join-Path -Path $home\documents -ChildPath "MyTasks_Backup_$(Get-Date -format "yyyyMMdd").xml" ),
+[switch]$Passthru
+
+)
+
+Begin {
+    Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+    #display PSBoundparameters formatted nicely for Verbose output  
+    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+    Write-Verbose "[BEGIN  ] Creating backup file $Destination"
+    
+    #add MyTaskPath to PSBoundparameters so it can be splatted to Copy-Item
+    $PSBoundParameters.Add("Path",$myTaskPath)
+
+    #explicitly add Destination if not already part of PSBoundParameters
+    if (-Not ($PSBoundParameters.ContainsKey("Destination"))) {
+        $PSBoundParameters.Add("Destination",$Destination)
+    }
+} #begin
+
+Process {
+    If (Test-Path -Path $myTaskPath) {
+        
+        Copy-Item @psBoundParameters
+
+        Write-Verbose "[PROCESS] Adding comment to backup XML file"
+        #insert a comment into the XML file
+        [xml]$doc = Get-Content -Path $Destination  
+        $comment  = $doc.CreateComment("Backup of $MytaskPath created on $(Get-Date)") 
+        $doc.InsertAfter($comment,$doc.FirstChild) | Out-Null
+        $doc.Save($Destination)
+    }
+    else {
+        Write-Warning "Failed to find $myTaskPath"
+    }
+
+} #process
+
+End {
+    Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+} #end
+
 }

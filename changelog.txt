@@ -1,5 +1,17 @@
 Changelog for MyTasks
 
+v0.0.13
+Renamed Backup-MyTask to Backup-MyTaskFile
+Modified module to export Backup-MyTaskFile
+Modified Remove-MyTask to use Backup-MyTaskFile
+
+v0.0.12
+Added Backup-MyTask
+modified format.ps1xml file to display DueDate without time
+when using tables. Format-List will show full DueDate value.
+Added parameter to New-MyTask to allow specifying a number of
+days instead of an actual date.
+
 v0.0.11
 Modified Get-MyTask to not include completed tasks when 
 filtering by DaysDue or Category.
