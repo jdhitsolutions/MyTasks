@@ -195,12 +195,13 @@ ParameterSetName = "Name"
 )]
 [ValidateNotNullorEmpty()]
 [string]$Name,
+[Parameter(ParameterSetName="ID")]
+[int]$ID,
 [string]$NewName,
 [string]$Description,
 [datetime]$DueDate,
 [ValidateRange(0,100)]
 [int]$Progress,
-#[TaskCategory]$Category,
 [switch]$Passthru
 
 )
@@ -250,6 +251,7 @@ Begin {
     $PSBoundParameters.Remove("WhatIf")   | Out-Null
     $PSBoundParameters.Remove("Confirm")  | Out-Null
     $PSBoundParameters.Remove("Passthru") | Out-Null
+    $PSBoundParameters.Remove("ID") | Out-Null
     
  } #begin
 
@@ -277,6 +279,10 @@ Process {
         $node = ($in | Select-xml -XPath "//Object/Property[@Name='Name' and contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'$($name.toLower())')]").Node.ParentNode
     }
     else {
+        if ($ID) {
+            #get the task by ID
+            $task = Get-MyTask -id $ID
+        }
         $node = ($in | Select-xml -XPath "//Object/Property[@Name='TaskID' and text()='$($task.taskid)']").Node.ParentNode
     }
 
@@ -588,49 +594,50 @@ Write-Verbose "PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) |
 }
 
 Process {
-#run Get-MyTask
-$tasks = Get-MyTask @PSBoundParameters
+    #run Get-MyTask
+    $tasks = Get-MyTask @PSBoundParameters
 
-#convert tasks to a text table
-$table = ($tasks | Format-Table | Out-String).split("`n")
+    #convert tasks to a text table
+    $table = ($tasks | Format-Table | Out-String).split("`n")
 
-#define a regular expression pattern to match the due date
-[regex]$rx = "\d{1,2}\/\d{1,2}\/\d{4}.*M"
+    #define a regular expression pattern to match the due date
+    [regex]$rx = "\b\d{1,2}\/\d{1,2}\/\d{4}\b"
 
-Write-Host "`n"
-Write-Host $table[1] -ForegroundColor Cyan
-Write-Host $table[2] -ForegroundColor Cyan
-$table[3..$table.count] | foreach {
+    Write-Host "`n"
+    Write-Host $table[1] -ForegroundColor Cyan
+    Write-Host $table[2] -ForegroundColor Cyan
+    $table[3..$table.count] | foreach {
 
-    #test if DueDate is within 24 hours
-    if ($rx.IsMatch($_)) {
-        $hours = (($rx.Match($_).Value -as [datetime]) - (Get-Date)).totalhours
-    }
+        #test if DueDate is within 24 hours
+        if ($rx.IsMatch($_)) {
+            $hours = (($rx.Match($_).Value -as [datetime]) - (Get-Date)).totalhours
+        }
 
-    #test if task is complete
-    if ($_ -match '\b100\b$') {
-        $complete = $True
-    }
-    else {
-        $complete = $False
-    }
-    #select a different color for over due tasks
-    if ($_ -match "\bTrue\b") {
-        $c = "Red"
-    }
-    elseif ($hours -le 24 -AND (-Not $complete)) {
-        $c = "Yellow"
-        $hours = 999
-    }
-    else {
-        $c = $host.ui.RawUI.ForegroundColor
-    }
-    Write-Host $_ -ForegroundColor $c
-} #foreach
-}
+        #test if task is complete
+        if ($_ -match '\b100\b$') {
+            $complete = $True
+        }
+        else {
+            $complete = $False
+        }
+        #select a different color for over due tasks
+        if ($_ -match "\bTrue\b") {
+            $c = "Red"
+        }
+        elseif ($hours -le 24 -AND (-Not $complete)) {
+            $c = "Yellow"
+            $hours = 999
+        }
+        else {
+            $c = $host.ui.RawUI.ForegroundColor
+        }
+        Write-Host $_ -ForegroundColor $c
+
+    } #foreach
+} #Process
 End {
     Write-Verbose "Ending: $($MyInvocation.Mycommand)"
-}
+} #End
 } #Show-MyTask
 
 Function Complete-MyTask {

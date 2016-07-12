@@ -103,4 +103,5 @@ Function = "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask",
 Alias = "gmt","rmt","shmt","smt","cmt","nmt"
 }
 
-Export-ModuleMember @exportParams
+#exported via manifist
+#Export-ModuleMember @exportParams

@@ -1,5 +1,9 @@
 Changelog for MyTasks
 
+v0.0.14
+modified Set-MyTask to use task ID
+fixed a regular expression bug in Show-MyTask
+
 v0.0.13
 Renamed Backup-MyTask to Backup-MyTaskFile
 Modified module to export Backup-MyTaskFile
