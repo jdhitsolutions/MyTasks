@@ -614,19 +614,24 @@ Process {
         }
 
         #test if task is complete
-        if ($_ -match '\b100\b$') {
+        if ($_ -match '\b100\b.$') {
             $complete = $True
+           
         }
         else {
             $complete = $False
         }
-        #select a different color for over due tasks
+        #select a different color for overdue tasks
         if ($_ -match "\bTrue\b") {
             $c = "Red"
         }
         elseif ($hours -le 24 -AND (-Not $complete)) {
             $c = "Yellow"
             $hours = 999
+        }
+        elseif ($complete) {
+            #display completed tasks in green
+            $c = "Green"
         }
         else {
             $c = $host.ui.RawUI.ForegroundColor
@@ -657,6 +662,8 @@ ParameterSetName = "Name"
 )]
 [ValidateNotNullorEmpty()]
 [string]$Name,
+
+[switch]$Archive,
 
 [switch]$Passthru
 )
@@ -703,7 +710,7 @@ Process {
         [xml]$In = Get-Content -Path $MyTaskPath
 
         #select node by TaskID (GUID)
-        $node = ($in | select-xml -XPath "//Object/Property[text()='$($task.TaskID)']").node.ParentNode
+        $node = ($in | Select-Xml -XPath "//Object/Property[text()='$($task.TaskID)']").node.ParentNode
 
         #import the new node
         $imp = $in.ImportNode($new,$true)
@@ -714,6 +721,11 @@ Process {
         #save
         If ($PSCmdlet.ShouldProcess($task.name)) {
             $in.Save($MyTaskPath)
+
+            if ($Archive) {
+                Write-Verbose "[PROCESS] Archiving completed task"
+                Save-MyTask -Node $new
+            }
 
             if ($Passthru) {
                 Write-Verbose "[PROCESS] Passing task back to the pipeline"
@@ -889,4 +901,91 @@ End {
     Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
 } #end
 
+}
+
+#archive completed tasks
+Function Save-MyTask {
+[cmdletbinding(SupportsShouldProcess,DefaultParameterSetName="All")]
+Param(
+[Parameter(Position = 0,ParameterSetName="All")]
+[ValidateNotNullorEmpty()]
+[string]$Path = $myTaskArchivePath,
+
+[Parameter(ParameterSetName="Node")]
+[System.Xml.xmlElement]$Node,
+
+[switch]$Passthru
+
+)
+
+Begin {
+Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"
+#display PSBoundparameters formatted nicely for Verbose output  
+[string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
+Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+Write-Verbose "[BEGIN  ] Using parameter set $($PSCmdlet.ParameterSetName)"
+}
+
+Process {
+
+[xml]$In = Get-Content -Path $mytaskPath
+
+if ($Node) {
+    Write-Verbose "[PROCESS] Archiving node $($node.property[0].'#text')"
+    $taskID = $node.property[5].'#text'
+    $completed = $in.Objects | Select-XML -XPath "//Object/Property[text()='$taskID']"
+}
+else {
+    #get completed tasks
+    Write-Verbose "[PROCESS] Getting completed tasks"
+       
+    $completed = $In.Objects | Select-XML -XPath "//Property[@Name='Completed' and text()='True']"
+}
+if ($completed) {
+    #save to $myTaskArchivePath
+    if (Test-Path -Path $Path) {
+        #append to existing document
+        Write-Verbose "[PROCESS] Appending to $Path"
+        [xml]$Out = Get-Content -Path $Path
+        $parent = $Out.Objects
+    }
+    else {
+        #create a new document
+        Write-Verbose "[PROCESS] Creating $Path"
+        $out = [xml]::new()
+        $ver = $out.CreateXmlDeclaration("1.0","UTF-8",$null)
+        $out.AppendChild($ver) | Out-Null
+        $objects = $out.CreateNode("element","Objects",$null)
+        $parent = $out.AppendChild($objects)
+    }
+
+    #import
+    foreach ($node in $completed.node) {
+        $imp = $out.ImportNode($node.ParentNode,$True)
+        Write-Verbose "[PROCESS] Archiving $($node.parentnode.property[0].'#text')"
+        $parent.AppendChild($imp) | Out-Null
+
+        #remove from existing file
+        $in.objects.RemoveChild($node.parentnode) | Out-Null
+    }
+
+    Write-Verbose "[PROCESS] Saving $Path"
+    if ($PSCmdlet.ShouldProcess($Path)) {
+        $out.Save($Path)
+
+        #save task file after saving archive
+        $in.Save($mytaskPath)
+        If ($Passthru) {
+            Get-Item -Path $Path
+        }
+    }   
+ }
+else {
+    Write-Host "Didn't find any completed tasks." -ForegroundColor Magenta
+}
+} #Process
+
+End {
+    Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+}
 }

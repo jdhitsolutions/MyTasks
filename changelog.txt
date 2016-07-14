@@ -1,5 +1,12 @@
 Changelog for MyTasks
 
+v0.0.15
+fixed a regular expression bug in Show-Mytask
+that wasn't properly capturing completed tasks.
+Modified Show-Mytask to display completed tasks in green.
+Added command Save-MyTasks to an archive file.
+Modified Complete-MyTask with an option to archive.
+
 v0.0.14
 modified Set-MyTask to use task ID
 fixed a regular expression bug in Show-MyTask
