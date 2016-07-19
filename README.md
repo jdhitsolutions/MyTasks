@@ -11,9 +11,12 @@ directly, you should use the appropriate module command.
 
 ## Categories ##
 The Task object includes a Category property. The module will define a default
-set of categories, but users can create their own by creating simple list in
-a text file. The text file must be called myTaskCategory.txt and placed in the
-user's Documents folder.
+set of categories, but users can create their own by using the MyTaskCategory
+commands:
+
++ Add-MyTaskCategory
++ Get-MyTaskCategory
++ Remove-MyTaskCategory
 
 ## Colorized Output ##
 Normally, you will use Get-MyTask to display tasks, all, some or a single item:
@@ -29,7 +32,8 @@ But there is also a command called *Show-MyTask* which will write output directl
 to the host. Incomplete tasks that are overdue will be displayed in red text.
 Tasks that will be due in 24 hours will be displayed in yellow.
 
-Read full help and examples for all commands.
+Read full help and examples for all commands as well as the about_MyTasks help
+file.
 
 ****************************************************************
 DO NOT USE IN A PRODUCTION ENVIRONMENT UNTIL YOU HAVE TESTED 
@@ -38,4 +42,4 @@ NOT UNDERSTAND WHAT THIS SCRIPT DOES OR HOW IT WORKS, DO NOT USE
 OUTSIDE OF A SECURE, TEST SETTING.      
 ****************************************************************
 
-*updated June 23, 2016*
+*updated July 19, 2016*
