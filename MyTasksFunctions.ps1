@@ -498,7 +498,7 @@ Switch ($PSCmdlet.ParameterSetName) {
 "Name" {
         if ($Name -match "\w+") {
             Write-Verbose "Retrieving task: $Name"
-            $tasks.Where({$_.Name -eq $Name})
+            $tasks.Where({$_.Name -like $Name})
         }
         else {
             #write all tasks to the pipeline
@@ -724,7 +724,7 @@ Process {
 
             if ($Archive) {
                 Write-Verbose "[PROCESS] Archiving completed task"
-                Save-MyTask -Node $new
+                Save-MyTask -Task $Task
             }
 
             if ($Passthru) {
@@ -905,34 +905,36 @@ End {
 
 #archive completed tasks
 Function Save-MyTask {
-[cmdletbinding(SupportsShouldProcess,DefaultParameterSetName="All")]
+
+[cmdletbinding(SupportsShouldProcess)]
 Param(
-[Parameter(Position = 0,ParameterSetName="All")]
+[Parameter(Position = 0)]
 [ValidateNotNullorEmpty()]
 [string]$Path = $myTaskArchivePath,
 
-[Parameter(ParameterSetName="Node")]
-[System.Xml.xmlElement]$Node,
+[Parameter(ValueFromPipeline)]
+[ValidateNotNullorEmpty()]
+[MyTask[]]$Task,
 
 [switch]$Passthru
 
 )
 
 Begin {
-Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"
-#display PSBoundparameters formatted nicely for Verbose output  
-[string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
-Write-Verbose "[BEGIN  ] Using parameter set $($PSCmdlet.ParameterSetName)"
+    Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"
+    #display PSBoundparameters formatted nicely for Verbose output  
+    [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
+    Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+    Write-Verbose "[BEGIN  ] Using parameter set $($PSCmdlet.ParameterSetName)"
 }
 
 Process {
 
 [xml]$In = Get-Content -Path $mytaskPath
 
-if ($Node) {
-    Write-Verbose "[PROCESS] Archiving node $($node.property[0].'#text')"
-    $taskID = $node.property[5].'#text'
+if ($Task) {
+    $taskID = $task.TaskID
+    Write-Verbose "[PROCESS] Archiving task $($task.name) [$($task.taskID)]"
     $completed = $in.Objects | Select-XML -XPath "//Object/Property[text()='$taskID']"
 }
 else {

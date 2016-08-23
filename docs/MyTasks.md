@@ -169,11 +169,18 @@ Or you can specify your own location and file name.
 
 Finally, if you have a number of completed tasks that you wish to save but not
 be imported every time you run Get-MyTask, you can archive them to a separate 
-XML file. The command is technically called Save-MyTask but you can also use an
-alias Archive-MyTask. By default all completed tasks will be removed from the
-tasks XML file and stored in a file called myTasksArchive.xml in the user's
-documents folder.
-
+XML file. The command is technically called Save-MyTask but you can also use its
+alias Archive-MyTask. 
+```
+PS C:\> archive-mytask
+```
+By default all completed tasks will be removed from the tasks XML file and stored
+in a file called myTasksArchive.xml in the user's documents folder. You also
+have the option of archiving specific tasks. This will move the task to the new
+file in its current state.
+```
+PS C:\> get-mytask TaskX | save-mytask -Path C:\Work\Other.xml
+```
 You can also archive a file when completing it.
 
 ```
@@ -199,4 +206,3 @@ There are no known issues at this time.
 - task
 - project
 - to-do
-- 
