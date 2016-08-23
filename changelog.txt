@@ -1,5 +1,10 @@
 Changelog for MyTasks
 
+v1.0.0
+added license file
+bumped version number
+initial release
+
 v0.0.16
 Added help documentation
 Revised Save-MyTask to save a single task.
