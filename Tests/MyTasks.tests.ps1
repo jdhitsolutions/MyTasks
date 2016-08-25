@@ -4,22 +4,27 @@ import-module ..\Mytasks -Force
 
 InModuleScope MyTasks {
 
-
 Describe "The module" {
+
+$theModule = get-module -name mytasks
     It "Should have 11 functions" {
-        (get-module -name mytasks).exportedfunctions.count | should be 11
+        $theModule.exportedfunctions.count | should be 11
     }
 
     It "Should have 7 aliases command" {
-        (Get-command -Module MyTasks -commandtype Alias).count | should be 7
+        $theModule.ExportedAliases.count | should be 7
     }
 
     It "Should export 3 variables by default" {
-        (Get-Module -Name Mytasks).ExportedVariables.Count | Should be 3
+        $theModule.ExportedVariables.Count | Should be 3
     }
 
     It "Should have a formatting xml file" {
-        (Get-Module -Name Mytasks).ExportedFormatFiles.Count | Should be 1
+        $theModule.ExportedFormatFiles.Count | Should be 1
+    }
+
+    It "Requires PowerShell 5.0" {
+        $theModule.PowerShellVersion | Should be '5.0'
     }
 } 
 
@@ -48,19 +53,23 @@ $myTaskCategory = "TestDrive:\myTaskCategory.txt"
         (Get-MyTaskCategory).count| Should be 6
     }
 
+    It "Should dynamically recognize all category values" {
+        (get-command new-mytask).parameters["Category"].attributes.validvalues.count | Should be 6
+    }
+
     It "Can remove a category" {
         Remove-MyTaskCategory -Category Demo
          (Get-MyTaskCategory).count| Should be 5
     }
-
+    
 }
 
 Describe Tasks {
 
 Mock Get-Date { return ("9/1/2016 12:01:00PM" -as [datetime])  }
-#
 
-#need absolute path
+
+#need absolute path for XML files
 $mytaskPath = Join-Path $TestDrive -child "myTasks.xml" 
 $myTaskArchivePath = Join-Path -Path $TestDrive -ChildPath myTasksArchive.xml
 
@@ -104,9 +113,9 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
     }
 
     #add some other tasks
-       New-MyTask -Name A -DueDate 12/31/2016 -Category Testing
-       New-MyTask -Name B -DueDate 10/01/2016 -Category Work
-       New-MyTask -Name C -DueDate 11/11/2016 -Category Personal
+    New-MyTask -Name A -DueDate 12/31/2016 -Category Testing
+    New-MyTask -Name B -DueDate 10/01/2016 -Category Work
+    New-MyTask -Name C -DueDate 11/11/2016 -Category Personal
 
     It "Should Complete a task" {
 
@@ -130,7 +139,6 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
         $home = $TestDrive
         mkdir $home\documents
     
-
         {Remove-myTask -Name A} | Should not Throw
         {Get-MyTask -Name B | Remove-MyTask } | should not Throw
         (Get-MyTask).count | Should be 2
