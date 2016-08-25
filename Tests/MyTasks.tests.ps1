@@ -97,6 +97,23 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
         $t.OverDue | Should Be $False
     }
 
+    #add some other tasks
+    New-MyTask -Name A -DueDate 12/31/2016 -Category Testing
+    New-MyTask -Name B -DueDate 10/01/2016 -Category Work
+    New-MyTask -Name C -DueDate 11/11/2016 -Category Personal
+
+    It "Should get tasks by category" {
+        (Get-Mytask -Category Testing).count | should be 3
+    }
+
+    It "Should get tasks by days due" {
+        (Get-MyTask -DaysDue 30).count | Should be 2
+    }
+
+    It "Should get all tasks" {
+        (Get-MyTask -All).count | Should be 5
+    }
+
     It "Should modify a task by name" {
         Set-MyTask -Name "Test1" -Progress 50 -Description "Pester Test" -DueDate "8/1/2016"
          $t = Get-MyTask -name Test1
@@ -112,10 +129,9 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
          $t.Progress | should be 80
     }
 
-    #add some other tasks
-    New-MyTask -Name A -DueDate 12/31/2016 -Category Testing
-    New-MyTask -Name B -DueDate 10/01/2016 -Category Work
-    New-MyTask -Name C -DueDate 11/11/2016 -Category Personal
+    It "Show-MyTask should write to the host" {
+        {Show-MyTask | Get-Membet} | Should Throw
+    }
 
     It "Should Complete a task" {
 
@@ -125,12 +141,24 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
 
     }
 
+    It "Should complete and archive a task" {
+
+        {Complete-Mytask -Name Test2 -Archive -ErrorAction Stop} | Should Not Throw
+         (Get-MyTask).count | Should be 3
+    }
+
     It "Should archive or save a task" {
         $save = Join-path $TestDrive -ChildPath "Archive.xml"
         Get-MyTask -Completed | Save-MyTask -Path $save
         Test-Path $save | should Be $True
         Get-MyTask -Name Test1 | Should Be $null
-        (Get-MyTask).count | Should be 4
+        (Get-MyTask).count | Should be 3
+    }
+
+    It "Should have an Archive-MyTask alias for Save-MyTask" {
+        $c = get-command Archive-Mytask
+        $c.Displayname | should be "Archive-MyTask"
+        $c.ReferencedCommand | Should be "Save-MyTask"
     }
 
     It "Should remove a task and backup the task file" {
@@ -141,7 +169,7 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
     
         {Remove-myTask -Name A} | Should not Throw
         {Get-MyTask -Name B | Remove-MyTask } | should not Throw
-        (Get-MyTask).count | Should be 2
+        (Get-MyTask).count | Should be 1
         Test-Path $TestDrive\documents\MyTasks_Backup_20160901.xml | Should be $True
     }
 
