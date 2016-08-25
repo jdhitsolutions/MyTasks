@@ -1,5 +1,9 @@
 Changelog for MyTasks
 
+v1.0.1
+Added Pester tests
+fixed a bug with exported variables
+
 v1.0.0
 added license file
 bumped version number
