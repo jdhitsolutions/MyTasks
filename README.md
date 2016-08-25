@@ -27,7 +27,6 @@ But there is also a command called *Show-MyTask* which will write output directl
 Read full help and examples for all commands as well as the about_MyTasks help file.
 
 - [Add-MyTaskCategory](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Add-MyTaskCategory.md)
-- [Archive-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Archive-MyTask.md)
 - [Backup-MyTaskFile](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Backup-MyTaskFile.md)
 - [Complete-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Complete-MyTask.md)
 - [Get-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Get-MyTask.md)
