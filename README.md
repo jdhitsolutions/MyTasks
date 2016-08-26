@@ -22,7 +22,7 @@ ID  Name         Description                DueDate OverDue Category  Progress
 --  ----         -----------                ------- ------- --------  --------
 8   MemoryTools  update module         ```7/22/2016 False   Projects        10
 ```
-But there is also a command called *Show-MyTask* which will write output directly to the host. Incomplete tasks that are overdue will be displayed in red text. Tasks that will be due in 24 hours will be displayed in yellow. If you select all tasks then completed items will be displayed in green.
+But there is also a command called *Show-MyTask* which will write output directly to the host. Incomplete tasks that are overdue will be displayed in red text. Tasks that will be due in 24 hours will be displayed in yellow. If you select all tasks then completed items will be displayed in green. This command may not work in the PowerShell ISE.
 
 ## Archiving and Removing ##
 Over time your task file might get quite large. Even though the default behavior is to ignore completed tasks, you have an option to archive them to a separate XML file using Save-MyTask or when you run Complete-MyTask. Or you can completely delete a task with Remove-MyTask.
