@@ -5,7 +5,7 @@ Function _ImportTasks {
 [cmdletbinding()]
 Param([string]$Path = $myTaskpath)
 
-[xml]$In = Get-Content -Path $Path
+[xml]$In = Get-Content -Encoding UTF8 -Path $Path
 
 foreach ($obj in $in.Objects.object) {
   $obj.Property | foreach -Begin {$propHash = [ordered]@{}} -Process {
@@ -76,7 +76,7 @@ DynamicParam {
 
     # Generate and set the ValidateSet 
     if (Test-Path -Path $myTaskCategory) {           
-        $arrSet = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
+        $arrSet = Get-Content -Encoding UTF8 -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
     }
     else {
         $arrSet = $myTaskDefaultCategories
@@ -128,7 +128,7 @@ Process {
     if (Test-Path -Path $mytaskPath) {
 
         #import xml file
-        [xml]$in = Get-Content -Path $mytaskPath
+        [xml]$in = Get-Content -Encoding UTF8 -Path $mytaskPath
 
         #continue of there are existing objects in the file
         if ($in.objects) {
@@ -224,7 +224,7 @@ DynamicParam {
 
     # Generate and set the ValidateSet 
     if (Test-Path -Path $myTaskCategory) {          
-        $arrSet = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
+        $arrSet = Get-Content -Encoding UTF8 -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
     }
     else {
         $arrSet = $myTaskDefaultCategories
@@ -266,7 +266,7 @@ Process {
 
     Write-Verbose "[PROCESS] Processing XML"
     Try {
-        [xml]$In = Get-Content -Path $MyTaskPath -ErrorAction Stop
+        [xml]$In = Get-Content -Encoding UTF8 -Path $MyTaskPath -ErrorAction Stop
     }
     Catch {
         Write-Error "There was a problem loading task data from $myTaskPath."
@@ -368,7 +368,7 @@ Begin {
 
     #load tasks from XML
     Write-Verbose "[BEGIN  ] Loading tasks from XML"
-    [xml]$In = Get-Content -Path $MyTaskPath
+    [xml]$In = Get-Content -Encoding UTF8 -Path $MyTaskPath
 } #begin
 
 Process {
@@ -453,7 +453,7 @@ DynamicParam {
 
     # Generate and set the ValidateSet 
     if (Test-Path -Path $myTaskCategory) {           
-        $arrSet = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
+        $arrSet = Get-Content -Encoding UTF8 -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
     }
     else {
         $arrSet = $myTaskDefaultCategories
@@ -568,7 +568,7 @@ DynamicParam {
 
     # Generate and set the ValidateSet 
     if (Test-Path -Path $myTaskCategory) {           
-        $arrSet = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
+        $arrSet = Get-Content -Encoding UTF8 -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
     }
     else {
         $arrSet = $myTaskDefaultCategories
@@ -598,7 +598,7 @@ Process {
     $tasks = Get-MyTask @PSBoundParameters
 
     #convert tasks to a text table
-    $table = ($tasks | Format-Table | Out-String).split("`n")
+    $table = ($tasks | Format-Table -AutoSize| Out-String -Stream).split("`r`n")
 
     #define a regular expression pattern to match the due date
     [regex]$rx = "\b\d{1,2}\/\d{1,2}\/\d{4}\b"
@@ -607,37 +607,36 @@ Process {
     Write-Host $table[1] -ForegroundColor Cyan
     Write-Host $table[2] -ForegroundColor Cyan
     $table[3..$table.count] | foreach {
+        if ($_ -ne ''){
+            #test if DueDate is within 24 hours
+            if ($rx.IsMatch($_)) {
+                $hours = (($rx.Match($_).Value -as [datetime]) - (Get-Date)).totalhours
+            }
 
-        #test if DueDate is within 24 hours
-        if ($rx.IsMatch($_)) {
-            $hours = (($rx.Match($_).Value -as [datetime]) - (Get-Date)).totalhours
+            #test if task is complete
+            if ($_ -match '\b100\b$') {
+                $complete = $True
+            }
+            else {
+                $complete = $False
+            }
+            #select a different color for overdue tasks
+            if ($_ -match "\bTrue\b") {
+                $c = "Red"
+            }
+            elseif ($hours -le 24 -AND (-Not $complete)) {
+                $c = "Yellow"
+                $hours = 999
+            }
+            elseif ($complete) {
+                #display completed tasks in green
+                $c = "Green"
+            }
+            else {
+                $c = $host.ui.RawUI.ForegroundColor
+            }
+            Write-Host $_ -ForegroundColor $c
         }
-
-        #test if task is complete
-        if ($_ -match '\b100\b.$') {
-            $complete = $True
-           
-        }
-        else {
-            $complete = $False
-        }
-        #select a different color for overdue tasks
-        if ($_ -match "\bTrue\b") {
-            $c = "Red"
-        }
-        elseif ($hours -le 24 -AND (-Not $complete)) {
-            $c = "Yellow"
-            $hours = 999
-        }
-        elseif ($complete) {
-            #display completed tasks in green
-            $c = "Green"
-        }
-        else {
-            $c = $host.ui.RawUI.ForegroundColor
-        }
-        Write-Host $_ -ForegroundColor $c
-
     } #foreach
 } #Process
 End {
@@ -707,7 +706,7 @@ Process {
         $new = ($task | Select Name,Descriptiong,DueDate,Category,Progress,TaskID,TaskCreated,TaskModified,Completed | ConvertTo-Xml).Objects.Object
 
         #load tasks from XML
-        [xml]$In = Get-Content -Path $MyTaskPath
+        [xml]$In = Get-Content -Encoding UTF8 -Path $MyTaskPath
 
         #select node by TaskID (GUID)
         $node = ($in | Select-Xml -XPath "//Object/Property[text()='$($task.TaskID)']").node.ParentNode
@@ -752,7 +751,7 @@ Param()
 Write-Verbose "Starting: $($MyInvocation.Mycommand)"
 If (Test-Path -Path $myTaskCategory) {
     Write-Verbose "Retrieving user categories from $myTaskCategory"
-    Get-Content -Path $myTaskCategory | Where {$_ -match "\w+"}
+    Get-Content -Encoding UTF8 -Path $myTaskCategory | Where {$_ -match "\w+"}
 }
 else {
     #Display the defaults
@@ -783,10 +782,10 @@ Begin {
     #create it
     if (-Not (Test-Path -Path $myTaskCategory)) {
         Write-Verbose "[BEGIN  ] Creating new user category file $myTaskCategory"
-        Set-Content -Value "" -Path $myTaskCategory
+        Set-Content -Encoding UTF8 -Value "" -Path $myTaskCategory
     }
     #get current contents
-    $current = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"}
+    $current = Get-Content -Encoding UTF8 -Path $myTaskCategory | where {$_ -match "\w+"}
 } #begin
 
 Process {
@@ -796,7 +795,7 @@ Process {
         }
         else {
             Write-Verbose "[PROCESS] Adding $item"
-            Add-Content -Value $item.Trim() -Path $myTaskCategory
+             Add-Content -Encoding UTF8 -Value $item.Trim() -Path $myTaskCategory 
         }
     }
 
@@ -825,7 +824,7 @@ Begin {
     Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
 
     #get current contents
-    $current = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"}
+    $current = Get-Content -Encoding UTF8 -Path $myTaskCategory | where {$_ -match "\w+"}
     #create backup 
     $back = Join-Path -path $home\Documents -ChildPath MyTaskCategory.bak
     Write-Verbose "[BEGIN  ] Creating backup copy"
@@ -843,7 +842,7 @@ Process {
 End {
     #update file
     Write-Verbose "[END    ] Updating: $myTaskCategory"
-    Set-Content -Value $current -Path $myTaskCategory
+    Set-Content -Encoding UTF8 -Value $current -Path $myTaskCategory
     Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
 } #end
 }
@@ -886,7 +885,7 @@ Process {
 
         Write-Verbose "[PROCESS] Adding comment to backup XML file"
         #insert a comment into the XML file
-        [xml]$doc = Get-Content -Path $Destination  
+        [xml]$doc = Get-Content -Encoding UTF8 -Path $Destination  
         $comment  = $doc.CreateComment("Backup of $MytaskPath created on $(Get-Date)") 
         $doc.InsertAfter($comment,$doc.FirstChild) | Out-Null
         $doc.Save($Destination)
@@ -898,7 +897,7 @@ Process {
 } #process
 
 End {
-    Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+    Write-Verbose "[END] Ending: $($MyInvocation.Mycommand)"
 } #end
 
 }
@@ -930,7 +929,7 @@ Begin {
 
 Process {
 
-[xml]$In = Get-Content -Path $mytaskPath
+[xml]$In = Get-Content -Encoding UTF8 -Path $mytaskPath
 
 if ($Task) {
     $taskID = $task.TaskID
@@ -948,7 +947,7 @@ if ($completed) {
     if (Test-Path -Path $Path) {
         #append to existing document
         Write-Verbose "[PROCESS] Appending to $Path"
-        [xml]$Out = Get-Content -Path $Path
+        [xml]$Out = Get-Content -Encoding UTF8 -Path $Path
         $parent = $Out.Objects
     }
     else {
