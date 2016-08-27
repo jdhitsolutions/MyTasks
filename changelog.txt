@@ -1,5 +1,9 @@
 Changelog for MyTasks
 
+v1.0.2
+modified New-MyTask so that passthru displays
+the correct ID. (Issue #1)
+
 v1.0.1
 Added Pester tests
 fixed a bug with exported variables

@@ -97,13 +97,13 @@ Begin {
     $Category = $PsBoundParameters[$ParameterName]
     Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"
     #display PSBoundparameters formatted nicely for Verbose output  
-    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
     Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 }
 
 Process {
     #display PSBoundparameters formatted nicely for Verbose output  
-    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
     Write-Verbose "[PROCESS] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
    
     Write-Verbose "[PROCESS] Using Parameter set: $($pscmdlet.parameterSetName)"
@@ -167,7 +167,7 @@ Process {
 
     If ($Passthru) {
         Write-Verbose "[PROCESS] Passing object to the pipeline."
-        $task
+        (get-mytask).where({$_.taskID -eq $task.taskid})
     }
 
 } #Process
