@@ -1,5 +1,16 @@
 Changelog for MyTasks
 
+v1.0.3
+modified code when creating a new XML file to declare
+encoding as UTF-8.
+Modified Get-MyTask to display a warning when trying to display tasks
+when none have been defined yet.
+Modified Show-MyTask to work under the Windows 10
+PowerShell ISE (Issue #2)
+Modified Remove-Mytask to accept MyTask as an input object (Issue #3)
+Help files are NOT updated yet to reflect these changes.
+Updated README.md.
+
 v1.0.2
 modified New-MyTask so that passthru displays
 the correct ID. (Issue #1)

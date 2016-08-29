@@ -41,7 +41,11 @@ You should read full help and examples for all commands as well as the about_MyT
 - [Set-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Set-MyTask.md)
 - [Show-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Show-MyTask.md)
 
+## Limitations
+This module is currently not intended or supported on the alpha release of PowerShell 6 that runs on Linux and macOS.
+
 Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
+
 
 ****************************************************************
 DO NOT USE IN A PRODUCTION ENVIRONMENT UNTIL YOU HAVE TESTED 
@@ -50,4 +54,4 @@ NOT UNDERSTAND WHAT THIS SCRIPT DOES OR HOW IT WORKS, DO NOT USE
 OUTSIDE OF A SECURE, TEST SETTING.      
 ****************************************************************
 
-*updated August 25, 2016*
+*updated August 29, 2016*

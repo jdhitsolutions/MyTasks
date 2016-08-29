@@ -5,8 +5,15 @@ Function _ImportTasks {
 [cmdletbinding()]
 Param([string]$Path = $myTaskpath)
 
+If (Test-Path $myTaskpath) {
 [xml]$In = Get-Content -Path $Path
 
+}
+else {
+    Write-Warning "There are no to tasks. Create a new one first."
+    #bail out
+    Break
+}
 foreach ($obj in $in.Objects.object) {
   $obj.Property | foreach -Begin {$propHash = [ordered]@{}} -Process {
     $propHash.Add($_.name,$_.'#text')
@@ -123,7 +130,8 @@ Process {
     Select Name,Description,DueDate,Category,Progress,TaskCreated,TaskModified,TaskID,Completed  | 
     ConvertTo-Xml
 
-    Write-Verbose "[PROCESS] Saving task"
+    Write-Verbose "[PROCESS] $($newXML | out-string)"
+        
     #add task to disk via XML file
     if (Test-Path -Path $mytaskPath) {
 
@@ -144,24 +152,29 @@ Process {
                 #update file
 
                 if ($PSCmdlet.ShouldProcess($task.name)) {
+                    Write-Verbose "[PROCESS] Saving to existing file"
                     $in.Save($mytaskPath)
                 }
             }
             else {
-                Write-Verbose "Skipping $id"
+                Write-Verbose "[PROCESS] Skipping $id"
             }
-        }
-        else {
-            #must be an empty XML file
-            if ($PSCmdlet.ShouldProcess($task.name)) {
-                $newxml.Save($mytaskPath)
-            }
-        }
-    }
+        } #if $in.objercts
+      }
     else {
         #If file doesn't exist create task and save to a file
-        if ($PSCmdlet.ShouldProcess($task.name)) {
-            $newxml.Save($mytaskPath)
+            Write-Verbose "[PROCESS] Saving first task"
+            #must be an empty XML file
+            if ($PSCmdlet.ShouldProcess($task.name)) {
+                #create an XML declaration section
+                write-Verbose "Creating XML declaration"
+                $declare = $newxml.CreateXmlDeclaration("1.0","UTF-8","yes")
+                
+                #replace declaration
+                $newXML.ReplaceChild($declare,$newXML.FirstChild) | Out-Null
+                #save the file
+                Write-Verbose "Saving the new file to $myTaskPath"
+                $newxml.Save($mytaskPath)
         }
     }
 
@@ -339,7 +352,6 @@ Param(
 Position = 0,
 Mandatory,
 HelpMessage = "Enter task name",
-ValueFromPipeline,
 ParameterSetName = "Name"
 )]
 [ValidateNotNullorEmpty()]
@@ -348,12 +360,11 @@ ParameterSetName = "Name"
 [Parameter(
 Position = 0,
 Mandatory,
-HelpMessage = "Enter task guid id",
-ValueFromPipelinebyPropertyName,
-ParameterSetName = "Guid"
+ValueFromPipeline,
+ParameterSetName = "Object"
 )]
 [ValidateNotNullorEmpty()]
-[Guid]$TaskID
+[MyTask]$InputObject
 
 )
 
@@ -363,8 +374,10 @@ Begin {
     [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
     Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
-    Write-Verbose "[BEGIN  ] Creating a backup copy of $myTaskPath"
-    Backup-MyTaskFile
+    if ($PSCmdlet.ShouldProcess($myTaskPath,"Create backup")) {
+        Write-Verbose "[BEGIN  ] Creating a backup copy of $myTaskPath"
+        Backup-MyTaskFile
+    }
 
     #load tasks from XML
     Write-Verbose "[BEGIN  ] Loading tasks from XML"
@@ -385,8 +398,12 @@ Process {
             return
         }        
      } #if $name
+     else {
+         $TaskID = $InputObject.TaskID
+     }
 
      #select node by TaskID (GUID)
+    
      Write-Verbose "[PROCESS] Identifying task id: $TaskID"
      $node = ($in | select-xml -XPath "//Object/Property[text()='$TaskID']").node.ParentNode
 
@@ -543,6 +560,7 @@ End {
 Function Show-MyTask {
 
 #colorize output using Write-Host
+#this may not work in the PowerShell ISE
 
 [cmdletbinding(DefaultParameterSetName="none")]
 Param(
@@ -585,12 +603,12 @@ DynamicParam {
   } #Dynamic Param
 
 Begin {
-$Category = $PsBoundParameters[$ParameterName]
-Write-Verbose "Starting: $($MyInvocation.Mycommand)"
+    $Category = $PsBoundParameters[$ParameterName]
+    Write-Verbose "Starting: $($MyInvocation.Mycommand)"
 
-#display PSBoundparameters formatted nicely for Verbose output  
-[string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-Write-Verbose "PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+    #display PSBoundparameters formatted nicely for Verbose output  
+    [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
+    Write-Verbose "PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 }
 
 Process {
@@ -606,7 +624,16 @@ Process {
     Write-Host "`n"
     Write-Host $table[1] -ForegroundColor Cyan
     Write-Host $table[2] -ForegroundColor Cyan
+
+    #define a parameter hashtable to splat to Write-Host to better
+    #handle colors in the PowerShell ISE under Windows 10
+    $phash = @{
+        Object = $Null
+    }
     $table[3..$table.count] | foreach {
+        
+        #add the incoming object as the object for Write-Host
+        $pHash.object = $_
 
         #test if DueDate is within 24 hours
         if ($rx.IsMatch($_)) {
@@ -621,25 +648,31 @@ Process {
         else {
             $complete = $False
         }
+
         #select a different color for overdue tasks
         if ($_ -match "\bTrue\b") {
-            $c = "Red"
+            $phash.ForegroundColor = "Red"
         }
         elseif ($hours -le 24 -AND (-Not $complete)) {
-            $c = "Yellow"
+            $phash.ForegroundColor = "Yellow"
             $hours = 999
         }
         elseif ($complete) {
             #display completed tasks in green
-            $c = "Green"
+            $phash.ForegroundColor = "Green"
         }
         else {
-            $c = $host.ui.RawUI.ForegroundColor
+            if ($pHash.ContainsKey("foregroundcolor")) {
+                #remove foreground color so that Write-Host uses
+                #the current default
+                $pHash.Remove("foregroundcolor")
+            }
         }
-        Write-Host $_ -ForegroundColor $c
+        Write-Host @pHash
 
     } #foreach
 } #Process
+
 End {
     Write-Verbose "Ending: $($MyInvocation.Mycommand)"
 } #End
