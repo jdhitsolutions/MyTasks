@@ -1,5 +1,13 @@
 Changelog for MyTasks
 
+v1.0.4
+explicitly added UTF8 encoding when reading and writing XML content.
+explicitly added Unicode encoding when reading and 
+writing task category file. (Issue #4)
+Modified Show-MyTask to format as a table with autosize and 
+string streaming.
+Updated manifest.
+
 v1.0.3
 modified code when creating a new XML file to declare
 encoding as UTF-8.

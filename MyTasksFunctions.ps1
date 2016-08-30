@@ -6,7 +6,7 @@ Function _ImportTasks {
 Param([string]$Path = $myTaskpath)
 
 If (Test-Path $myTaskpath) {
-[xml]$In = Get-Content -Path $Path
+[xml]$In = Get-Content -Path $Path -Encoding UTF8
 
 }
 else {
@@ -136,7 +136,7 @@ Process {
     if (Test-Path -Path $mytaskPath) {
 
         #import xml file
-        [xml]$in = Get-Content -Path $mytaskPath
+        [xml]$in = Get-Content -Path $mytaskPath -Encoding UTF8
 
         #continue of there are existing objects in the file
         if ($in.objects) {
@@ -237,7 +237,7 @@ DynamicParam {
 
     # Generate and set the ValidateSet 
     if (Test-Path -Path $myTaskCategory) {          
-        $arrSet = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
+        $arrSet = Get-Content -Path $myTaskCategory -Encoding Unicode | where {$_ -match "\w+"} | foreach {$_.Trim()}
     }
     else {
         $arrSet = $myTaskDefaultCategories
@@ -279,7 +279,7 @@ Process {
 
     Write-Verbose "[PROCESS] Processing XML"
     Try {
-        [xml]$In = Get-Content -Path $MyTaskPath -ErrorAction Stop
+        [xml]$In = Get-Content -Path $MyTaskPath -ErrorAction Stop -Encoding UTF8
     }
     Catch {
         Write-Error "There was a problem loading task data from $myTaskPath."
@@ -381,7 +381,7 @@ Begin {
 
     #load tasks from XML
     Write-Verbose "[BEGIN  ] Loading tasks from XML"
-    [xml]$In = Get-Content -Path $MyTaskPath
+    [xml]$In = Get-Content -Path $MyTaskPath -Encoding UTF8
 } #begin
 
 Process {
@@ -405,7 +405,7 @@ Process {
      #select node by TaskID (GUID)
     
      Write-Verbose "[PROCESS] Identifying task id: $TaskID"
-     $node = ($in | select-xml -XPath "//Object/Property[text()='$TaskID']").node.ParentNode
+     $node = ($in | Select-Xml -XPath "//Object/Property[text()='$TaskID']").node.ParentNode
 
      if ($node) {
          #remove it
@@ -492,7 +492,7 @@ Begin {
     $Category = $PsBoundParameters[$ParameterName]
     Write-Verbose "Using parameter set $($PSCmdlet.ParameterSetName)"
     #display PSBoundparameters formatted nicely for Verbose output  
-    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
     Write-Verbose "PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
     #import from the XML file
@@ -586,7 +586,8 @@ DynamicParam {
 
     # Generate and set the ValidateSet 
     if (Test-Path -Path $myTaskCategory) {           
-        $arrSet = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
+        $arrSet = Get-Content -Path $myTaskCategory -Encoding Unicode | 
+        where {$_ -match "\w+"} | foreach {$_.Trim()}
     }
     else {
         $arrSet = $myTaskDefaultCategories
@@ -616,7 +617,7 @@ Process {
     $tasks = Get-MyTask @PSBoundParameters
 
     #convert tasks to a text table
-    $table = ($tasks | Format-Table | Out-String).split("`n")
+    $table = ($tasks | Format-Table -AutoSize | Out-String -Stream).split("`r`n")
 
     #define a regular expression pattern to match the due date
     [regex]$rx = "\b\d{1,2}\/\d{1,2}\/\d{4}\b"
@@ -704,7 +705,7 @@ ParameterSetName = "Name"
 Begin {
     Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
     #display PSBoundparameters formatted nicely for Verbose output  
-    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
     Write-Verbose "[BEGIN  ] PSBoundParameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
 } #begin
@@ -712,7 +713,7 @@ Begin {
 Process {
     Write-Verbose "[PROCESS] Using parameter set: $($PSCmdlet.ParameterSetName)"
     #display PSBoundparameters formatted nicely for Verbose output  
-    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
     Write-Verbose "[PROCESS] PSBoundParameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
     if ($Name) {
@@ -740,7 +741,7 @@ Process {
         $new = ($task | Select Name,Descriptiong,DueDate,Category,Progress,TaskID,TaskCreated,TaskModified,Completed | ConvertTo-Xml).Objects.Object
 
         #load tasks from XML
-        [xml]$In = Get-Content -Path $MyTaskPath
+        [xml]$In = Get-Content -Path $MyTaskPath -Encoding UTF8
 
         #select node by TaskID (GUID)
         $node = ($in | Select-Xml -XPath "//Object/Property[text()='$($task.TaskID)']").node.ParentNode
@@ -785,7 +786,7 @@ Param()
 Write-Verbose "Starting: $($MyInvocation.Mycommand)"
 If (Test-Path -Path $myTaskCategory) {
     Write-Verbose "Retrieving user categories from $myTaskCategory"
-    Get-Content -Path $myTaskCategory | Where {$_ -match "\w+"}
+    Get-Content -Path $myTaskCategory -Encoding Unicode | Where {$_ -match "\w+"}
 }
 else {
     #Display the defaults
@@ -816,10 +817,10 @@ Begin {
     #create it
     if (-Not (Test-Path -Path $myTaskCategory)) {
         Write-Verbose "[BEGIN  ] Creating new user category file $myTaskCategory"
-        Set-Content -Value "" -Path $myTaskCategory
+        Set-Content -Value "" -Path $myTaskCategory -Encoding Unicode
     }
     #get current contents
-    $current = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"}
+    $current = Get-Content -Path $myTaskCategory -Encoding Unicode | where {$_ -match "\w+"}
 } #begin
 
 Process {
@@ -829,7 +830,7 @@ Process {
         }
         else {
             Write-Verbose "[PROCESS] Adding $item"
-            Add-Content -Value $item.Trim() -Path $myTaskCategory
+            Add-Content -Value $item.Trim() -Path $myTaskCategory -Encoding Unicode
         }
     }
 
@@ -858,7 +859,7 @@ Begin {
     Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
 
     #get current contents
-    $current = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"}
+    $current = Get-Content -Path $myTaskCategory -Encoding Unicode| where {$_ -match "\w+"}
     #create backup 
     $back = Join-Path -path $home\Documents -ChildPath MyTaskCategory.bak
     Write-Verbose "[BEGIN  ] Creating backup copy"
@@ -876,7 +877,7 @@ Process {
 End {
     #update file
     Write-Verbose "[END    ] Updating: $myTaskCategory"
-    Set-Content -Value $current -Path $myTaskCategory
+    Set-Content -Value $current -Path $myTaskCategory -Encoding Unicode
     Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
 } #end
 }
@@ -899,7 +900,7 @@ HelpMessage = "Enter the filename and path for the backup xml file"
 Begin {
     Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
     #display PSBoundparameters formatted nicely for Verbose output  
-    [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+    [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
     Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
     Write-Verbose "[BEGIN  ] Creating backup file $Destination"
     
@@ -919,7 +920,7 @@ Process {
 
         Write-Verbose "[PROCESS] Adding comment to backup XML file"
         #insert a comment into the XML file
-        [xml]$doc = Get-Content -Path $Destination  
+        [xml]$doc = Get-Content -Path $Destination -Encoding UTF8  
         $comment  = $doc.CreateComment("Backup of $MytaskPath created on $(Get-Date)") 
         $doc.InsertAfter($comment,$doc.FirstChild) | Out-Null
         $doc.Save($Destination)
@@ -963,7 +964,7 @@ Begin {
 
 Process {
 
-[xml]$In = Get-Content -Path $mytaskPath
+[xml]$In = Get-Content -Path $mytaskPath -Encoding UTF8
 
 if ($Task) {
     $taskID = $task.TaskID
@@ -981,7 +982,7 @@ if ($completed) {
     if (Test-Path -Path $Path) {
         #append to existing document
         Write-Verbose "[PROCESS] Appending to $Path"
-        [xml]$Out = Get-Content -Path $Path
+        [xml]$Out = Get-Content -Path $Path -Encoding UTF8
         $parent = $Out.Objects
     }
     else {
