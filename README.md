@@ -20,7 +20,7 @@ PS S:\> get-mytask -name MemoryTools
 
 ID  Name         Description                DueDate OverDue Category  Progress
 --  ----         -----------                ------- ------- --------  --------
-8   MemoryTools  update module         ```7/22/2016 False   Projects        10
+8   MemoryTools  update module         ```7/22/2018 False   Projects        10
 ```
 But there is also a command called *Show-MyTask* which will write output directly to the host. Incomplete tasks that are overdue will be displayed in red text. Tasks that will be due in 24 hours will be displayed in yellow. If you select all tasks then completed items will be displayed in green. This command may not work in the PowerShell ISE.
 
@@ -42,16 +42,9 @@ You should read full help and examples for all commands as well as the about_MyT
 - [Show-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Show-MyTask.md)
 
 ## Limitations
-This module is currently not intended or supported on the alpha release of PowerShell 6 that runs on Linux and macOS.
+This module is currently not intended or supported on PowerShell Core running on Linux or macOS..
 
 Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
 
 
-****************************************************************
-DO NOT USE IN A PRODUCTION ENVIRONMENT UNTIL YOU HAVE TESTED 
-THOROUGHLY IN A LAB ENVIRONMENT. USE AT YOUR OWN RISK. IF YOU DO 
-NOT UNDERSTAND WHAT THIS SCRIPT DOES OR HOW IT WORKS, DO NOT USE
-OUTSIDE OF A SECURE, TEST SETTING.      
-****************************************************************
-
-*updated August 29, 2016*
+*last updated 2 January 2018*

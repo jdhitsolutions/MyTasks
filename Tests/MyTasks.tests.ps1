@@ -1,6 +1,5 @@
 
-
-import-module ..\Mytasks -Force
+import-module ..\Mytasks.psd1 -Force
 
 InModuleScope MyTasks {
 
@@ -26,7 +25,7 @@ $theModule = get-module -name mytasks
     It "Requires PowerShell 5.0" {
         $theModule.PowerShellVersion | Should be '5.0'
     }
-} 
+} #describe my module
 
 
 Describe Categories {
@@ -62,52 +61,62 @@ $myTaskCategory = "TestDrive:\myTaskCategory.txt"
          (Get-MyTaskCategory).count| Should be 5
     }
     
-}
+} #describe my categories
 
 Describe Tasks {
 
-Mock Get-Date { return ("9/1/2016 12:01:00PM" -as [datetime])  }
+    <#
+        It doesn't appear that you can consistently mock commands that might be used in a class
+        so we'll use actual the actual date
+    #>
 
-
-#need absolute path for XML files
-$mytaskPath = Join-Path $TestDrive -child "myTasks.xml" 
-$myTaskArchivePath = Join-Path -Path $TestDrive -ChildPath myTasksArchive.xml
-
-$myTaskCategory = "TestDrive:\myTaskCategory.txt"
+    $Due = (Get-Date).AddDays(30).Date
+    #need absolute path for XML files
+new-Item -Name Documents -ItemType Directory -path $TestDrive
+$home = $TestDrive
+$mytaskPath = Join-Path $home\Documents -child "myTasks.xml" 
+$myTaskArchivePath = Join-Path -Path $home\Documents -ChildPath "myTasksArchive.xml"
+$myTaskCategory = Join-Path -path $home\Documents -childpath "myTaskCategory.txt"
 
 Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
 
+
     It "Should create a new task" {
-        $a = New-MyTask -Name Test1 -DueDate 12/31/2016 -Category Testing -Passthru
-        $a.id | Should be 0
+        $a = New-MyTask -Name Test1 -DueDate $Due  -Category Testing -Passthru
+        $a.id | Should be 1
         Test-Path $mytaskPath | Should Be $True
     }
 
     It "Should create a new task with a 7 day default due date" {
         $b = New-MyTask -Name Test2 -Category Testing -Passthru
-        $b.DueDate | Should Be "09/08/2016 12:01:00"
+        $target = "{0:ddMMyyyy}" -f (get-date).adddays(7)
+        $tested = "{0:ddMMyyyy}" -f $b.duedate
+        $tested | Should Be $target
     }
 
-    It "Should get tasks" {
-        $t = Get-MyTask -name Test1
+    It "Should get tasks by name" {
+        $t = Get-MyTask -name Test1 
+        # write-host "Today is $(Get-Date)" -ForegroundColor yellow
+        # $t | format-list *,Completed | out-string | write-host -ForegroundColor yellow   
         $t.ID | Should be 2
         $t.name | Should be "Test1"
-        $t.duedate | Should match "12/31/2016"
+        $t.duedate.year | Should match (Get-Date).year
         $t.Category | Should be "Testing"
-        $t.OverDue | Should Be $False
-    }
-
-    #add some other tasks
-    New-MyTask -Name A -DueDate 12/31/2016 -Category Testing
-    New-MyTask -Name B -DueDate 10/01/2016 -Category Work
-    New-MyTask -Name C -DueDate 11/11/2016 -Category Personal
-
-    It "Should get tasks by category" {
-        (Get-Mytask -Category Testing).count | should be 3
+        $t.duedate  | Should be $Due
+        $t.Overdue | Should Be $False
     }
 
     It "Should get tasks by days due" {
         (Get-MyTask -DaysDue 30).count | Should be 2
+    }
+
+    #add some other tasks
+    New-MyTask -Name Alice -DueDate "12/31" -Category Testing
+    New-MyTask -Name Bob -DueDate "10/01" -Category Work
+    New-MyTask -Name Carol -DueDate "11/11" -Category Personal
+
+    It "Should get tasks by category" {
+        (Get-Mytask -Category Testing).count | should be 3
     }
 
     It "Should get all tasks" {
@@ -115,12 +124,13 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
     }
 
     It "Should modify a task by name" {
-        Set-MyTask -Name "Test1" -Progress 50 -Description "Pester Test" -DueDate "8/1/2016"
+        $yr = (Get-Date).year+1
+        Set-MyTask -Name "Test1" -Progress 50 -Description "Pester Test" -DueDate "8/1/$yr"
          $t = Get-MyTask -name Test1
          $t.Progress | should be 50
          $t.description | should be "Pester Test"
-         $t.duedate | Should be ("8/1/2016" -as [datetime])
-         $t.OverDue | Should be $true
+         $t.duedate | Should be ("8/1/$yr" -as [datetime])
+         $t.OverDue | Should be $false
     }
 
     It "Should modify a task via the pipeline" {
@@ -130,7 +140,7 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
     }
 
     It "Show-MyTask should write to the host" {
-        {Show-MyTask | Get-Membet} | Should Throw
+        {Show-MyTask | Get-Member -ErrorAction stop} | Should Throw
     }
 
     It "Should Complete a task" {
@@ -144,7 +154,7 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
     It "Should complete and archive a task" {
 
         {Complete-Mytask -Name Test2 -Archive -ErrorAction Stop} | Should Not Throw
-         (Get-MyTask).count | Should be 3
+        (Get-MyTask).count | Should be 3
     }
 
     It "Should archive or save a task" {
@@ -160,19 +170,19 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
         $c.Displayname | should be "Archive-MyTask"
         $c.ReferencedCommand | Should be "Save-MyTask"
     }
-
-    It "Should remove a task and backup the task file" {
-
-        Mock Get-Date { return "20160901"  } -ParameterFilter {format -eq "yyyyMMdd"} 
-        $home = $TestDrive
-        mkdir $home\documents
     
-        {Remove-myTask -Name A} | Should not Throw
-        {Get-MyTask -Name B | Remove-MyTask } | should not Throw
+    It "Should remove a task and backup the task file" {
+       
+      #  Mock Get-Date { return "20171001"  } -ParameterFilter {$format -eq "yyyyMMdd"} 
+        {Remove-myTask -Name Alice } | Should not Throw
+        {Get-MyTask -Name Bob | Remove-MyTask } | should not Throw
         (Get-MyTask).count | Should be 1
-        Test-Path $TestDrive\documents\MyTasks_Backup_20160901.xml | Should be $True
+       # dir $TestDrive -Recurse | out-string | write-host
+        Test-Path $TestDrive\documents\MyTasks_Backup_*.xml | Should be $True
+       
     }
 
-}
+} #describe my tasks
+
 
 } #in module
