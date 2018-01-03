@@ -1,17 +1,19 @@
 ---
 external help file: MyTasks-help.xml
+Module Name: MyTasks
 online version: 
 schema: 2.0.0
 ---
 
 # Save-MyTask
+
 ## SYNOPSIS
 Archive completed or other tasks to a new file.
 
 ## SYNTAX
 
 ```
-Save-MyTask [[-Path] <String>] [-Task <MyTask[]>] [-Passthru] [-WhatIf] [-Confirm]
+Save-MyTask [[-Path] <String>] [-Task <MyTask[]>] [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,28 +44,14 @@ PS C:\> get-mytask -Category other | save-mytask -Path c:\work\myOther.xml -Pass
 
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
--a----        8/23/2016   9:55 AM            833 myOther.xml
+-a----        8/23/2017   9:55 AM            833 myOther.xml
 ```
 
 Get all tasks in the Other category and save them to a new file. The tasks will be removed from the source file.
+
 ## PARAMETERS
 
-### -Confirm
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: 
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Passthru
-
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -71,7 +59,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -86,7 +74,7 @@ Aliases:
 
 Required: False
 Position: 0
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -101,13 +89,25 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -WhatIf
+### -Confirm
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -115,10 +115,13 @@ Aliases: wi
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -129,11 +132,10 @@ Accept wildcard characters: False
 ### None
 
 ## NOTES
-
 Learn more about PowerShell:
 http://jdhitsolutions.com/blog/essential-powershell-resources/
 
-
 ## RELATED LINKS
+
 [Get-MyTask]()
 [Complete-MyTask]()

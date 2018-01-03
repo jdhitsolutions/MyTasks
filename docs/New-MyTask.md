@@ -1,10 +1,12 @@
 ---
 external help file: MyTasks-help.xml
+Module Name: MyTasks
 online version: 
 schema: 2.0.0
 ---
 
 # New-MyTask
+
 ## SYNOPSIS
 Create a new MyTask itemn
 
@@ -13,13 +15,13 @@ Create a new MyTask itemn
 ### Date (Default)
 ```
 New-MyTask [-Name] <String> [-DueDate <DateTime>] [-Description <String>] [-Passthru] [-WhatIf] [-Confirm]
- -Category <String>
+ -Category <String> [<CommonParameters>]
 ```
 
 ### Days
 ```
 New-MyTask [-Name] <String> [-Days <Int32>] [-Description <String>] [-Passthru] [-WhatIf] [-Confirm]
- -Category <String>
+ -Category <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -35,10 +37,11 @@ PS C:\> New-MyTask -Name "Finish DSC Training" -days 30 -Category Personal -Pass
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-0   Finish DSC Training                             9/21/2016 False   Personal            0
+0   Finish DSC Training                             9/21/2017 False   Personal            0
 ```
 
 Create a new task using the Training category that is due 30 days from now.
+
 ## PARAMETERS
 
 ### -Category
@@ -51,22 +54,8 @@ Accepted values: your defined categories
 
 Required: True
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Confirm
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: 
-Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -80,7 +69,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -95,7 +84,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
@@ -110,7 +99,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
@@ -125,14 +114,12 @@ Aliases:
 
 Required: True
 Position: 0
-Default value: 
+Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Passthru
-
-
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -140,14 +127,25 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -WhatIf
-
-
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -155,10 +153,13 @@ Aliases: wi
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -173,6 +174,7 @@ Learn more about PowerShell:
 http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
+
 [Get-MyTask]()
 [Get-MyTaskCategory]()
 [Set-MyTask]()

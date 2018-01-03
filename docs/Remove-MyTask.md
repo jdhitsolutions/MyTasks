@@ -1,10 +1,12 @@
 ---
 external help file: MyTasks-help.xml
+Module Name: MyTasks
 online version: 
 schema: 2.0.0
 ---
 
 # Remove-MyTask
+
 ## SYNOPSIS
 Remove a MyTask work item.
 
@@ -12,12 +14,12 @@ Remove a MyTask work item.
 
 ### Name (Default)
 ```
-Remove-MyTask [-Name] <String> [-WhatIf] [-Confirm]
+Remove-MyTask [-Name] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
-### Guid
+### Object
 ```
-Remove-MyTask [-TaskID] <Guid> [-WhatIf] [-Confirm]
+Remove-MyTask -InputObject <MyTask> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,7 +33,7 @@ As an alternative to deleting tasks you can also archive them.
 ```
 PS C:\> remove-mytask -Name "Finish DSC Training" -whatif
 What if: Performing the operation "Copy File" on target "Item: C:\Users\Jeff\Documents\myTasks.xml Destination: C:\Users
-\Jeff\documents\MyTasks_Backup_20160822.xml".
+\Jeff\documents\MyTasks_Backup_201760822.xml".
 What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-9c7c-df55dd0d135a".
 ```
 
@@ -43,19 +45,20 @@ PS C:\> Get-myTask -Name "Finish DSC Training" | Remove-MyTask
 ```
 
 Permanently deleting a task.
+
 ## PARAMETERS
 
-### -Confirm
-
+### -InputObject
+A myTask object from Get-MyTask
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
+Type: MyTask
+Parameter Sets: Object
+Aliases: 
 
-Required: False
+Required: True
 Position: Named
-Default value: 
-Accept pipeline input: False
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -69,28 +72,25 @@ Aliases:
 
 Required: True
 Position: 0
-Default value: 
-Accept pipeline input: True (ByValue)
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -TaskID
-Enter task guid id or pipe a task to this command.
-
+### -Confirm
 ```yaml
-Type: Guid
-Parameter Sets: Guid
-Aliases: 
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
-Required: True
-Position: 0
-Default value: 
-Accept pipeline input: True (ByPropertyName)
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -WhatIf
-
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -98,25 +98,28 @@ Aliases: wi
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+
 ## INPUTS
 
 ### System.String
-### System.Guid
 
+### System.Guid
 
 ## OUTPUTS
 
 ### None
 
 ## NOTES
-
 Learn more about PowerShell:
 http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
+
 [Save-MyTask]()

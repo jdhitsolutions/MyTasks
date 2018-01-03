@@ -37,13 +37,10 @@ Class MyTask {
     
     #check if task is overdue and update
     hidden [void]Refresh() {
-        write-verbose "[CLASS  ] Refreshing task $($this.name)"
+        Write-Verbose "[CLASS  ] Refreshing task $($this.name)"
         #only mark as overdue if not completed and today is greater than the due date
         Write-Verbose "[CLASS  ] Comparing $($this.DueDate) due date to $(Get-Date)"
-        #write-host "Now is $(get-date)"
-        #write-host "comparing to $($this.duedate)"
-        #write-host ((Get-Date) -gt $this.DueDate)
-        #write-host (-Not $this.completed)
+
         if (((Get-Date) -gt $this.DueDate) -AND (-Not $this.completed)) {
             $this.Overdue = $True 
         } 
@@ -52,8 +49,7 @@ Class MyTask {
         }
     
     } #refresh
-    
-    
+        
     #Constructors
     MyTask([string]$Name) {
         write-verbose "[CLASS  ] Constructing with name: $name"
@@ -95,7 +91,7 @@ Function _ImportTasks {
         $obj.Property | ForEach-Object -Begin {$propHash = [ordered]@{}} -Process {
             $propHash.Add($_.name, $_.'#text')
         } 
-            $propHash | out-string | write-verbose
+        $propHash | out-string | write-verbose
         Try {     
             $tmp = New-Object -TypeName MyTask -ArgumentList $propHash.Name, $propHash.DueDate, $propHash.Description, $propHash.Category
 
@@ -161,7 +157,7 @@ Function New-MyTask {
 
         # Generate and set the ValidateSet 
         if (Test-Path -Path $myTaskCategory) {           
-            $arrSet = Get-Content -Path $myTaskCategory | where {$_ -match "\w+"} | foreach {$_.Trim()}
+            $arrSet = Get-Content -Path $myTaskCategory | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
         }
         else {
             $arrSet = $myTaskDefaultCategories
@@ -315,7 +311,7 @@ Function Set-MyTask {
 
         # Generate and set the ValidateSet 
         if (Test-Path -Path $myTaskCategory) {          
-            $arrSet = Get-Content -Path $myTaskCategory -Encoding Unicode | where {$_ -match "\w+"} | foreach {$_.Trim()}
+            $arrSet = Get-Content -Path $myTaskCategory -Encoding Unicode | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
         }
         else {
             $arrSet = $myTaskDefaultCategories
@@ -721,7 +717,7 @@ Function Show-MyTask {
             }
 
             #test if task is complete
-            if ($_ -match '\b100\b.$') {
+            if ($_ -match '\b100\b$') {
                 $complete = $True
            
             }
@@ -812,7 +808,7 @@ Function Complete-MyTask {
             Write-Verbose "[PROCESS] Marking task as completed"
             #invoke CompleteTask() method
             $task.CompleteTask()
-            Write-Verbose "[PROCESS] $($task | Select *,Completed,TaskModified,TaskID | Out-String)"
+            Write-Verbose "[PROCESS] $($task | Select-Object *,Completed,TaskModified,TaskID | Out-String)"
         
             #find matching XML node and replace it
             Write-Verbose "[PROCESS] Updating task file"
@@ -940,7 +936,7 @@ Function Remove-MyTaskCategory {
         #get current contents
         $current = Get-Content -Path $myTaskCategory -Encoding Unicode| where-object {$_ -match "\w+"}
         #create backup 
-        $back = Join-Path -path $home\Documents -ChildPath MyTaskCategory.bak
+        $back = Join-Path -path $mytaskhome -ChildPath MyTaskCategory.bak
         Write-Verbose "[BEGIN  ] Creating backup copy"
         Copy-Item -Path $myTaskCategory -Destination $back -Force
     } #begin
@@ -971,7 +967,7 @@ Function Backup-MyTaskFile {
             HelpMessage = "Enter the filename and path for the backup xml file"
         )]
         [ValidateNotNullorEmpty()]
-        [string]$Destination = (Join-Path -Path $home\documents -ChildPath "MyTasks_Backup_$(Get-Date -format "yyyyMMdd").xml" ),
+        [string]$Destination = (Join-Path -Path $mytaskhome -ChildPath "MyTasks_Backup_$(Get-Date -format "yyyyMMdd").xml" ),
         [switch]$Passthru
 
     )

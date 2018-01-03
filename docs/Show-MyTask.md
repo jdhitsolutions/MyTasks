@@ -1,10 +1,12 @@
 ---
 external help file: MyTasks-help.xml
+Module Name: MyTasks
 online version: 
 schema: 2.0.0
 ---
 
 # Show-MyTask
+
 ## SYNOPSIS
 Display all active tasks with color highlights.
 
@@ -12,17 +14,17 @@ Display all active tasks with color highlights.
 
 ### none (Default)
 ```
-Show-MyTask
+Show-MyTask [<CommonParameters>]
 ```
 
 ### all
 ```
-Show-MyTask [-All]
+Show-MyTask [-All] [<CommonParameters>]
 ```
 
 ### Category
 ```
-Show-MyTask [-Category <String>]
+Show-MyTask [-Category <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -56,7 +58,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -72,10 +74,13 @@ Accepted values: your defined categories
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -88,4 +93,5 @@ Accept wildcard characters: False
 ## NOTES
 
 ## RELATED LINKS
+
 [Get-MyTask]()

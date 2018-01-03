@@ -3,13 +3,19 @@
 #region variables
 
 #path to user defined categories
-$myTaskCategory = Join-Path -Path $home\Documents\ -ChildPath myTaskCategory.txt
+if ($isLinux) {
+    $mytaskhome = $home
+}
+else {
+    $mytaskhome = "$home\Documents" 
+}
+$myTaskCategory = Join-Path -Path $mytaskhome -ChildPath myTaskCategory.txt
 
 #path to stored tasks
-$mytaskPath = Join-Path -Path "$home\Documents\" -ChildPath myTasks.xml
+$mytaskPath = Join-Path -Path $mytaskhome -ChildPath myTasks.xml
 
 #path to archived or completed tasks
-$myTaskArchivePath = Join-Path -Path "$home\Documents\" -ChildPath myTasksArchive.xml
+$myTaskArchivePath = Join-Path -Path $mytaskhome -ChildPath myTasksArchive.xml
 
 #default task categories
 $myTaskDefaultCategories = "Work","Personal","Other","Customer"
@@ -17,7 +23,7 @@ $myTaskDefaultCategories = "Work","Personal","Other","Customer"
 #endregion
 
 #dot source functions
-. $psscriptroot\myTasksFunctions.ps1
+. $psscriptroot\MyTasksFunctions.ps1
 
 #define some aliases
 Set-Alias -Name gmt -Value Get-MyTask
@@ -30,7 +36,7 @@ Set-Alias -Name Archive-MyTask -Value Save-MyTask
 
 #define a hashtable of parameters to splat to Export-ModuleMember
 $exportParams = @{
-Variable = "myTaskPath","myTaskDefaultCategories","myTaskArchivePath"
+Variable = "myTaskPath","myTaskDefaultCategories","myTaskArchivePath","mytaskhome"
 Function = "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask",
 "Show-MyTask","Complete-MyTask","Get-MyTaskCategory","Add-MyTaskCategory",
 "Remove-MyTaskCategory","Backup-MyTaskFile","Save-MyTask"

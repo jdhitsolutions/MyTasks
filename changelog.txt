@@ -1,5 +1,11 @@
 Changelog for MyTasks
 
+v1.2.0
+Modified files to support PowerShell Core
+Update help documentation
+Updated README
+Updated manifest
+
 v1.1.0
 Updated verbose messages
 moved class definition to functions script

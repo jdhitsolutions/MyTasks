@@ -1,10 +1,12 @@
 ---
 external help file: MyTasks-help.xml
+Module Name: MyTasks
 online version: 
 schema: 2.0.0
 ---
 
 # Get-MyTask
+
 ## SYNOPSIS
 Get MyTask work items.
 
@@ -12,32 +14,32 @@ Get MyTask work items.
 
 ### Name (Default)
 ```
-Get-MyTask [[-Name] <String>]
+Get-MyTask [[-Name] <String>] [<CommonParameters>]
 ```
 
 ### ID
 ```
-Get-MyTask [-ID <Int32>]
+Get-MyTask [-ID <Int32>] [<CommonParameters>]
 ```
 
 ### All
 ```
-Get-MyTask [-All]
+Get-MyTask [-All] [<CommonParameters>]
 ```
 
 ### Completed
 ```
-Get-MyTask [-Completed]
+Get-MyTask [-Completed] [<CommonParameters>]
 ```
 
 ### Days
 ```
-Get-MyTask [-DaysDue <Int32>]
+Get-MyTask [-DaysDue <Int32>] [<CommonParameters>]
 ```
 
 ### Category
 ```
-Get-MyTask [-Category <String>]
+Get-MyTask [-Category <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -53,30 +55,30 @@ PS C:\> Get-MyTask
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-2   Order books               Month of Lunches       8/1/2016 True    Personal            0
-4   Apache Install            Ubuntu 16             9/13/2016 False   work               10
-5   2017 Training Budget                            10/1/2016 False   Personal            0
-6   Conferences                                     10/7/2016 False   other               0
-7   Update Server03                                10/14/2016 False   work                0
-8   Finish DSC Training                            12/31/2016 False   Personal           80
-
+2   Order books               Month of Lunches       8/1/2017 True    Personal            0
+4   Apache Install            Ubuntu 16             9/13/2017 False   work               10
+5   2018 Training Budget                            10/1/2017 False   Personal            0
+6   Conferences                                     10/7/2017 False   other               0
+7   Update Server03                                10/14/2017 False   work                0
+8   Finish DSC Training                            12/31/2017 False   Personal           80
 ```
 
 Get all active tasks.
+
 ### -------------------------- EXAMPLE 2 --------------------------
 ```
 PS C:\> Get-MyTask -all 
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-1   Update Server02                                 7/14/2016 False   work              100
-2   Order books               Month of Lunches       8/1/2016 True    Personal            0
-3   Update Server01                                 8/30/2016 False   Work              100
-4   Apache Install            Ubuntu 16             9/13/2016 False   work               10
-5   2017 Training Budget                            10/1/2016 False   Personal            0
-6   Conferences                                     10/7/2016 False   other               0
-7   Update Server03                                10/14/2016 False   work                0
-8   Finish DSC Training                            12/31/2016 False   Personal           80
+1   Update Server02                                 7/14/2017 False   work              100
+2   Order books               Month of Lunches       8/1/2017 True    Personal            0
+3   Update Server01                                 8/30/2017 False   Work              100
+4   Apache Install            Ubuntu 16             9/13/2017 False   work               10
+5   2018 Training Budget                            10/1/2017 False   Personal            0
+6   Conferences                                     10/7/2017 False   other               0
+7   Update Server03                                10/14/2017 False   work                0
+8   Finish DSC Training                            12/31/2017 False   Personal           80
 ```
 
 Get all tasks including completed.
@@ -87,8 +89,8 @@ PS C:\>get-mytask -Category work
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-4   Apache Install            Ubuntu 16             9/13/2016 False   work               10
-7   Update Server03                                10/14/2016 False   work                0
+4   Apache Install            Ubuntu 16             9/13/2017 False   work               10
+7   Update Server03                                10/14/2017 False   work                0
 ```
 
 Get all active tasks in the Work category.
@@ -99,8 +101,8 @@ PS C:\> get-mytask -daysdue 30
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-2   Order books               Month of Lunches       8/1/2016 True    Personal            0
-4   Apache Install            Ubuntu 16             9/13/2016 False   work               10
+2   Order books               Month of Lunches       8/1/2017 True    Personal            0
+4   Apache Install            Ubuntu 16             9/13/2017 False   work               10
 ```
 
 Get all active tasks due in the next 30 days
@@ -113,12 +115,12 @@ PS C:\> get-mytask -id 4 | format-list -View all
 ID           : 4
 Name         : Apache Install
 Description  : Ubuntu 16
-DueDate      : 9/13/2016 8:39:46 AM
+DueDate      : 9/13/2017 8:39:46 AM
 Overdue      : False
 Category     : work
 Progress     : 10
-TaskCreated  : 8/23/2016 8:39:46 AM
-TaskModified : 8/23/2016 8:41:56 AM
+TaskCreated  : 8/23/2017 8:39:46 AM
+TaskModified : 8/23/2017 8:41:56 AM
 Completed    : False
 TaskID       : c6fdf70c-a2f7-42c2-8e7d-93e4faa669fd
 ```
@@ -137,7 +139,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -153,7 +155,7 @@ Accepted values: your defined categories
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -168,7 +170,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -183,7 +185,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -198,7 +200,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -212,15 +214,17 @@ Aliases:
 
 Required: False
 Position: 0
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: True
 ```
 
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+
 ## INPUTS
 
 ### None
-
 
 ## OUTPUTS
 
@@ -230,9 +234,12 @@ Accept wildcard characters: True
 Learn more about PowerShell:
 http://jdhitsolutions.com/blog/essential-powershell-resources/
 
-
 ## RELATED LINKS
+
 [Show-MyTask]()
+
 [New-MyTask]()
+
 [Set-MyTask]()
+
 [Complete-MyTask]()

@@ -1,17 +1,19 @@
 ---
 external help file: MyTasks-help.xml
+Module Name: MyTasks
 online version: 
 schema: 2.0.0
 ---
 
 # Backup-MyTaskFile
+
 ## SYNOPSIS
 Create a backup copy of the MyTask XML source file.
 
 ## SYNTAX
 
 ```
-Backup-MyTaskFile [[-Destination] <String>] [-Passthru] [-WhatIf] [-Confirm]
+Backup-MyTaskFile [[-Destination] <String>] [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,7 +31,7 @@ PS C:\> backup-mytaskfile -Passthru
 
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
--a----        8/19/2016   6:19 PM          16461 MyTasks_Backup_20160819.xml
+-a----        8/19/2017   6:19 PM          16461 MyTasks_Backup_20170819.xml
 ```
 
 Create a backup copy of the source XML file to the default location,
@@ -37,26 +39,11 @@ Create a backup copy of the source XML file to the default location,
 ### -------------------------- EXAMPLE 2 --------------------------
 ```
 PS C:\> Backup-MyTaskFile -Destination c:\work\taskback.xm
-
 ```
 
 Create a backup copy of the source XML file to specified file.
 
 ## PARAMETERS
-
-### -Confirm
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: 
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -Destination
 Enter the filename and path for the backup xml file.
@@ -68,13 +55,12 @@ Aliases:
 
 Required: False
 Position: 0
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Passthru
-
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -82,13 +68,25 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -WhatIf
-
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -96,10 +94,13 @@ Aliases: wi
 
 Required: False
 Position: Named
-Default value: 
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -112,4 +113,5 @@ Accept wildcard characters: False
 ## NOTES
 
 ## RELATED LINKS
+
 [Save-MyTask]()
