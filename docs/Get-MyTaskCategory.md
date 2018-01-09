@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
 Module Name: MyTasks
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -21,7 +21,7 @@ Use this command to display all of the current categories for the MyTasks module
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 PS C:\> Get-MyTaskCategory
 Work

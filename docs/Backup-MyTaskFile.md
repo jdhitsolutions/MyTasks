@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
 Module Name: MyTasks
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -17,11 +17,11 @@ Backup-MyTaskFile [[-Destination] <String>] [-Passthru] [-WhatIf] [-Confirm] [<C
 ```
 
 ## DESCRIPTION
-Use this command to create a backup copy of the source XML file. The default behavior is to create an XML file in your Documents directory with the format MyTasks_Backup_YYYYMMDD.xml. You can also specify an alternate filename.
+Use this command to create a backup copy of the source XML file. The default behavior is to create an XML file in your Documents or Home directory with the format MyTasks_Backup_YYYYMMDD.xml. You can also specify an alternate filename.
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 PS C:\> backup-mytaskfile -Passthru
 
@@ -36,9 +36,9 @@ Mode                LastWriteTime         Length Name
 
 Create a backup copy of the source XML file to the default location,
 
-### -------------------------- EXAMPLE 2 --------------------------
+### EXAMPLE 2
 ```
-PS C:\> Backup-MyTaskFile -Destination c:\work\taskback.xm
+PS C:\> Backup-MyTaskFile -Destination c:\work\taskback.xml
 ```
 
 Create a backup copy of the source XML file to specified file.
@@ -51,7 +51,7 @@ Enter the filename and path for the backup xml file.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 0
@@ -64,7 +64,7 @@ Accept wildcard characters: False
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named

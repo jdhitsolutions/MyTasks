@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
 Module Name: MyTasks
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -27,14 +27,14 @@ Note: Currently there are no commands in this module for working with the archiv
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 PS C:\> archive-mytask
 ```
 
 Uaing the alias, archive all completed tasks to myTaskArchive.xml.
 
-### -------------------------- EXAMPLE 2 --------------------------
+### EXAMPLE 2
 ```
 PS C:\> get-mytask -Category other | save-mytask -Path c:\work\myOther.xml -Passthru
 
@@ -55,7 +55,7 @@ Get all tasks in the Other category and save them to a new file. The tasks will 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -70,7 +70,7 @@ The path to a new XML file.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 0
@@ -85,7 +85,7 @@ A MyTask object.
 ```yaml
 Type: MyTask[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named

@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
 Module Name: MyTasks
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -37,7 +37,7 @@ Use Complete-MyTask to mark an item as completed.
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 PS C:\> PS S:\> Set-MyTask -Name "Finish DSC Training" -Progress 70 -duedate "12/31/2017" -Passthru
 
@@ -48,7 +48,7 @@ ID  Name                      Description             DueDate OverDue Category  
 
 Set the progress value and a new due date for the 'Finish DSC Training' task.
 
-### -------------------------- EXAMPLE 2 --------------------------
+### EXAMPLE 2
 ```
 PS C:\> get-mytask -ID 9 | set-mytask -Progress 10 -Category Projects
 ```
@@ -63,7 +63,7 @@ Set the task category.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 Accepted values: your defined categories
 
 Required: False
@@ -79,7 +79,7 @@ Set the comment or description for the task.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -94,7 +94,7 @@ Set when the task is due for completion.
 ```yaml
 Type: DateTime
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -109,7 +109,7 @@ Enter the task ID to identify task you wish to modify.
 ```yaml
 Type: Int32
 Parameter Sets: ID
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -124,7 +124,7 @@ Enter the name of a task to modify.
 ```yaml
 Type: String
 Parameter Sets: Name
-Aliases: 
+Aliases:
 
 Required: True
 Position: 0
@@ -139,7 +139,7 @@ Give the task a new name.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -152,7 +152,7 @@ Accept wildcard characters: False
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -167,7 +167,7 @@ Set a progress completion value between 0 and 100.
 ```yaml
 Type: Int32
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -182,7 +182,7 @@ A task object usually piped from Get-MyTask.
 ```yaml
 Type: MyTask
 Parameter Sets: Task
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named

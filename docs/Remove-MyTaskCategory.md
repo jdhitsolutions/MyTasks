@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
 Module Name: MyTasks
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -21,7 +21,7 @@ If you have created custom MyTask categories with Add-MyTaskCategory, and wish t
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 PS C:\> Remove-MyTaskCategory ProjectX
 ```
@@ -36,7 +36,7 @@ Enter a task category name to remove.
 ```yaml
 Type: String[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: 0
@@ -89,4 +89,5 @@ http://jdhitsolutions.com/blog/essential-powershell-resources/
 ## RELATED LINKS
 
 [Get-MyTaskCategory]()
+
 [Add-MyTaskCategory]()

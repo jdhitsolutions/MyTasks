@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
 Module Name: MyTasks
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -29,7 +29,7 @@ As an alternative to deleting tasks you can also archive them.
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 PS C:\> remove-mytask -Name "Finish DSC Training" -whatif
 What if: Performing the operation "Copy File" on target "Item: C:\Users\Jeff\Documents\myTasks.xml Destination: C:\Users
@@ -39,7 +39,7 @@ What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-
 
 The command supports Whatif.
 
-### -------------------------- EXAMPLE 2 --------------------------
+### EXAMPLE 2
 ```
 PS C:\> Get-myTask -Name "Finish DSC Training" | Remove-MyTask
 ```
@@ -53,7 +53,7 @@ A myTask object from Get-MyTask
 ```yaml
 Type: MyTask
 Parameter Sets: Object
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -68,7 +68,7 @@ Enter task name
 ```yaml
 Type: String
 Parameter Sets: Name
-Aliases: 
+Aliases:
 
 Required: True
 Position: 0

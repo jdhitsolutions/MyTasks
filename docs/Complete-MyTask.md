@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
 Module Name: MyTasks
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -14,12 +14,20 @@ Mark a MyTask item as completed.
 
 ### Name (Default)
 ```
-Complete-MyTask [-Name] <String> [-Archive] [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
+Complete-MyTask [-Name] <String> [-CompletedDate <DateTime>] [-Archive] [-Passthru] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Task
 ```
-Complete-MyTask [-Task <MyTask>] [-Archive] [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
+Complete-MyTask [-Task <MyTask>] [-CompletedDate <DateTime>] [-Archive] [-Passthru] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
+```
+
+### ID
+```
+Complete-MyTask -ID <Int32> [-CompletedDate <DateTime>] [-Archive] [-Passthru] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -27,7 +35,7 @@ Use this command to mark a MyTask work item as completed. This will automaticall
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 PS C:\> get-mytask -id 6 | Complete-MyTask -Passthru
 
@@ -38,12 +46,19 @@ ID  Name                      Description             DueDate OverDue Category  
 
 Get MyTask with an ID of 6 and mark it as complete. By default nothing is written to the pipeline unless you use -Passthru.
 
-### -------------------------- EXAMPLE 2 --------------------------
+### EXAMPLE 2
 ```
 PS C:\> Complete-MyTask -Name "setup CEO laptop" -archive
 ```
 
 Mark the task as completed and archive it to the myTasksArchive.xml file.
+
+### EXAMPLE 3
+```
+PS C:\> Complete-MyTask -Name "update-resume" -CompletedDate "4/1/2017 4:00PM"
+```
+
+Mark the task as completed using the specified date.
 
 ## PARAMETERS
 
@@ -53,7 +68,7 @@ Move the task to the default archive file. There is no provision for specifying 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -68,7 +83,7 @@ Enter the name of a task.
 ```yaml
 Type: String
 Parameter Sets: Name
-Aliases: 
+Aliases:
 
 Required: True
 Position: 0
@@ -82,7 +97,7 @@ Accept wildcard characters: False
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -97,7 +112,7 @@ A MyTask item.
 ```yaml
 Type: MyTask
 Parameter Sets: Task
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -126,6 +141,34 @@ Parameter Sets: (All)
 Aliases: wi
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CompletedDate
+The date you completed the task. The default is the now.
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ID
+Enter the task ID```yaml
+Type: Int32
+Parameter Sets: ID
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

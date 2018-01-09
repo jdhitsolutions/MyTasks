@@ -1,5 +1,15 @@
 Changelog for MyTasks
 
+v1.3.0
+Updated README
+Added 'task' as an alias for New-MyTask
+Added CompletedDate parameter to Complete-MyTask (Issue #13)
+Added option to complete a task by ID (Issue #11)
+Changed default for Get-MyTask and Show-MyTask to display tasks due in next 30 days. (Issue #12)
+fixed bug in Show-Mytask where completed tasks were displaying in red
+Made parameters for New-MyTask more positional (Issue #14)
+Updated help documentation
+
 v1.2.0
 Modified files to support PowerShell Core
 Update help documentation

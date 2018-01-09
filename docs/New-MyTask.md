@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
 Module Name: MyTasks
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -31,7 +31,7 @@ The command will not write anything to the pipeline unless you use -Passthru. If
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 PS C:\> New-MyTask -Name "Finish DSC Training" -days 30 -Category Personal -Passthru
 
@@ -42,6 +42,12 @@ ID  Name                      Description             DueDate OverDue Category  
 
 Create a new task using the Training category that is due 30 days from now.
 
+### EXAMPLE 2
+```
+PS C:\> task reboot-router "1/18/2018 5:00PM" other  
+```
+
+Create a task using the alias and positional parameters for the task name, due date and category.
 ## PARAMETERS
 
 ### -Category
@@ -49,7 +55,7 @@ A task category. The Get-MyTaskCategory command should display all available cat
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 Accepted values: your defined categories
 
 Required: True
@@ -65,7 +71,7 @@ The deadline for the task set this number of days from now.
 ```yaml
 Type: Int32
 Parameter Sets: Days
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -80,7 +86,7 @@ Additional information or a brief description for your task.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -95,7 +101,7 @@ When you task is due to be completed.
 ```yaml
 Type: DateTime
 Parameter Sets: Date
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -110,7 +116,7 @@ Enter the name of your task.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: 0
@@ -123,7 +129,7 @@ Accept wildcard characters: False
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named

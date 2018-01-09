@@ -10,12 +10,12 @@ $theModule = get-module -name mytasks
         $theModule.exportedfunctions.count | should be 11
     }
 
-    It "Should have 7 aliases command" {
-        $theModule.ExportedAliases.count | should be 7
+    It "Should have 8 aliases command" {
+        $theModule.ExportedAliases.count | should be 8
     }
 
-    It "Should export 3 variables by default" {
-        $theModule.ExportedVariables.Count | Should be 3
+    It "Should export 4 variables by default" {
+        $theModule.ExportedVariables.Count | Should be 4
     }
 
     It "Should have a formatting xml file" {
@@ -74,12 +74,12 @@ Describe Tasks {
     #need absolute path for XML files
 new-Item -Name Documents -ItemType Directory -path $TestDrive
 $home = $TestDrive
+$mytaskhome = "$home\Documents"
 $mytaskPath = Join-Path $home\Documents -child "myTasks.xml" 
 $myTaskArchivePath = Join-Path -Path $home\Documents -ChildPath "myTasksArchive.xml"
 $myTaskCategory = Join-Path -path $home\Documents -childpath "myTaskCategory.txt"
 
 Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
-
 
     It "Should create a new task" {
         $a = New-MyTask -Name Test1 -DueDate $Due  -Category Testing -Passthru
@@ -144,17 +144,13 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
     }
 
     It "Should Complete a task" {
-
         {Complete-Mytask -Name Test1 -ErrorAction Stop} | Should Not Throw
-        (Get-MyTask | Measure-Object).Count | Should be 4
         (Get-MyTask -Completed | Measure-Object).Count | Should be 1
-
     }
 
     It "Should complete and archive a task" {
-
         {Complete-Mytask -Name Test2 -Archive -ErrorAction Stop} | Should Not Throw
-        (Get-MyTask).count | Should be 3
+        (Get-MyTask -all | where-object {-not $_.completed}).count | Should be 3
     }
 
     It "Should archive or save a task" {
@@ -162,7 +158,7 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
         Get-MyTask -Completed | Save-MyTask -Path $save
         Test-Path $save | should Be $True
         Get-MyTask -Name Test1 | Should Be $null
-        (Get-MyTask).count | Should be 3
+        (Get-MyTask -all).count | Should be 3
     }
 
     It "Should have an Archive-MyTask alias for Save-MyTask" {
@@ -172,14 +168,15 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
     }
     
     It "Should remove a task and backup the task file" {
-       
-      #  Mock Get-Date { return "20171001"  } -ParameterFilter {$format -eq "yyyyMMdd"} 
         {Remove-myTask -Name Alice } | Should not Throw
         {Get-MyTask -Name Bob | Remove-MyTask } | should not Throw
-        (Get-MyTask).count | Should be 1
-       # dir $TestDrive -Recurse | out-string | write-host
+        (Get-MyTask -all).count | Should be 1
+            }
+    
+    It "Should backup the task file" {
+        {Backup-MyTaskFile -ErrorAction Stop} | Should Not Throw
+        #dir $TestDrive -Recurse | out-string | write-host
         Test-Path $TestDrive\documents\MyTasks_Backup_*.xml | Should be $True
-       
     }
 
 } #describe my tasks

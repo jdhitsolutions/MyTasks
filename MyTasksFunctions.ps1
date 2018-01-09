@@ -27,12 +27,12 @@ Class MyTask {
     
     #set task as completed
     
-    [void]CompleteTask() {
+    [void]CompleteTask([datetime]$CompletedDate) {
         write-verbose "[CLASS  ] Completing task: $($this.name)"
         $this.Completed = $True
         $this.Progress = 100
         $this.Overdue = $False
-        $this.TaskModified = Get-Date
+        $this.TaskModified = $CompletedDate
     }
     
     #check if task is overdue and update
@@ -41,7 +41,10 @@ Class MyTask {
         #only mark as overdue if not completed and today is greater than the due date
         Write-Verbose "[CLASS  ] Comparing $($this.DueDate) due date to $(Get-Date)"
 
-        if (((Get-Date) -gt $this.DueDate) -AND (-Not $this.completed)) {
+        if ($This.completed) {
+            $this.Overdue = $False
+        }
+        elseif ((Get-Date) -gt $this.DueDate)  {
             $this.Overdue = $True 
         } 
         else {
@@ -125,7 +128,7 @@ Function New-MyTask {
         )]
         [string]$Name,
 
-        [Parameter(ValueFromPipelineByPropertyName, ParameterSetName = "Date")]
+        [Parameter(Position = 1,ValueFromPipelineByPropertyName, ParameterSetName = "Date")]
         [ValidateNotNullorEmpty()]
         [dateTime]$DueDate = (Get-Date).AddDays(7),
 
@@ -151,6 +154,7 @@ Function New-MyTask {
         $ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
         $ParameterAttribute.Mandatory = $true
         $ParameterAttribute.ValueFromPipelineByPropertyName = $True
+        $ParameterAttribute.Position = 2
     
         # Add the attributes to the attributes collection
         $AttributeCollection.Add($ParameterAttribute)
@@ -508,7 +512,7 @@ Function Remove-MyTask {
 } #Remove-MyTask
 
 Function Get-MyTask {
-    [cmdletbinding(DefaultParameterSetName = "Name")]
+    [cmdletbinding(DefaultParameterSetName = "Days")]
 
     Param(
         [Parameter(
@@ -523,7 +527,7 @@ Function Get-MyTask {
         [Parameter(ParameterSetName = "Completed")]
         [switch]$Completed,
         [Parameter(ParameterSetName = "Days")]
-        [int]$DaysDue
+        [int]$DaysDue = 30
     )
 
     DynamicParam {
@@ -637,10 +641,12 @@ Function Show-MyTask {
     #colorize output using Write-Host
     #this may not work in the PowerShell ISE
 
-    [cmdletbinding(DefaultParameterSetName = "none")]
+    [cmdletbinding(DefaultParameterSetName = "Days")]
     Param(
         [Parameter(ParameterSetName = "all")]
-        [switch]$All
+        [switch]$All,
+        [Parameter(ParameterSetName = "Days")]
+        [int32]$DaysDue = 30
     )
 
     DynamicParam {
@@ -689,6 +695,7 @@ Function Show-MyTask {
 
     Process {
         #run Get-MyTask
+        Write-Verbose "[PROCESS] Getting Tasks"
         $tasks = Get-MyTask @PSBoundParameters
 
         #convert tasks to a text table
@@ -710,7 +717,7 @@ Function Show-MyTask {
         
             #add the incoming object as the object for Write-Host
             $pHash.object = $_
-
+            Write-Verbose "[PROCESS] Analyzing $_ "
             #test if DueDate is within 24 hours
             if ($rx.IsMatch($_)) {
                 $hours = (($rx.Match($_).Value -as [datetime]) - (Get-Date)).totalhours
@@ -718,24 +725,25 @@ Function Show-MyTask {
 
             #test if task is complete
             if ($_ -match '\b100\b$') {
+                Write-Verbose "[PROCESS] Detected as completed"
                 $complete = $True
-           
             }
             else {
+                Write-Verbose "[PROCESS] Detected as incomplete"
                 $complete = $False
             }
 
             #select a different color for overdue tasks
-            if ($_ -match "\bTrue\b") {
+            if ($complete) {
+                #display completed tasks in green
+                $phash.ForegroundColor = "Green"
+            }
+            elseif ($_ -match "\bTrue\b") {
                 $phash.ForegroundColor = "Red"
             }
             elseif ($hours -le 24 -AND (-Not $complete)) {
                 $phash.ForegroundColor = "Yellow"
                 $hours = 999
-            }
-            elseif ($complete) {
-                #display completed tasks in green
-                $phash.ForegroundColor = "Green"
             }
             else {
                 if ($pHash.ContainsKey("foregroundcolor")) {
@@ -772,6 +780,15 @@ Function Complete-MyTask {
         [ValidateNotNullorEmpty()]
         [string]$Name,
 
+        [Parameter(
+            Mandatory,
+            HelpMessage = "Enter the task ID",
+            ParameterSetName = "ID"
+        )]
+        [int32]$ID,
+
+        [datetime]$CompletedDate = $(Get-Date),
+
         [switch]$Archive,
 
         [switch]$Passthru
@@ -803,11 +820,23 @@ Function Complete-MyTask {
                 Return
             }
         }
+        elseif ($ID) {
+            #get the task
+            Try {
+                Write-Verbose "[PROCESS] Retrieving task ID: $ID"
+                $Task = Get-MyTask -ID $ID -ErrorAction Stop
+            }
+            Catch {
+                Write-Error $_
+                #bail out
+                Return
+            }
+        }
 
         If ($Task) {
             Write-Verbose "[PROCESS] Marking task as completed"
             #invoke CompleteTask() method
-            $task.CompleteTask()
+            $task.CompleteTask($CompletedDate)
             Write-Verbose "[PROCESS] $($task | Select-Object *,Completed,TaskModified,TaskID | Out-String)"
         
             #find matching XML node and replace it

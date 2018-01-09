@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
 Module Name: MyTasks
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -21,14 +21,14 @@ By default the MyTasks module ships with default categories of Work, Personal, C
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 PS C:\> Add-MyTaskCategory -Category Training
 ```
 
 Add a Training category.
 
-### -------------------------- EXAMPLE 2 --------------------------
+### EXAMPLE 2
 ```
 PS C:\> Add-MyTaskCategory -Category Other,Work,Personal,Team
 PS C:\> Get-MyTaskCategory 
@@ -50,7 +50,7 @@ Enter a new task category.
 ```yaml
 Type: String[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: 0
@@ -101,6 +101,7 @@ Learn more about PowerShell:
 http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
+
 [Get-MyTaskCategory]()
 
 [Remove-MyTaskCategory]()

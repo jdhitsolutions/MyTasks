@@ -2,7 +2,6 @@
     about_mytasks
 
 
-
 SHORT DESCRIPTION
     The commands in the module are intended to be used as a simple solution for
     personal project management or as a more extensive To-Do list. The goal is
@@ -52,7 +51,7 @@ Design
     used. This path is stored as a global variable myTaskPath and will have a
     value like: C:\Users\Jeff\Documents\myTasks.xml. There is also an XML file
     for archiving  completed tasks. This too is in the Documents or $home folder
-    and can be  referenced via the myTaskArchivePath variable.
+    and can be referenced via the myTaskArchivePath variable.
 
     As tasks are created, modified, completed and archived, these XML files are 
     updated. Select-XML is used extensively to make this process as efficient

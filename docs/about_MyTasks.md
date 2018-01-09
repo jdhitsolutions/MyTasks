@@ -44,7 +44,6 @@ into  the PowerShell session. These numbers might change in the same way
 that job numbers change from session to session. The hidden TaskID is the
 unique id for each task.
 
-
 ## Design
 All task information is stored in an XML file which is created in the user's
 documents folder. On Linux with PowerShell Core the $home folder will be used.

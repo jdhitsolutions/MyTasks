@@ -26,13 +26,15 @@ $myTaskDefaultCategories = "Work","Personal","Other","Customer"
 . $psscriptroot\MyTasksFunctions.ps1
 
 #define some aliases
-Set-Alias -Name gmt -Value Get-MyTask
-Set-Alias -Name smt -Value Set-MyTask
-Set-Alias -Name shmt -Value Show-MyTask
-Set-Alias -Name rmt -Value Remove-MyTask
-Set-Alias -Name cmt -Value Complete-MyTask
-Set-Alias -Name nmt -Value New-MyTask
-Set-Alias -Name Archive-MyTask -Value Save-MyTask
+$aliases = @()
+$aliases+= Set-Alias -Name gmt -Value Get-MyTask -PassThru
+$aliases+= Set-Alias -Name smt -Value Set-MyTask -PassThru
+$aliases+= Set-Alias -Name shmt -Value Show-MyTask -PassThru
+$aliases+= Set-Alias -Name rmt -Value Remove-MyTask -PassThru
+$aliases+= Set-Alias -Name cmt -Value Complete-MyTask -PassThru
+$aliases+= Set-Alias -Name nmt -Value New-MyTask -PassThru
+$aliases+= Set-Alias -name task -value New-MyTask -PassThru
+$aliases+= Set-Alias -Name Archive-MyTask -Value Save-MyTask -PassThru
 
 #define a hashtable of parameters to splat to Export-ModuleMember
 $exportParams = @{
@@ -40,7 +42,7 @@ Variable = "myTaskPath","myTaskDefaultCategories","myTaskArchivePath","mytaskhom
 Function = "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask",
 "Show-MyTask","Complete-MyTask","Get-MyTaskCategory","Add-MyTaskCategory",
 "Remove-MyTaskCategory","Backup-MyTaskFile","Save-MyTask"
-Alias = "gmt","rmt","shmt","smt","cmt","nmt","Archive-MyTask"
+Alias = $aliases.Name
 }
 
 #exported via manifest

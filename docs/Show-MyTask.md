@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
 Module Name: MyTasks
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -12,9 +12,9 @@ Display all active tasks with color highlights.
 
 ## SYNTAX
 
-### none (Default)
+### Days (Default)
 ```
-Show-MyTask [<CommonParameters>]
+Show-MyTask [-DaysDue <Int32>] [<CommonParameters>]
 ```
 
 ### all
@@ -32,14 +32,14 @@ This command is very similar to Get-MyTask in terms of what it displays. However
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 PS C:\> Show-MyTask
 ```
 
-You will get a colorized output of Get-MyTask.
+You will get a colorized output of Get-MyTask for tasks due in the next 30 days.
 
-### -------------------------- EXAMPLE 2 --------------------------
+### EXAMPLE 2
 ```
 PS C:\> Show-MyTask -category Work
 ```
@@ -54,7 +54,7 @@ Display all tasks including those that are completed.
 ```yaml
 Type: SwitchParameter
 Parameter Sets: all
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -69,12 +69,27 @@ Display all tasks that belong to the specified category.
 ```yaml
 Type: String
 Parameter Sets: Category
-Aliases: 
+Aliases:
 Accepted values: your defined categories
 
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DaysDue
+Get tasks due in this number of days. This is the default behavior.
+
+```yaml
+Type: Int32
+Parameter Sets: Days
+Aliases:
+
+Required: False
+Position: Named
+Default value: 30
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
