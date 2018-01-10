@@ -44,7 +44,7 @@ Class MyTask {
         if ($This.completed) {
             $this.Overdue = $False
         }
-        elseif ((Get-Date) -gt $this.DueDate)  {
+        elseif ((Get-Date) -gt $this.DueDate) {
             $this.Overdue = $True 
         } 
         else {
@@ -128,7 +128,7 @@ Function New-MyTask {
         )]
         [string]$Name,
 
-        [Parameter(Position = 1,ValueFromPipelineByPropertyName, ParameterSetName = "Date")]
+        [Parameter(Position = 1, ValueFromPipelineByPropertyName, ParameterSetName = "Date")]
         [ValidateNotNullorEmpty()]
         [dateTime]$DueDate = (Get-Date).AddDays(7),
 
@@ -594,40 +594,48 @@ Function Get-MyTask {
             "Name" {
                 if ($Name -match "\w+") {
                     Write-Verbose "[PROCESS] Retrieving task: $Name"
-                    $tasks.Where( {$_.Name -like $Name})
+                    $results = $tasks.Where( {$_.Name -like $Name})
                 }
                 else {
                     #write all tasks to the pipeline
                     Write-Verbose "[PROCESS] Retrieving all incomplete tasks"
-                    $tasks.Where( {-Not $_.Completed})
+                    $results = $tasks.Where( {-Not $_.Completed})
                 }
             } #name
 
             "ID" {
                 Write-Verbose "[PROCESS] Retrieving Task by ID: $ID"
-                $tasks.where( {$_.id -eq $ID})
+                $results = $tasks.where( {$_.id -eq $ID})
             } #id
 
             "All" { 
                 Write-Verbose "[PROCESS] Retrieving all tasks"
-                $Tasks
+                $results = $Tasks
             } #all
 
             "Completed" {
                 Write-Verbose "[PROCESS] Retrieving completed tasks"
-                $tasks.Where( {$_.Completed})
+                $results = $tasks.Where( {$_.Completed})
             } #completed
 
             "Category" {
                 Write-Verbose "[PROCESS] Retrieving tasks for category $Category"
-                $tasks.Where( {$_.Category -eq $Category -AND (-Not $_.Completed)})
+                $results = $tasks.Where( {$_.Category -eq $Category -AND (-Not $_.Completed)})
             } #category
 
             "Days" {
                 Write-Verbose "[PROCESS] Retrieving tasks due in $DaysDue days or before"
-                $tasks.Where( {($_.DueDate -le (Get-Date).AddDays($DaysDue)) -AND (-Not $_.Completed)})
+                $results = $tasks.Where( {($_.DueDate -le (Get-Date).AddDays($DaysDue)) -AND (-Not $_.Completed)})
             }
         } #switch
+
+        #display tasks if found otherwise display a warning
+        if ($results.count -ge 1) {
+            $results
+        }
+        else {
+            Write-Warning "No tasks found matching your criteria"
+        }
     } #process
 
     End {
@@ -697,64 +705,68 @@ Function Show-MyTask {
         #run Get-MyTask
         Write-Verbose "[PROCESS] Getting Tasks"
         $tasks = Get-MyTask @PSBoundParameters
+        if ($tasks.count -gt 0) {
+            #convert tasks to a text table
+            $table = ($tasks | Format-Table -AutoSize | Out-String -Stream).split("`r`n")
 
-        #convert tasks to a text table
-        $table = ($tasks | Format-Table -AutoSize | Out-String -Stream).split("`r`n")
+            #define a regular expression pattern to match the due date
+            [regex]$rx = "\b\d{1,2}\/\d{1,2}\/\d{4}\b"
 
-        #define a regular expression pattern to match the due date
-        [regex]$rx = "\b\d{1,2}\/\d{1,2}\/\d{4}\b"
+            Write-Host "`n"
+            Write-Host $table[1] -ForegroundColor Cyan
+            Write-Host $table[2] -ForegroundColor Cyan
 
-        Write-Host "`n"
-        Write-Host $table[1] -ForegroundColor Cyan
-        Write-Host $table[2] -ForegroundColor Cyan
-
-        #define a parameter hashtable to splat to Write-Host to better
-        #handle colors in the PowerShell ISE under Windows 10
-        $phash = @{
-            Object = $Null
-        }
-        $table[3..$table.count] | foreach-object {
+            #define a parameter hashtable to splat to Write-Host to better
+            #handle colors in the PowerShell ISE under Windows 10
+            $phash = @{
+                Object = $Null
+            }
+            $table[3..$table.count] | foreach-object {
         
-            #add the incoming object as the object for Write-Host
-            $pHash.object = $_
-            Write-Verbose "[PROCESS] Analyzing $_ "
-            #test if DueDate is within 24 hours
-            if ($rx.IsMatch($_)) {
-                $hours = (($rx.Match($_).Value -as [datetime]) - (Get-Date)).totalhours
-            }
-
-            #test if task is complete
-            if ($_ -match '\b100\b$') {
-                Write-Verbose "[PROCESS] Detected as completed"
-                $complete = $True
-            }
-            else {
-                Write-Verbose "[PROCESS] Detected as incomplete"
-                $complete = $False
-            }
-
-            #select a different color for overdue tasks
-            if ($complete) {
-                #display completed tasks in green
-                $phash.ForegroundColor = "Green"
-            }
-            elseif ($_ -match "\bTrue\b") {
-                $phash.ForegroundColor = "Red"
-            }
-            elseif ($hours -le 24 -AND (-Not $complete)) {
-                $phash.ForegroundColor = "Yellow"
-                $hours = 999
-            }
-            else {
-                if ($pHash.ContainsKey("foregroundcolor")) {
-                    #remove foreground color so that Write-Host uses
-                    #the current default
-                    $pHash.Remove("foregroundcolor")
+                #add the incoming object as the object for Write-Host
+                $pHash.object = $_
+                Write-Verbose "[PROCESS] Analyzing $_ "
+                #test if DueDate is within 24 hours
+                if ($rx.IsMatch($_)) {
+                    $hours = (($rx.Match($_).Value -as [datetime]) - (Get-Date)).totalhours
                 }
-            }
-            Write-Host @pHash
 
-        } #foreach
+                #test if task is complete
+                if ($_ -match '\b100\b$') {
+                    Write-Verbose "[PROCESS] Detected as completed"
+                    $complete = $True
+                }
+                else {
+                    Write-Verbose "[PROCESS] Detected as incomplete"
+                    $complete = $False
+                }
+
+                #select a different color for overdue tasks
+                if ($complete) {
+                    #display completed tasks in green
+                    $phash.ForegroundColor = "Green"
+                }
+                elseif ($_ -match "\bTrue\b") {
+                    $phash.ForegroundColor = "Red"
+                }
+                elseif ($hours -le 24 -AND (-Not $complete)) {
+                    $phash.ForegroundColor = "Yellow"
+                    $hours = 999
+                }
+                else {
+                    if ($pHash.ContainsKey("foregroundcolor")) {
+                        #remove foreground color so that Write-Host uses
+                        #the current default
+                        $pHash.Remove("foregroundcolor")
+                    }
+                }
+                Write-Host @pHash
+
+            } #foreach
+        } #if tasks are found
+        else {
+            Write-Verbose "[PROCESS] No tasks returned from Get-MyTask."
+        }
     } #Process
 
     End {

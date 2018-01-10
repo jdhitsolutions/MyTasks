@@ -1,5 +1,9 @@
 Changelog for MyTasks
 
+v1.3.1
+fixed bug with Show-Task when no entries are found (Issue #16)
+Updated README
+
 v1.3.0
 Updated README
 Added 'task' as an alias for New-MyTask
