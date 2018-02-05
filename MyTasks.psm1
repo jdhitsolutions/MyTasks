@@ -41,7 +41,8 @@ $exportParams = @{
 Variable = "myTaskPath","myTaskDefaultCategories","myTaskArchivePath","mytaskhome"
 Function = "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask",
 "Show-MyTask","Complete-MyTask","Get-MyTaskCategory","Add-MyTaskCategory",
-"Remove-MyTaskCategory","Backup-MyTaskFile","Save-MyTask"
+"Remove-MyTaskCategory","Backup-MyTaskFile","Save-MyTask","Enable-EmailReminder",
+"Disable-EmailReminder","Get-EmailReminder"
 Alias = $aliases.Name
 }
 

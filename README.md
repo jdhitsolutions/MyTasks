@@ -60,8 +60,6 @@ Complete-MyTask -name "order coffee"
 The task will remain but be marked as 100% complete. You can still see the task when using the -All parameter with `Get-MyTask` or `Show-MyTask`. At some point you might want to remove completed tasks from the master XML file. You can use `Remove-MyTask` to permanently delete them. Or use the `Archive-MyTask` command to move them to an archive xml file.
 
 
-
-
 ## Format Views
 The module includes a format.ps1xml file that defines a default display when you run `Get-MyTask`. You will get a slightly different set of properties when you run `Get-MyTask | Format-List`. There is also a custom table view called Category which will create a table grouped by the Category property. You should sort the tasks first: `Get-MyTask | Sort-Object Category | Format-Table -view category`.
 
@@ -76,22 +74,28 @@ Get-Mytask -Completed | Archive-MyTask
 
 There is an option to archive tasks when you run `Complete-MyTask`. There are no commands in this module for working with the archived XML file at this time. Or you can completely delete a task with `Remove-MyTask`.
 
+## Email Reminders
+If you are running this module on a Windows platform that includes the PSScheduledJob module, you can create a scheduled PowerShell job that will send you a daily email with tasks that are due in 3 days or less. The default is a plain text message but you can also send it as HTML. Use the `Enable-EmailReminder` command to set up the job. 
+
 You should read full help and examples for all commands as well as the [about_MyTasks](./docs/about_MyTasks.md) help file.
 
-- [Add-MyTaskCategory](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Add-MyTaskCategory.md)
-- [Backup-MyTaskFile](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Backup-MyTaskFile.md)
-- [Complete-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Complete-MyTask.md)
-- [Get-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Get-MyTask.md)
-- [Get-MyTaskCategory](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Get-MyTaskCategory.md)
-- [New-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/New-MyTask.md)
-- [Remove-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Remove-MyTask.md)
-- [Remove-MyTaskCategory](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Remove-MyTaskCategory.md)
-- [Save-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Save-MyTask.md)
-- [Set-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Set-MyTask.md)
-- [Show-MyTask](https://github.com/jdhitsolutions/MyTasks/blob/master/docs/Show-MyTask.md)
+- [Add-MyTaskCategory](./docs/Add-MyTaskCategory.md)
+- [Backup-MyTaskFile](./docs/Backup-MyTaskFile.md)
+- [Complete-MyTask](./docs/Complete-MyTask.md)
+- [Get-MyTask](./docs/Get-MyTask.md)
+- [Get-MyTaskCategory](./docs/Get-MyTaskCategory.md)
+- [New-MyTask](./docs/New-MyTask.md)
+- [Remove-MyTask](./docs/Remove-MyTask.md)
+- [Remove-MyTaskCategory](./docs/Remove-MyTaskCategory.md)
+- [Save-MyTask](./docs/Save-MyTask.md)
+- [Set-MyTask](./docs/Set-MyTask.md)
+- [Show-MyTask](./docs/Show-MyTask.md)
+- [Enable-EmailReminder](./docs/Enable-EmailReminder.md)
+- [Disable-EmailReminder](./docs/Disable-EmailReminder.md)
+- [Get-EmailReminder](./docs/Get-EmailReminder.md)
 
 ## Limitations
 Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
 
 
-*last updated 10 January 2018*
+*last updated 5 February 2018*

@@ -1,5 +1,10 @@
 Changelog for MyTasks
 
+v1.4.0
+Added support for PowerShell scheduled job to email upcoming tasks (Issue #17)
+Scheduled reminders will be a Windows only feature.
+Added timestamp to verbose messages
+
 v1.3.1
 fixed bug with Show-Task when no entries are found (Issue #16)
 Updated README

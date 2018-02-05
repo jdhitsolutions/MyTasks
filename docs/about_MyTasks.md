@@ -183,6 +183,19 @@ There is no provision to specify an alternate location like `Save-MyTask`.
 Currently there are no commands in this module for working with the archived
 task XML file.
 
+## Email Reminder
+If you are running this module on a Windows platform with the PSScheduled jobs
+module you can create a scheduled PowerShell job to send a daily email message
+showing tasks that are due in the next 3 days.  The default behavior is to send
+a text message but you can send an HTML message which will add color coding to
+highlight overdue and impending tasks. 
+
+Use Enable-EmailReminder to set up the scheduled job. The default time is
+8:00AM daily but you can pick a different time. The job name is hard coded.
+You will need to re-enter your current credentials for the task so that the
+task scheduler has access to the network. Use Disable-EmailReminder to remove
+the task in case you want to change it. Get-EmailReminder will show you the
+current state of the task.
 # NOTE
 This module is not intended as a full-feature project management tool. It is
 intended to serve as a light-weight reminder or to-do list system. However,

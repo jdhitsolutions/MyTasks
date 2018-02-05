@@ -180,35 +180,35 @@ Function New-MyTask {
 
     Begin { 
         $Category = $PsBoundParameters[$ParameterName]
-        Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"
         #display PSBoundparameters formatted nicely for Verbose output  
         [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-        Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
     }
 
     Process {
         #display PSBoundparameters formatted nicely for Verbose output  
         [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-        Write-Verbose "[PROCESS] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
    
-        Write-Verbose "[PROCESS] Using Parameter set: $($pscmdlet.parameterSetName)"
+        Write-Verbose "$((Get-Date).TimeofDay) [PROCESS] Using Parameter set: $($pscmdlet.parameterSetName)"
 
         #create the new task
-        Write-Verbose "[PROCESS] Creating new task $Name"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Creating new task $Name"
 
         If ($Days) {
-            Write-Verbose "[PROCESS] Calculating due date in $Days days"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Calculating due date in $Days days"
             $DueDate = (Get-Date).AddDays($Days)
         }
         $task = New-Object -TypeName MyTask -ArgumentList $Name, $DueDate, $Description, $Category
 
         #convert to xml
-        Write-Verbose "[PROCESS] Converting to XML"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Converting to XML"
         $newXML = $task | 
             Select-object -property Name, Description, DueDate, Category, Progress, TaskCreated, TaskModified, TaskID, Completed  | 
             ConvertTo-Xml
 
-        Write-Verbose "[PROCESS] $($newXML | out-string)"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $($newXML | out-string)"
         
         #add task to disk via XML file
         if (Test-Path -Path $mytaskPath) {
@@ -230,41 +230,41 @@ Function New-MyTask {
                     #update file
 
                     if ($PSCmdlet.ShouldProcess($task.name)) {
-                        Write-Verbose "[PROCESS] Saving to existing file"
+                        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Saving to existing file"
                         $in.Save($mytaskPath)
                     }
                 }
                 else {
-                    Write-Verbose "[PROCESS] Skipping $id"
+                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Skipping $id"
                 }
             } #if $in.objects
         }
         else {
             #If file doesn't exist create task and save to a file
-            Write-Verbose "[PROCESS] Saving first task"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Saving first task"
             #must be an empty XML file
             if ($PSCmdlet.ShouldProcess($task.name)) {
                 #create an XML declaration section
-                write-Verbose "Creating XML declaration"
+                write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Creating XML declaration"
                 $declare = $newxml.CreateXmlDeclaration("1.0", "UTF-8", "yes")
                 
                 #replace declaration
                 $newXML.ReplaceChild($declare, $newXML.FirstChild) | Out-Null
                 #save the file
-                Write-Verbose "Saving the new file to $myTaskPath"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Saving the new file to $myTaskPath"
                 $newxml.Save($mytaskPath)
             }
         }
 
         If ($Passthru) {
-            Write-Verbose "[PROCESS] Passing object to the pipeline."
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Passing object to the pipeline."
             (get-mytask).where( {$_.taskID -eq $task.taskid})
         }
 
     } #Process
 
     End {
-        Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending: $($MyInvocation.Mycommand)"
     } #end
 
 } #New-MyTask
@@ -332,12 +332,12 @@ Function Set-MyTask {
     } #Dynamic Param
 
     Begin {
-        Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
         #display PSBoundparameters formatted nicely for Verbose output  
         [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
-        Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
-        Write-Verbose "[BEGIN  ] Cleaning PSBoundparameters"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Cleaning PSBoundparameters"
         $PSBoundParameters.Remove("Verbose")  | Out-Null
         $PSBoundParameters.Remove("WhatIf")   | Out-Null
         $PSBoundParameters.Remove("Confirm")  | Out-Null
@@ -347,15 +347,15 @@ Function Set-MyTask {
     } #begin
 
     Process {
-        Write-Verbose "[PROCESS] Using parameter set: $($PSCmdlet.ParameterSetName)"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Using parameter set: $($PSCmdlet.ParameterSetName)"
 
         #remove this as a bound parameter
         $PSBoundParameters.Remove("Task") | Out-Null
 
         [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-        Write-Verbose "[PROCESS] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
-        Write-Verbose "[PROCESS] Processing XML"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Processing XML"
         Try {
             [xml]$In = Get-Content -Path $MyTaskPath -ErrorAction Stop -Encoding UTF8
         }
@@ -384,21 +384,21 @@ Function Set-MyTask {
         } 
     
         $taskName = $node.SelectNodes("Property[@Name='Name']").'#text'
-        Write-Verbose "[PROCESS] Updating task $taskName"
-        Write-Verbose "[PROCESS] $($node.property | Out-String)"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating task $taskName"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $($node.property | Out-String)"
 
         #go through all PSBoundParameters other than Name or NewName
 
         $PSBoundParameters.keys | where-object {$_ -notMatch 'name'} | foreach-object {
             #update the task property
-            Write-Verbose "[PROCESS] Updating $_ to $($PSBoundParameters.item($_))"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating $_ to $($PSBoundParameters.item($_))"
             $setting = $node.SelectSingleNode("Property[@Name='$_']")
             $setting.InnerText = $PSBoundParameters.item($_) -as [string]
      
         }   
        
         If ($NewName) {
-            Write-Verbose "[PROCESS] Updating to new name: $NewName"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating to new name: $NewName"
             $node.SelectSingleNode("Property[@Name='Name']").'#text' = $NewName
         }
      
@@ -407,19 +407,19 @@ Function Set-MyTask {
    
         If ($PSCmdlet.ShouldProcess($TaskName)) {
             #update source
-            Write-Verbose "[PROCESS] Saving task file"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Saving task file"
             $in.Save($MyTaskPath)
      
             #pass object to the pipeline
             if ($Passthru) {
-                Write-Verbose "[PROCESS] Passing object to the pipeline"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Passing object to the pipeline"
                 Get-MyTask -Name $taskName
             }
         } #should process
     } #process
 
     End {
-        Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending: $($MyInvocation.Mycommand)"
     } #end
 } #Set-MyTask
 
@@ -447,26 +447,26 @@ Function Remove-MyTask {
     )
 
     Begin {
-        Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
         #display PSBoundparameters formatted nicely for Verbose output  
         [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-        Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
         if ($PSCmdlet.ShouldProcess($myTaskPath, "Create backup")) {
-            Write-Verbose "[BEGIN  ] Creating a backup copy of $myTaskPath"
+            Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Creating a backup copy of $myTaskPath"
             Backup-MyTaskFile
         }
 
         #load tasks from XML
-        Write-Verbose "[BEGIN  ] Loading tasks from XML"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Loading tasks from XML"
         [xml]$In = Get-Content -Path $MyTaskPath -Encoding UTF8
     } #begin
 
     Process {
-        Write-Verbose "[PROCESS] Using parameter set: $($PSCmdlet.parameterSetname)"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Using parameter set: $($PSCmdlet.parameterSetname)"
 
         if ($Name) {
-            Write-Verbose "[PROCESS] Retrieving task: $Name"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving task: $Name"
             Try {
                 $taskID = (Get-MyTask -Name $Name -ErrorAction Stop).TaskID
             }
@@ -483,19 +483,19 @@ Function Remove-MyTask {
 
         #select node by TaskID (GUID)
     
-        Write-Verbose "[PROCESS] Identifying task id: $TaskID"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Identifying task id: $TaskID"
         $node = ($in | Select-Xml -XPath "//Object/Property[text()='$TaskID']").node.ParentNode
 
         if ($node) {
             #remove it
-            write-Verbose "[PROCESS] Removing: $($node.Property | Out-String)"
+            write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Removing: $($node.Property | Out-String)"
 
             if ($PSCmdlet.ShouldProcess($TaskID)) {
                 $node.parentNode.RemoveChild($node) | Out-Null
 
                 $node.ParentNode.objects
                 #save file
-                Write-Verbose "[PROCESS] Updating $MyTaskPath"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating $MyTaskPath"
                 $in.Save($mytaskPath)
             } #should process
         }
@@ -506,7 +506,7 @@ Function Remove-MyTask {
     } #process
 
     End {
-        Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending: $($MyInvocation.Mycommand)"
     } #end
 
 } #Remove-MyTask
@@ -567,18 +567,18 @@ Function Get-MyTask {
 
     } 
     Begin {
-        Write-Verbose "[BEGIN  ] Starting $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($MyInvocation.Mycommand)"
         $Category = $PsBoundParameters[$ParameterName]
-        Write-Verbose "[BEGIN  ] Using parameter set $($PSCmdlet.ParameterSetName)"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Using parameter set $($PSCmdlet.ParameterSetName)"
         #display PSBoundparameters formatted nicely for Verbose output  
         [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-        Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
         #import from the XML file
-        Write-Verbose "[BEGIN  ] Importing tasks from $mytaskPath"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Importing tasks from $mytaskPath"
         $tasks = _ImportTasks | Sort-Object -property DueDate
 
-        Write-Verbose "[BEGIN  ] Imported $($tasks.count) tasks"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Imported $($tasks.count) tasks"
     }
 
     Process {
@@ -593,38 +593,38 @@ Function Get-MyTask {
 
             "Name" {
                 if ($Name -match "\w+") {
-                    Write-Verbose "[PROCESS] Retrieving task: $Name"
+                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving task: $Name"
                     $results = $tasks.Where( {$_.Name -like $Name})
                 }
                 else {
                     #write all tasks to the pipeline
-                    Write-Verbose "[PROCESS] Retrieving all incomplete tasks"
+                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving all incomplete tasks"
                     $results = $tasks.Where( {-Not $_.Completed})
                 }
             } #name
 
             "ID" {
-                Write-Verbose "[PROCESS] Retrieving Task by ID: $ID"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving Task by ID: $ID"
                 $results = $tasks.where( {$_.id -eq $ID})
             } #id
 
             "All" { 
-                Write-Verbose "[PROCESS] Retrieving all tasks"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving all tasks"
                 $results = $Tasks
             } #all
 
             "Completed" {
-                Write-Verbose "[PROCESS] Retrieving completed tasks"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving completed tasks"
                 $results = $tasks.Where( {$_.Completed})
             } #completed
 
             "Category" {
-                Write-Verbose "[PROCESS] Retrieving tasks for category $Category"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving tasks for category $Category"
                 $results = $tasks.Where( {$_.Category -eq $Category -AND (-Not $_.Completed)})
             } #category
 
             "Days" {
-                Write-Verbose "[PROCESS] Retrieving tasks due in $DaysDue days or before"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving tasks due in $DaysDue days or before"
                 $results = $tasks.Where( {($_.DueDate -le (Get-Date).AddDays($DaysDue)) -AND (-Not $_.Completed)})
             }
         } #switch
@@ -639,7 +639,7 @@ Function Get-MyTask {
     } #process
 
     End {
-        Write-Verbose "[END    ] Ending $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($MyInvocation.Mycommand)"
     } #end
 
 } #Get-MyTask
@@ -694,16 +694,16 @@ Function Show-MyTask {
 
     Begin {
         $Category = $PsBoundParameters[$ParameterName]
-        Write-Verbose "[BEGIN  ] Starting $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($MyInvocation.Mycommand)"
 
         #display PSBoundparameters formatted nicely for Verbose output  
         [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-        Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
     }
 
     Process {
         #run Get-MyTask
-        Write-Verbose "[PROCESS] Getting Tasks"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting Tasks"
         $tasks = Get-MyTask @PSBoundParameters
         if ($tasks.count -gt 0) {
             #convert tasks to a text table
@@ -725,7 +725,7 @@ Function Show-MyTask {
         
                 #add the incoming object as the object for Write-Host
                 $pHash.object = $_
-                Write-Verbose "[PROCESS] Analyzing $_ "
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Analyzing $_ "
                 #test if DueDate is within 24 hours
                 if ($rx.IsMatch($_)) {
                     $hours = (($rx.Match($_).Value -as [datetime]) - (Get-Date)).totalhours
@@ -733,11 +733,11 @@ Function Show-MyTask {
 
                 #test if task is complete
                 if ($_ -match '\b100\b$') {
-                    Write-Verbose "[PROCESS] Detected as completed"
+                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Detected as completed"
                     $complete = $True
                 }
                 else {
-                    Write-Verbose "[PROCESS] Detected as incomplete"
+                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Detected as incomplete"
                     $complete = $False
                 }
 
@@ -765,12 +765,12 @@ Function Show-MyTask {
             } #foreach
         } #if tasks are found
         else {
-            Write-Verbose "[PROCESS] No tasks returned from Get-MyTask."
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] No tasks returned from Get-MyTask."
         }
     } #Process
 
     End {
-        Write-Verbose "[END    ] Ending $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($MyInvocation.Mycommand)"
     } #End
 } #Show-MyTask
 
@@ -807,23 +807,23 @@ Function Complete-MyTask {
     )
 
     Begin {
-        Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
         #display PSBoundparameters formatted nicely for Verbose output  
         [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-        Write-Verbose "[BEGIN  ] PSBoundParameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] PSBoundParameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
     } #begin
 
     Process {
-        Write-Verbose "[PROCESS] Using parameter set: $($PSCmdlet.ParameterSetName)"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Using parameter set: $($PSCmdlet.ParameterSetName)"
         #display PSBoundparameters formatted nicely for Verbose output  
         [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-        Write-Verbose "[PROCESS] PSBoundParameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] PSBoundParameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
         if ($Name) {
             #get the task
             Try {
-                Write-Verbose "[PROCESS] Retrieving task: $Name"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving task: $Name"
                 $Task = Get-MyTask -Name $Name -ErrorAction Stop
             }
             Catch {
@@ -835,7 +835,7 @@ Function Complete-MyTask {
         elseif ($ID) {
             #get the task
             Try {
-                Write-Verbose "[PROCESS] Retrieving task ID: $ID"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving task ID: $ID"
                 $Task = Get-MyTask -ID $ID -ErrorAction Stop
             }
             Catch {
@@ -846,13 +846,13 @@ Function Complete-MyTask {
         }
 
         If ($Task) {
-            Write-Verbose "[PROCESS] Marking task as completed"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Marking task as completed"
             #invoke CompleteTask() method
             $task.CompleteTask($CompletedDate)
-            Write-Verbose "[PROCESS] $($task | Select-Object *,Completed,TaskModified,TaskID | Out-String)"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $($task | Select-Object *,Completed,TaskModified,TaskID | Out-String)"
         
             #find matching XML node and replace it
-            Write-Verbose "[PROCESS] Updating task file"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating task file"
             #convert current task to XML
             $new = ($task | Select-object -property Name, Descriptiong, DueDate, Category, Progress, TaskID, TaskCreated, TaskModified, Completed | ConvertTo-Xml).Objects.Object
 
@@ -873,12 +873,12 @@ Function Complete-MyTask {
                 $in.Save($MyTaskPath)
 
                 if ($Archive) {
-                    Write-Verbose "[PROCESS] Archiving completed task"
+                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Archiving completed task"
                     Save-MyTask -Task $Task
                 }
 
                 if ($Passthru) {
-                    Write-Verbose "[PROCESS] Passing task back to the pipeline"
+                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Passing task back to the pipeline"
                     Get-MyTask -Name $task.name
                 }
             }
@@ -890,7 +890,7 @@ Function Complete-MyTask {
 
 
     End {
-        Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending: $($MyInvocation.Mycommand)"
     } #end
 
 } #Complete-MyTask
@@ -899,18 +899,24 @@ Function Get-MyTaskCategory {
     [cmdletbinding()]
     Param()
 
-    Write-Verbose "Starting: $($MyInvocation.Mycommand)"
-    If (Test-Path -Path $myTaskCategory) {
-        Write-Verbose "Retrieving user categories from $myTaskCategory"
-        Get-Content -Path $myTaskCategory -Encoding Unicode | Where-object {$_ -match "\w+"}
-    }
-    else {
-        #Display the defaults
-        Write-Verbose "Retrieving module default categories"
-        $myTaskDefaultCategories
-    }
-
-    Write-Verbose "Ending: $($MyInvocation.Mycommand)"
+    Begin {
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"
+        
+    } #begin
+    Process {
+        If (Test-Path -Path $myTaskCategory) {
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving user categories from $myTaskCategory"
+            Get-Content -Path $myTaskCategory -Encoding Unicode | Where-object {$_ -match "\w+"}
+        }
+        else {
+            #Display the defaults
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving module default categories"
+            $myTaskDefaultCategories
+        }
+    } #process
+    End {
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending: $($MyInvocation.Mycommand)"
+    } #end
 }
 
 Function Add-MyTaskCategory {
@@ -928,11 +934,11 @@ Function Add-MyTaskCategory {
     )
 
     Begin {
-        Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
         #test if user category file already exists and if not, then 
         #create it
         if (-Not (Test-Path -Path $myTaskCategory)) {
-            Write-Verbose "[BEGIN  ] Creating new user category file $myTaskCategory"
+            Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Creating new user category file $myTaskCategory"
             Set-Content -Value "" -Path $myTaskCategory -Encoding Unicode
         }
         #get current contents
@@ -942,18 +948,17 @@ Function Add-MyTaskCategory {
     Process {
         foreach ($item in $Category) {
             if ($current -contains $($item.trim())) {
-                Write-Verbose "[PROCESS] Skipping duplicate item $item"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Skipping duplicate item $item"
             }
             else {
-                Write-Verbose "[PROCESS] Adding $item"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Adding $item"
                 Add-Content -Value $item.Trim() -Path $myTaskCategory -Encoding Unicode
             }
         }
-
     } #process
 
     End {
-        Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending: $($MyInvocation.Mycommand)"
     } #end
 }
 
@@ -972,19 +977,19 @@ Function Remove-MyTaskCategory {
     )
 
     Begin {
-        Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
 
         #get current contents
         $current = Get-Content -Path $myTaskCategory -Encoding Unicode| where-object {$_ -match "\w+"}
         #create backup 
         $back = Join-Path -path $mytaskhome -ChildPath MyTaskCategory.bak
-        Write-Verbose "[BEGIN  ] Creating backup copy"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Creating backup copy"
         Copy-Item -Path $myTaskCategory -Destination $back -Force
     } #begin
 
     Process {
         foreach ($item in $Category) {
-            Write-Verbose "[PROCESS] Removing category $item"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Removing category $item"
             $current = ($current).Where( {$_ -notcontains $item})
         }
 
@@ -992,9 +997,9 @@ Function Remove-MyTaskCategory {
 
     End {
         #update file
-        Write-Verbose "[END    ] Updating: $myTaskCategory"
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Updating: $myTaskCategory"
         Set-Content -Value $current -Path $myTaskCategory -Encoding Unicode
-        Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending: $($MyInvocation.Mycommand)"
     } #end
 }
 
@@ -1014,11 +1019,11 @@ Function Backup-MyTaskFile {
     )
 
     Begin {
-        Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
         #display PSBoundparameters formatted nicely for Verbose output  
         [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-        Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
-        Write-Verbose "[BEGIN  ] Creating backup file $Destination"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Creating backup file $Destination"
     
         #add MyTaskPath to PSBoundparameters so it can be splatted to Copy-Item
         $PSBoundParameters.Add("Path", $myTaskPath)
@@ -1031,11 +1036,11 @@ Function Backup-MyTaskFile {
 
     Process {
         If (Test-Path -Path $myTaskPath) {
-            Write-Verbose "[PROCESS] Copy parameters"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Copy parameters"
             Write-Verbose ($PSBoundParameters | format-list | Out-String)
             Copy-Item @psBoundParameters
 
-            Write-Verbose "[PROCESS] Adding comment to backup XML file"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Adding comment to backup XML file"
             #insert a comment into the XML file
             [xml]$doc = Get-Content -Path $Destination -Encoding UTF8  
             $comment = $doc.CreateComment("Backup of $MytaskPath created on $(Get-Date)") 
@@ -1049,7 +1054,7 @@ Function Backup-MyTaskFile {
     } #process
 
     End {
-        Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending: $($MyInvocation.Mycommand)"
     } #end
 
 }
@@ -1072,11 +1077,11 @@ Function Save-MyTask {
     )
 
     Begin {
-        Write-Verbose "[BEGIN  ] Starting: $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"
         #display PSBoundparameters formatted nicely for Verbose output  
         [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
-        Write-Verbose "[BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
-        Write-Verbose "[BEGIN  ] Using parameter set $($PSCmdlet.ParameterSetName)"
+        Write-Verbose "[$((Get-Date).TimeofDay) EGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Using parameter set $($PSCmdlet.ParameterSetName)"
     }
 
     Process {
@@ -1085,12 +1090,12 @@ Function Save-MyTask {
 
         if ($Task) {
             $taskID = $task.TaskID
-            Write-Verbose "[PROCESS] Archiving task $($task.name) [$($task.taskID)]"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Archiving task $($task.name) [$($task.taskID)]"
             $completed = $in.Objects | Select-XML -XPath "//Object/Property[text()='$taskID']"
         }
         else {
             #get completed tasks
-            Write-Verbose "[PROCESS] Getting completed tasks"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting completed tasks"
        
             $completed = $In.Objects | Select-XML -XPath "//Property[@Name='Completed' and text()='True']"
         }
@@ -1098,13 +1103,13 @@ Function Save-MyTask {
             #save to $myTaskArchivePath
             if (Test-Path -Path $Path) {
                 #append to existing document
-                Write-Verbose "[PROCESS] Appending to $Path"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Appending to $Path"
                 [xml]$Out = Get-Content -Path $Path -Encoding UTF8
                 $parent = $Out.Objects
             }
             else {
                 #create a new document
-                Write-Verbose "[PROCESS] Creating $Path"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Creating $Path"
                 $out = [xml]::new()
                 $ver = $out.CreateXmlDeclaration("1.0", "UTF-8", $null)
                 $out.AppendChild($ver) | Out-Null
@@ -1115,14 +1120,14 @@ Function Save-MyTask {
             #import
             foreach ($node in $completed.node) {
                 $imp = $out.ImportNode($node.ParentNode, $True)
-                Write-Verbose "[PROCESS] Archiving $($node.parentnode.property[0].'#text')"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Archiving $($node.parentnode.property[0].'#text')"
                 $parent.AppendChild($imp) | Out-Null
 
                 #remove from existing file
                 $in.objects.RemoveChild($node.parentnode) | Out-Null
             }
 
-            Write-Verbose "[PROCESS] Saving $Path"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Saving $Path"
             if ($PSCmdlet.ShouldProcess($Path)) {
                 $out.Save($Path)
 
@@ -1139,6 +1144,261 @@ Function Save-MyTask {
     } #Process
 
     End {
-        Write-Verbose "[END    ] Ending: $($MyInvocation.Mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending: $($MyInvocation.Mycommand)"
     }
 }
+
+Function Enable-EmailReminder {
+    [cmdletbinding(SupportsShouldProcess)]
+    Param(
+        [Parameter(Position = 0, HelpMessage = "What time do you want to send your daily email reminder?")]
+        [ValidateNotNullOrEmpty()]
+        [datetime]$Time = "8:00AM",
+        [Parameter(HelpMessage = "What is your email server name or address?")]
+        [ValidateNotNullOrEmpty()]        
+        [string]$SMTPServer = $PSEmailServer,
+        [Parameter(Mandatory, HelpMessage = "Enter your email address")]
+        [ValidateNotNullOrEmpty()]
+        [ValidatePattern("\S+@*.\.\w{2,4}")]
+        [string]$To,
+        [Parameter(HelpMessage = "Enter the FROM email address. If you don't specify one, the TO address will be used.")]
+        [ValidatePattern("\S+@*.\.\w{2,4}")]
+        [string]$From,
+        [Parameter(HelpMessage = "Include if you need to use SSL?")]
+        [switch]$UseSSL,
+        [Parameter(HelpMessage = "Specify the port to use for your email server")]
+        [ValidateNotNullOrEmpty()]
+        [int32]$Port = 25,
+        [Parameter(HelpMessage = "Specify any credential you need to authenticate to your mail server.")]
+        [PSCredential]$MailCredential,
+        [Parameter(HelpMessage = "Send an HTML body email")]
+        [switch]$AsHtml,
+        [Parameter(Mandatory, HelpMessage = "Re-enter your local user credentials for the scheduled job task")]
+        [ValidateNotNullOrEmpty()]
+        [PSCredential]$TaskCredential
+    )
+    Begin {
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Using these mail parameters:"
+
+        if (-Not $From) {
+            $From = $To
+        }
+        $hash = @{
+            To         = $To
+            From       = $From
+            SMTPServer = $SMTPServer
+            Port       = $Port
+        }
+        if ($MailCredential) {
+            $hash.Add("Credential", $MailCredential)
+        }
+        If ($UseSSL) {
+            $hash.add("UseSSL", $True)
+        }
+
+        $hash | Out-String | Write-Verbose
+        #define the job scriptblock
+        $sb = {
+            Param([hashtable]$Hash)
+            #uncomment for troubleshooting
+            #$PSBoundParameters | out-string | write-host -ForegroundColor cyan
+            #get tasks for the next 3 days as the body
+
+            $data = Get-MyTask -Days 3
+            if ($data) {
+                if ($hash.BodyAsHTML) {
+                    Write-Host "[$((Get-Date).ToString())] Sending as HTML" -ForegroundColor green
+                    #css to be embedded in the html document
+                    $head = @"
+                    <Title>Upcoming Tasks</Title>
+                    <style>
+                    body { background-color:rgb(199, 194, 194);
+                        font-family:Tahoma;
+                        font-size:12pt; }
+                    td, th { border:1px solid black; 
+                             border-collapse:collapse; }
+                    th { color:white;
+                         background-color:black; }
+                    table, tr, td, th { padding: 2px; margin: 0px }
+                    tr:nth-child(odd) {background-color: lightgray}
+                    table { width:95%;margin-left:5px; margin-bottom:20px;}
+                    .alert {color: red ! overdue}
+                    .warn {color: yellow ! impending}
+                    </style>
+                    <br>
+                    <H1>My Tasks</H1>
+"@
+                    [xml]$html = $data | ConvertTo-HTML -Fragment
+                    
+                    #parse html to add color attributes
+                    for ($i = 1; $i -le $html.table.tr.count - 1; $i++) {
+                        $class = $html.CreateAttribute("class")
+                        #check the value of the percent free memory column and assign a class to the row
+                        if ($html.table.tr[$i].td[4] -eq 'True') {                                          
+                            $class.value = "alert"  
+                            #$html.table.tr[$i].ChildNodes[4].Attributes.Append($class) | Out-Null
+                            $html.table.tr[$i].Attributes.Append($class) | Out-Null
+                        }
+                        elseif ((($html.table.tr[$i].td[3] -as [DateTime]) - (Get-Date)).totalHours -le 24 ) {
+                            $class.value = "warn"  
+                            #$html.table.tr[$i].ChildNodes[4].Attributes.Append($class) | Out-Null
+                            $html.table.tr[$i].Attributes.Append($class) | Out-Null
+                        }
+                    }
+                    
+                    $Body = Convertto-html -body $html.InnerXml -Head $head | Out-String
+
+                }
+                else {
+                    Write-Host "[$((Get-Date).ToString())] Sending as TEXT" -ForegroundColor Green
+                    $body = $data | Out-string
+                }
+            }
+            else {
+                Write-Warning "No tasks found due in the next 3 days."
+                #bail out
+                return
+            }
+            $hash.Add("Body", $body)
+            $hash.Add("Subject", "Tasks Due in the Next 3 Days")
+            $hash.Add("ErrorAction", "Stop")
+            Try {
+                Send-MailMessage @hash
+                #if you receive the job I wanted to display some sort of result
+                Write-Output "[$((Get-Date).ToString())] Message ($($hash.subject)) sent to $($hash.to) from $($hash.from)" 
+                Write-Host "[$((Get-Date).ToString())] Message ($($hash.subject)) sent to $($hash.to) from $($hash.from)" -ForegroundColor green
+            }
+            Catch {
+                throw $_
+            }
+        }
+    } #begin
+
+    Process {
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Testing for an existing job"
+        Try {
+            $job = Get-ScheduledJob -Name myTasksEmail -ErrorAction stop
+            if ($job) {
+                Write-Warning "An existing mail job was found. Please remove it first with Disable-EmailReminder and try again."
+                #bail out
+                return
+            }
+        }
+        Catch {
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] No existing job found"
+        }
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Validating Requirements"
+        if ((Get-Module PSScheduledJob) -And (($PSVersionTable.Platform -eq 'Win32NT') -OR ($PSVersionTable.PSEdition -eq 'Desktop'))) {
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Creating a Daily job trigger for $($Time.TimeofDay)"
+            $trigger = New-JobTrigger -Daily -At $Time
+
+            $opt = New-ScheduledJobOption -RunElevated -RequireNetwork 
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Registering the scheduled job"
+            if ($AsHtml) {
+                $hash.Add("BodyAsHTML", $True)
+            }
+            #hash table of parameters to splat Register-ScheduledJob
+            $regParams = @{
+                ScriptBlock        = $sb
+                Name               = "myTasksEmail"
+                Trigger            = $Trigger 
+                ArgumentList       = $hash
+                MaxResultCount     = 5
+                ScheduledJobOption = $opt
+                Credential         = $TaskCredential
+            }
+            $regParams | Out-String | Write-Verbose
+            Register-ScheduledJob  @regParams     
+        }
+        else {
+            Write-Warning "This command requires the PSScheduledJob module on a Windows platform."
+        }
+    } #process
+
+    End {
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
+    } #end 
+
+} #close Enable-MailReminder
+
+Function Disable-EmailReminder {
+    [cmdletbinding(SupportsShouldProcess)]
+    Param()
+    Begin {
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
+    } #begin
+
+    Process {
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Processing"
+        Try {
+            if (Get-ScheduledJob -Name myTasksEmail -ErrorAction stop) {
+                #The cmdlet appears to ignore -WhatIf so I'll handle it myself
+                if ($PSCmdlet.ShouldProcess("myTasksEmail")) {
+                    Unregister-ScheduledJob -Name myTasksEmail -ErrorAction stop
+                } #should process
+            } #if task found
+        }
+        Catch {
+            Write-Warning "Can't find any matching scheduled jobs with the name 'myTasksEmail'."
+        }
+    } #process
+
+    End {
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
+    } #end 
+
+} #close Disable-EmailReminder
+
+Function Get-EmailReminder {
+    [cmdletbinding()]
+    Param ()
+    
+    Begin {
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
+
+    } #begin
+
+    Process {
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting scheduled job myTasksEmail"
+        $t = Get-ScheduledJob myTasksEmail
+
+        $hash = $t.InvocationInfo.Parameters[0].where({$_.name -eq "argumentlist"}).value
+        
+        Try {
+            #get the last run
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting last job run"
+            $last = Get-Job $t.name -Newest 1 -ErrorAction stop
+            }
+        Catch {
+            $last = [PSCustomObject]@{
+                PSEndTime = "11/30/1999" -as [datetime]
+                State = "The task has not yet run"
+            }
+        }
+        [pscustomobject]@{
+            Task = $t.Name
+            Frequency = $t.JobTriggers.Frequency
+            At = $t.JobTriggers.at.TimeOfDay
+            To = $hash.To
+            From = $hash.From
+            MailServer = $hash.SMTPServer
+            Port = $hash.Port
+            UseSSL = $hash.UseSSL
+            AsHTML = $hash.BodyAsHTML
+            LastRun = $last.PSEndTime
+            LastState = $last.State
+            Enabled = $t.Enabled
+        }
+    } #process
+
+    End {
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending $($myinvocation.mycommand)"
+
+    } #end 
+
+} #close Get-EmailReminder
+
+
+
+
