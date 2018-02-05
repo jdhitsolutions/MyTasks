@@ -6,8 +6,8 @@ InModuleScope MyTasks {
 Describe "The module" {
 
 $theModule = get-module -name mytasks
-    It "Should have 11 functions" {
-        $theModule.exportedfunctions.count | should be 11
+    It "Should have 14 functions" {
+        $theModule.exportedfunctions.count | should be 14
     }
 
     It "Should have 8 aliases command" {
