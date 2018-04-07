@@ -168,7 +168,6 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
     }
     
     It "Should remove a task and backup the task file" {
-        Copy-Item -Path $mytaskPath -Destination c:\temp\task.xml
         {Remove-myTask -Name Alice } | Should not Throw
         {Get-MyTask -Name Bob | Remove-MyTask } | should not Throw
         (Get-MyTask -all).count | Should be 1
