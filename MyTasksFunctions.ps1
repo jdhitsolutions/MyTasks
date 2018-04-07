@@ -205,7 +205,15 @@ Function New-MyTask {
         #convert to xml
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Converting to XML"
         $newXML = $task | 
-            Select-object -property Name, Description, DueDate, Category, Progress, TaskCreated, TaskModified, TaskID, Completed  | 
+            Select-object -property Name, 
+                                    Description, 
+                                    @{Name = 'DueDate'; Expression = {Get-Date -Date $task.DueDate -Format 's'}}, 
+                                    Category, 
+                                    Progress, 
+                                    @{Name = 'TaskCreated'; Expression = {Get-Date -Date $task.TaskCreated -Format 's'}}, 
+                                    @{Name = 'TaskModified'; Expression = {Get-Date -Date $task.TaskModified -Format 's'}}, 
+                                    TaskID, 
+                                    Completed  | 
             ConvertTo-Xml
 
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $($newXML | out-string)"
@@ -393,8 +401,12 @@ Function Set-MyTask {
             #update the task property
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating $_ to $($PSBoundParameters.item($_))"
             $setting = $node.SelectSingleNode("Property[@Name='$_']")
-            $setting.InnerText = $PSBoundParameters.item($_) -as [string]
-     
+            if ($_ -in 'DueDate', 'TaskCreated', 'TaskModified') {
+                $setting.InnerText = Get-Date -Date ($PSBoundParameters.item($_)) -Format 's'
+            } 
+            else {
+                $setting.InnerText = $PSBoundParameters.item($_) -as [string]
+            }   
         }   
        
         If ($NewName) {
@@ -403,7 +415,7 @@ Function Set-MyTask {
         }
      
         #update TaskModified
-        $node.SelectSingleNode("Property[@Name='TaskModified']").'#text' = (Get-Date).ToString()
+        $node.SelectSingleNode("Property[@Name='TaskModified']").'#text' = (Get-Date -Format 's').ToString()
    
         If ($PSCmdlet.ShouldProcess($TaskName)) {
             #update source
@@ -854,7 +866,15 @@ Function Complete-MyTask {
             #find matching XML node and replace it
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating task file"
             #convert current task to XML
-            $new = ($task | Select-object -property Name, Descriptiong, DueDate, Category, Progress, TaskID, TaskCreated, TaskModified, Completed | ConvertTo-Xml).Objects.Object
+            $new = ($task | Select-object -property Name, 
+                                                    Description, 
+                                                    @{Name = 'DueDate'; Expression = {Get-Date -Date $task.DueDate -Format 's'}}, 
+                                                    Category, 
+                                                    Progress, 
+                                                    @{Name = 'TaskCreated'; Expression = {Get-Date -Date $task.TaskCreated -Format 's'}}, 
+                                                    @{Name = 'TaskModified'; Expression = {Get-Date -Date $task.TaskModified -Format 's'}}, 
+                                                    TaskID, 
+                                                    Completed | ConvertTo-Xml).Objects.Object
 
             #load tasks from XML
             [xml]$In = Get-Content -Path $MyTaskPath -Encoding UTF8
