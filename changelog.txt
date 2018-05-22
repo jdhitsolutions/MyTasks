@@ -1,5 +1,10 @@
 Changelog for MyTasks
 
+v1.5.0
+Added a patch to store date in an ISO friendly format. (Issue #23 and Issue #22)
+Added a new function, Set-MyTaskPath to allow you to update the task folder (Issue #20)
+Updated documentation
+
 v1.4.0
 Added support for PowerShell scheduled job to email upcoming tasks (Issue #17)
 Scheduled reminders will be a Windows only feature.

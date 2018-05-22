@@ -9,6 +9,8 @@ if ($isLinux) {
 else {
     $mytaskhome = "$home\Documents" 
 }
+
+#path to the category file
 $myTaskCategory = Join-Path -Path $mytaskhome -ChildPath myTaskCategory.txt
 
 #path to stored tasks
@@ -42,7 +44,7 @@ Variable = "myTaskPath","myTaskDefaultCategories","myTaskArchivePath","mytaskhom
 Function = "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask",
 "Show-MyTask","Complete-MyTask","Get-MyTaskCategory","Add-MyTaskCategory",
 "Remove-MyTaskCategory","Backup-MyTaskFile","Save-MyTask","Enable-EmailReminder",
-"Disable-EmailReminder","Get-EmailReminder"
+"Disable-EmailReminder","Get-EmailReminder","Set-MyTaskPath"
 Alias = $aliases.Name
 }
 

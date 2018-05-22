@@ -206,14 +206,14 @@ Function New-MyTask {
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Converting to XML"
         $newXML = $task | 
             Select-object -property Name, 
-                                    Description, 
-                                    @{Name = 'DueDate'; Expression = {Get-Date -Date $task.DueDate -Format 's'}}, 
-                                    Category, 
-                                    Progress, 
-                                    @{Name = 'TaskCreated'; Expression = {Get-Date -Date $task.TaskCreated -Format 's'}}, 
-                                    @{Name = 'TaskModified'; Expression = {Get-Date -Date $task.TaskModified -Format 's'}}, 
-                                    TaskID, 
-                                    Completed  | 
+        Description, 
+        @{Name = 'DueDate'; Expression = {Get-Date -Date $task.DueDate -Format 's'}}, 
+        Category, 
+        Progress, 
+        @{Name = 'TaskCreated'; Expression = {Get-Date -Date $task.TaskCreated -Format 's'}}, 
+        @{Name = 'TaskModified'; Expression = {Get-Date -Date $task.TaskModified -Format 's'}}, 
+        TaskID, 
+        Completed  | 
             ConvertTo-Xml
 
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $($newXML | out-string)"
@@ -867,14 +867,14 @@ Function Complete-MyTask {
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating task file"
             #convert current task to XML
             $new = ($task | Select-object -property Name, 
-                                                    Description, 
-                                                    @{Name = 'DueDate'; Expression = {Get-Date -Date $task.DueDate -Format 's'}}, 
-                                                    Category, 
-                                                    Progress, 
-                                                    @{Name = 'TaskCreated'; Expression = {Get-Date -Date $task.TaskCreated -Format 's'}}, 
-                                                    @{Name = 'TaskModified'; Expression = {Get-Date -Date $task.TaskModified -Format 's'}}, 
-                                                    TaskID, 
-                                                    Completed | ConvertTo-Xml).Objects.Object
+                Description, 
+                @{Name = 'DueDate'; Expression = {Get-Date -Date $task.DueDate -Format 's'}}, 
+                Category, 
+                Progress, 
+                @{Name = 'TaskCreated'; Expression = {Get-Date -Date $task.TaskCreated -Format 's'}}, 
+                @{Name = 'TaskModified'; Expression = {Get-Date -Date $task.TaskModified -Format 's'}}, 
+                TaskID, 
+                Completed | ConvertTo-Xml).Objects.Object
 
             #load tasks from XML
             [xml]$In = Get-Content -Path $MyTaskPath -Encoding UTF8
@@ -1383,32 +1383,32 @@ Function Get-EmailReminder {
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting scheduled job myTasksEmail"
         $t = Get-ScheduledJob myTasksEmail
 
-        $hash = $t.InvocationInfo.Parameters[0].where({$_.name -eq "argumentlist"}).value
+        $hash = $t.InvocationInfo.Parameters[0].where( {$_.name -eq "argumentlist"}).value
         
         Try {
             #get the last run
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting last job run"
             $last = Get-Job $t.name -Newest 1 -ErrorAction stop
-            }
+        }
         Catch {
             $last = [PSCustomObject]@{
                 PSEndTime = "11/30/1999" -as [datetime]
-                State = "The task has not yet run"
+                State     = "The task has not yet run"
             }
         }
         [pscustomobject]@{
-            Task = $t.Name
-            Frequency = $t.JobTriggers.Frequency
-            At = $t.JobTriggers.at.TimeOfDay
-            To = $hash.To
-            From = $hash.From
+            Task       = $t.Name
+            Frequency  = $t.JobTriggers.Frequency
+            At         = $t.JobTriggers.at.TimeOfDay
+            To         = $hash.To
+            From       = $hash.From
             MailServer = $hash.SMTPServer
-            Port = $hash.Port
-            UseSSL = $hash.UseSSL
-            AsHTML = $hash.BodyAsHTML
-            LastRun = $last.PSEndTime
-            LastState = $last.State
-            Enabled = $t.Enabled
+            Port       = $hash.Port
+            UseSSL     = $hash.UseSSL
+            AsHTML     = $hash.BodyAsHTML
+            LastRun    = $last.PSEndTime
+            LastState  = $last.State
+            Enabled    = $t.Enabled
         }
     } #process
 
@@ -1419,6 +1419,27 @@ Function Get-EmailReminder {
 
 } #close Get-EmailReminder
 
+Function Set-MyTaskPath {
+    [cmdletbinding(SupportsShouldProcess)]
+    Param(
+        [Parameter(Mandatory, HelpMessage = "Enter the path to your new myTaskPath directory")]
+        [ValidateScript( {Test-Path $_})]
+        [string]$Path
+    )
 
+    If ($pscmdlet.ShouldProcess("$path", "Update task path")) {
+        $global:mytaskhome = $Path
+        
+        #path to the category file
+        $global:myTaskCategory = Join-Path -Path $mytaskhome -ChildPath myTaskCategory.txt
+
+        #path to stored tasks
+        $global:mytaskPath = Join-Path -Path $mytaskhome -ChildPath myTasks.xml
+
+        #path to archived or completed tasks
+        $global:myTaskArchivePath = Join-Path -Path $mytaskhome -ChildPath myTasksArchive.xml
+
+    }
+} #close Set-MyTaskPath
 
 

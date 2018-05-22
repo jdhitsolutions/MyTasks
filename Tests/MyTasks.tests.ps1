@@ -6,8 +6,8 @@ InModuleScope MyTasks {
 Describe "The module" {
 
 $theModule = get-module -name mytasks
-    It "Should have 14 functions" {
-        $theModule.exportedfunctions.count | should be 14
+    It "Should have 15 functions" {
+        $theModule.exportedfunctions.count | should be 15
     }
 
     It "Should have 8 aliases command" {
@@ -67,19 +67,21 @@ Describe Tasks {
 
     <#
         It doesn't appear that you can consistently mock commands that might be used in a class
-        so we'll use actual the actual date
+        so we'll use the actual date
     #>
 
     $Due = (Get-Date).AddDays(30).Date
+    
     #need absolute path for XML files
-new-Item -Name Documents -ItemType Directory -path $TestDrive
+new-Item -Name Documents -ItemType Directory -path TestDrive:
 $home = $TestDrive
-$mytaskhome = "$home\Documents"
+$mytaskhome = Join-Path $home -childpath Documents
 $mytaskPath = Join-Path $home\Documents -child "myTasks.xml" 
 $myTaskArchivePath = Join-Path -Path $home\Documents -ChildPath "myTasksArchive.xml"
 $myTaskCategory = Join-Path -path $home\Documents -childpath "myTaskCategory.txt"
-
 Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
+
+#gv mytask* | out-string | write-host -ForegroundColor yellow
 
     It "Should create a new task" {
         $a = New-MyTask -Name Test1 -DueDate $Due  -Category Testing -Passthru
@@ -148,16 +150,18 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
         (Get-MyTask -Completed | Measure-Object).Count | Should be 1
     }
 
+    Context Archive {
+
+        $save = Join-path $TestDrive -ChildPath "Archive.xml"
     It "Should complete and archive a task" {
         {Complete-Mytask -Name Test2 -Archive -ErrorAction Stop} | Should Not Throw
         (Get-MyTask -all | where-object {-not $_.completed}).count | Should be 3
     }
 
     It "Should archive or save a task" {
-        $save = Join-path $TestDrive -ChildPath "Archive.xml"
         Get-MyTask -Completed | Save-MyTask -Path $save
         Test-Path $save | should Be $True
-        Get-MyTask -Name Test1 | Should Be $null
+        Get-MyTask -Name Test1 -WarningAction SilentlyContinue | Should Be $null
         (Get-MyTask -all).count | Should be 3
     }
 
@@ -166,7 +170,8 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
         $c.Displayname | should be "Archive-MyTask"
         $c.ReferencedCommand | Should be "Save-MyTask"
     }
-    
+} 
+    Context Backup {
     It "Should remove a task and backup the task file" {
         {Remove-myTask -Name Alice } | Should not Throw
         {Get-MyTask -Name Bob | Remove-MyTask } | should not Throw
@@ -175,11 +180,28 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
     
     It "Should backup the task file" {
         {Backup-MyTaskFile -ErrorAction Stop} | Should Not Throw
-        #dir $TestDrive -Recurse | out-string | write-host
-        Test-Path $TestDrive\documents\MyTasks_Backup_*.xml | Should be $True
+        #dir TestDrive: -Recurse | out-string | write-host
+        Test-Path TestDrive:\documents\MyTasks_Backup_*.xml | Should be $True
     }
-
+    }
 } #describe my tasks
 
+Describe TaskVariables {
 
+    It "Set-MyTaskPath should change the global module variables" {
+        $new = Join-Path -Path $TestDrive -ChildPath MyTasks
+        new-item $new -ItemType Directory
+        {Set-MyTaskPath -path $new }
+    }
+    $vars = 'myTaskArchivePath','myTaskCategory','mytaskhome','mytaskPath'
+    foreach ($var in $vars) {
+        It "Should update $var" {
+            (get-variable var).value | Should match $new
+        }
+    }
+<#     myTaskArchivePath              C:\Users\jeff\Documents\myTasksArchive.xml
+myTaskCategory                 C:\users\jeff\Dropbox\mytasks\myTaskCategory.txt
+mytaskhome                     C:\Users\jeff\Documents
+mytaskPath                     C:\Users\jeff\Documents\myTasks.xml
+ #>} #describe TaskVariables
 } #in module
