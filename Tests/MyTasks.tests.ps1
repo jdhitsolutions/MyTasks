@@ -125,11 +125,11 @@ Add-MyTaskCategory -Category Work,Personal,Other,Training,Testing
 
     It "Should modify a task by name" {
         $yr = (Get-Date).year+1
-        Set-MyTask -Name "Test1" -Progress 50 -Description "Pester Test" -DueDate "8/1/$yr"
+        Set-MyTask -Name "Test1" -Progress 50 -Description "Pester Test" -DueDate "$yr-1-8"
          $t = Get-MyTask -name Test1
          $t.Progress | should be 50
          $t.description | should be "Pester Test"
-         $t.duedate | Should be ("8/1/$yr" -as [datetime])
+         $t.duedate | Should be ("$yr-1-8" -as [datetime])
          $t.OverDue | Should be $false
     }
 
