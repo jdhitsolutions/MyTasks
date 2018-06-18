@@ -160,8 +160,9 @@ Function New-MyTask {
         $AttributeCollection.Add($ParameterAttribute)
 
         # Generate and set the ValidateSet 
-        if (Test-Path -Path $myTaskCategory) {           
-            $arrSet = Get-Content -Path $myTaskCategory | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
+        if (Test-Path -Path $global:myTaskCategory) {           
+            $arrSet = Get-Content -Path $global:myTaskCategory | 
+            where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
         }
         else {
             $arrSet = $myTaskDefaultCategories
@@ -322,8 +323,8 @@ Function Set-MyTask {
         $AttributeCollection.Add($ParameterAttribute)
 
         # Generate and set the ValidateSet 
-        if (Test-Path -Path $myTaskCategory) {          
-            $arrSet = Get-Content -Path $myTaskCategory -Encoding Unicode | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
+        if (Test-Path -Path $global:myTaskCategory) {          
+            $arrSet = Get-Content -Path $global:myTaskCategory -Encoding Unicode | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
         }
         else {
             $arrSet = $myTaskDefaultCategories
@@ -560,8 +561,8 @@ Function Get-MyTask {
         $AttributeCollection.Add($ParameterAttribute)
 
         # Generate and set the ValidateSet 
-        if (Test-Path -Path $myTaskCategory) {           
-            $arrSet = Get-Content -Path $myTaskCategory | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
+        if (Test-Path -Path $global:myTaskCategory) {           
+            $arrSet = Get-Content -Path $global:myTaskCategory | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
         }
         else {
             $arrSet = $myTaskDefaultCategories
@@ -686,8 +687,8 @@ Function Show-MyTask {
         $AttributeCollection.Add($ParameterAttribute)
 
         # Generate and set the ValidateSet 
-        if (Test-Path -Path $myTaskCategory) {           
-            $arrSet = Get-Content -Path $myTaskCategory -Encoding Unicode | 
+        if (Test-Path -Path $global:myTaskCategory) {           
+            $arrSet = Get-Content -Path $global:myTaskCategory -Encoding Unicode | 
                 where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
         }
         else {
@@ -924,9 +925,9 @@ Function Get-MyTaskCategory {
         
     } #begin
     Process {
-        If (Test-Path -Path $myTaskCategory) {
-            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving user categories from $myTaskCategory"
-            Get-Content -Path $myTaskCategory -Encoding Unicode | Where-object {$_ -match "\w+"}
+        If (Test-Path -Path $global:myTaskCategory) {
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving user categories from $global:myTaskCategory"
+            Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-object {$_ -match "\w+"}
         }
         else {
             #Display the defaults
@@ -957,12 +958,12 @@ Function Add-MyTaskCategory {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
         #test if user category file already exists and if not, then 
         #create it
-        if (-Not (Test-Path -Path $myTaskCategory)) {
-            Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Creating new user category file $myTaskCategory"
-            Set-Content -Value "" -Path $myTaskCategory -Encoding Unicode
+        if (-Not (Test-Path -Path $global:myTaskCategory)) {
+            Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Creating new user category file $global:myTaskCategory"
+            Set-Content -Value "" -Path $global:myTaskCategory -Encoding Unicode
         }
         #get current contents
-        $current = Get-Content -Path $myTaskCategory -Encoding Unicode | where-object {$_ -match "\w+"}
+        $current = Get-Content -Path $global:myTaskCategory -Encoding Unicode | where-object {$_ -match "\w+"}
     } #begin
 
     Process {
@@ -972,7 +973,7 @@ Function Add-MyTaskCategory {
             }
             else {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Adding $item"
-                Add-Content -Value $item.Trim() -Path $myTaskCategory -Encoding Unicode
+                Add-Content -Value $item.Trim() -Path $global:myTaskCategory -Encoding Unicode
             }
         }
     } #process
@@ -1000,11 +1001,11 @@ Function Remove-MyTaskCategory {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"  
 
         #get current contents
-        $current = Get-Content -Path $myTaskCategory -Encoding Unicode| where-object {$_ -match "\w+"}
+        $current = Get-Content -Path $global:myTaskCategory -Encoding Unicode| where-object {$_ -match "\w+"}
         #create backup 
         $back = Join-Path -path $mytaskhome -ChildPath MyTaskCategory.bak
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Creating backup copy"
-        Copy-Item -Path $myTaskCategory -Destination $back -Force
+        Copy-Item -Path $global:myTaskCategory -Destination $back -Force
     } #begin
 
     Process {
@@ -1017,8 +1018,8 @@ Function Remove-MyTaskCategory {
 
     End {
         #update file
-        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Updating: $myTaskCategory"
-        Set-Content -Value $current -Path $myTaskCategory -Encoding Unicode
+        Write-Verbose "[$((Get-Date).TimeofDay) END    ] Updating: $global:myTaskCategory"
+        Set-Content -Value $current -Path $global:myTaskCategory -Encoding Unicode
         Write-Verbose "[$((Get-Date).TimeofDay) END    ] Ending: $($MyInvocation.Mycommand)"
     } #end
 }
@@ -1424,7 +1425,8 @@ Function Set-MyTaskPath {
     Param(
         [Parameter(Mandatory, HelpMessage = "Enter the path to your new myTaskPath directory")]
         [ValidateScript( {Test-Path $_})]
-        [string]$Path
+        [string]$Path,
+        [switch]$Passthru
     )
 
     If ($pscmdlet.ShouldProcess("$path", "Update task path")) {
@@ -1439,6 +1441,9 @@ Function Set-MyTaskPath {
         #path to archived or completed tasks
         $global:myTaskArchivePath = Join-Path -Path $mytaskhome -ChildPath myTasksArchive.xml
 
+        if ($passthru) {
+            Get-Variable myTaskHome,myTaskPath,myTaskArchivePath,myTaskCategory
+        }
     }
 } #close Set-MyTaskPath
 

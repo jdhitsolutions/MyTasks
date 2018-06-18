@@ -4,20 +4,20 @@
 
 #path to user defined categories
 if ($isLinux) {
-    $mytaskhome = $home
+    $global:mytaskhome = $home
 }
 else {
-    $mytaskhome = "$home\Documents" 
+    $global:mytaskhome = "$home\Documents" 
 }
 
 #path to the category file
-$myTaskCategory = Join-Path -Path $mytaskhome -ChildPath myTaskCategory.txt
+$global:myTaskCategory = Join-Path -Path $mytaskhome -ChildPath myTaskCategory.txt
 
 #path to stored tasks
-$mytaskPath = Join-Path -Path $mytaskhome -ChildPath myTasks.xml
+$global:mytaskPath = Join-Path -Path $mytaskhome -ChildPath myTasks.xml
 
 #path to archived or completed tasks
-$myTaskArchivePath = Join-Path -Path $mytaskhome -ChildPath myTasksArchive.xml
+$global:myTaskArchivePath = Join-Path -Path $mytaskhome -ChildPath myTasksArchive.xml
 
 #default task categories
 $myTaskDefaultCategories = "Work","Personal","Other","Customer"
@@ -40,7 +40,7 @@ $aliases+= Set-Alias -Name Archive-MyTask -Value Save-MyTask -PassThru
 
 #define a hashtable of parameters to splat to Export-ModuleMember
 $exportParams = @{
-Variable = "myTaskPath","myTaskDefaultCategories","myTaskArchivePath","mytaskhome"
+#Variable = "myTaskPath","myTaskDefaultCategories","myTaskArchivePath","mytaskhome"
 Function = "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask",
 "Show-MyTask","Complete-MyTask","Get-MyTaskCategory","Add-MyTaskCategory",
 "Remove-MyTaskCategory","Backup-MyTaskFile","Save-MyTask","Enable-EmailReminder",
