@@ -1,20 +1,22 @@
 ﻿# MyTasks
-## about_MyTasks
-      
 
-# SHORT DESCRIPTION
+## about_MyTasks
+
+## SHORT DESCRIPTION
+
 The commands in the module are intended to be used as a simple solution for
 personal project management or as a more extensive To-Do list. The goal is
 to put all of your work items at your fingertips in a PowerShell session. At
 a  glance you should be able to see project status and update your tasks.
 
-# LONG DESCRIPTION
+## LONG DESCRIPTION
+
 The core of this module is an object defined in a PowerShell class. The
 class has a number of properties, some of which are hidden meaning you won't
 see them unless you specify the property name.
 
 Note: ID and OverDue values are calculated at run time.
-    
+
     [int]$ID
     [string]$Name
     [string]$Description
@@ -36,7 +38,6 @@ A MyTask object might look like this:
     Overdue      : False
     Category     : Work
     Progress     : 0
-    TaskModified : 6/22/2017 5:33:12 PM
 
 The class methods are invoked by the different functions within this module.
 The ID property is calculated at run time when all the tasks are loaded
@@ -44,7 +45,8 @@ into  the PowerShell session. These numbers might change in the same way
 that job numbers change from session to session. The hidden TaskID is the
 unique id for each task.
 
-## Design
+### Design
+
 All task information is stored in an XML file which is created in the user's
 documents folder. On Linux with PowerShell Core the $home folder will be used.
 This path is stored as a global variable myTaskPath and will have a value like:
@@ -56,20 +58,21 @@ As tasks are created, modified, completed and archived, these XML files are
 updated. `Select-XML` is used extensively to make this process as efficient as
 possible.
 
-## Categories
+### Categories
+
 The MyTask object has a provision to tag or label each task with a category.
 By default the class includes an enumeration with a default set of categories:
 
-+ Work 
-+ Personal 
-+ Other 
++ Work
++ Personal
++ Other
 + Customer
 
 Or you can create your own text list of categories which override the
 default settings. For example, you might want to add a priority category
-such as High, Medium and Low. 
+such as High, Medium and Low.
 
-The module is designed to look for a specific text file of category names. 
+The module is designed to look for a specific text file of category names.
 Instead of manually creating the text file, it is strongly recommended to 
 use the MyTaskCategory commands.
 
@@ -82,16 +85,18 @@ custom category list as short as possible as several commands have a dynamic
 parameter to expand this list. You should avoid removing any item from a
 custom category list as long as you have an active task with that category.
 
-## Creating a Task
-Use the New-MyTask command to create a new task. The required parameters are
+### Creating a Task
+
+Use the `New-MyTask` command to create a new task. The required parameters are
 Name and Category. You can specify a deadline date or a number of days in
 which to complete the task. If you don't specify anything the default is 7
 days from the current date.
 
     New-MyTask -Name "Rebuild DC02" -Category Work -Days 30
 
-## Displaying a Task
-The Get-MyTask command will read all tasks from the task XML file and create
+### Displaying a Task
+
+The `Get-MyTask` command will read all tasks from the task XML file and create
 mytask objects. During this process the OverDue property is calculated based
 on comparing the current date to the DueDate. All tasks will be assigned an
 ID value. Tasks are sorted by due date in descending order and completed
@@ -114,26 +119,28 @@ as `Get-MyTask` except that output is written directly to the console using
 Red. Items that are due in the next 24 hours will be displayed in Yellow.
 Completed tasks will be displayed in Green.
 
-## Modifying a Task
-Use Set-MyTask to modify an existing task. You can update any combination of
+### Modifying a Task
+
+Use `Set-MyTask` to modify an existing task. You can update any combination of
 these properties:
 
-+ Name 
-+ Category 
-+ DueDate 
-+ Description 
++ Name
++ Category
++ DueDate
++ Description
 + Progress
 
 You can specify a task by its name or ID, although it might be easiest to
-use Get-MyTask and pipe to `Set-MyTask`.
+use `Get-MyTask` and pipe to `Set-MyTask`.
 
     Get-MyTask -id 6 | Set-MyTask -Progress 33 -DueDate 8/20/2017 -Passthru
-    
+
     ID  Name            Description          DueDate OverDue Category     Progress
     --  ----            -----------          ------- ------- --------     --------
     6   Rebuild DC02                       8/20/2017 False   Work               33
 
-## Completing a Task
+### Completing a Task
+
 When a task if finished, use `Complete-MyTask` to mark it as complete. This
 will set the Progress to 100 and set the hidden Completed property to TRUE.
 
@@ -142,18 +149,18 @@ will set the Progress to 100 and set the hidden Completed property to TRUE.
 The completed task will remain in the task XML file until you archive it or 
 delete it. You can delete any task from the XML file with `Remove-MyTask`.
 
-## Archive and Backup
+### Archive and Backup
+
 If you will be making changes to your tasks, you might want to backup the
 XML task file. Instead of manually copying the file use the `Backup-MyTask`
 command. By default the command will create a backup copy in your documents
 folder using a timestamp filename.
 
     PS C:\> backup-mytaskfile -Passthru
-    
-    
+
         Directory: C:\Users\Jeff\documents
-    
-    
+
+
     Mode                LastWriteTime         Length Name
     ----                -------------         ------ ----
     -a----        7/19/2017   6:19 PM          16461 MyTasks_Backup_20170719.xml
@@ -183,31 +190,36 @@ There is no provision to specify an alternate location like `Save-MyTask`.
 Currently there are no commands in this module for working with the archived
 task XML file.
 
-## Email Reminder
+### Email Reminder
+
 If you are running this module on a Windows platform with the PSScheduled jobs
 module you can create a scheduled PowerShell job to send a daily email message
 showing tasks that are due in the next 3 days.  The default behavior is to send
 a text message but you can send an HTML message which will add color coding to
 highlight overdue and impending tasks. 
 
-Use Enable-EmailReminder to set up the scheduled job. The default time is
+Use `Enable-EmailReminder` to set up the scheduled job. The default time is
 8:00AM daily but you can pick a different time. The job name is hard coded.
 You will need to re-enter your current credentials for the task so that the
-task scheduler has access to the network. Use Disable-EmailReminder to remove
-the task in case you want to change it. Get-EmailReminder will show you the
+task scheduler has access to the network. Use `Disable-EmailReminder` to remove
+the task in case you want to change it. `Get-EmailReminder` will show you the
 current state of the task.
-# NOTE
+
+## NOTE
+
 This module is not intended as a full-feature project management tool. It is
 intended to serve as a light-weight reminder or to-do list system. However,
 feature requests and comments are welcome on the project's GitHub site.
 
-# TROUBLESHOOTING NOTE
+## TROUBLESHOOTING NOTE
+
 There are no known issues at this time.
 
-# SEE ALSO
+## SEE ALSO
 
 
-# KEYWORDS
+## KEYWORDS
+
 - task
 - project
 - to-do

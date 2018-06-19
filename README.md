@@ -1,4 +1,4 @@
-# MyTasks 
+# MyTasks
 
 This PowerShell module is designed as a task or simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell Core. You can install the latest version from the PowerShell Gallery. You will need the -Scope parameter for PowerShell Core.
 
@@ -7,12 +7,15 @@ This PowerShell module is designed as a task or simple To-Do manager. The module
 Task data is stored in an XML file in the user's Documents folder. Here are a few highlights.
 
 ## Class based 
+
 This module requires at least PowerShell version 5.0 since is uses a class definition for the task object. While you could use the object's properties and methods directly, you should use the appropriate module command.
 
 ## XML Data
+
 All of the task information is stored in an XML file. The commands in this module will read in, update, and remove items as needed using PowerShell commands such as `Select-XML`.
 
 ## Categories 
+
 The Task object includes a Category property. The module will define a default set of categories, but users can create their own by using the MyTaskCategory commands:
 
 + Add-MyTaskCategory
@@ -20,61 +23,73 @@ The Task object includes a Category property. The module will define a default s
 + Remove-MyTaskCategory
 
 ## Basic Usage 
+
 You create a task with at least a name and category. The default due date will be 7 days from the current date and time.
-```
+
+```powershell
 New-MyTask "return library books" -Category personal
 ```
+
 You can also specify a due date.
-```
+
+```powershell
 New-MyTask "Pluralsight" -duedate "2/1/2018" -description "renew subscription" -category other
 ```
+
 You can use `Set-MyTask` to modify a task.
-```
+
+```powershell
 Get-MyTask Pluralsight | Set-Mytask -DueDate 3/1/2018
 ```
+
 Because the task has a Progress property, you can use `Set-MyTask` to update that as well.
-```
+
+```powershell
 Set-Mytask "book review" -Progress 60
 ```
 
 To view tasks you can use `Get-MyTask`. Normally, you will use `Get-MyTask` to display tasks, all, some or a single item:
 
-```
+```powershell
 PS S:\> get-mytask -name MemoryTools
 
 ID  Name         Description                DueDate OverDue Category  Progress
 --  ----         -----------                ------- ------- --------  --------
 8   MemoryTools  update module            7/22/2018 False   Projects        10
 ```
+
 The default behavior is to display incomplete tasks due in the next 30 days. Look at the help for [Get-MyTask](.\docs\Get-MyTask.md) for more information.
 
 There is also a command called `Show-MyTask` which is really nothing more than a wrapper to `Get-MyTask`. The "Show" command will write output directly to the host. Incomplete tasks that are overdue will be displayed in red text. Tasks that will be due in 24 hours will be displayed in yellow. If you select all tasks then completed items will be displayed in green. This command may not work in the PowerShell ISE.
 
-
 ![](./images/show-mytask-1.png)
 
 When a task is finished you can mark it as complete.
-```
+
+```powershell
 Complete-MyTask -name "order coffee"
 ```
+
 The task will remain but be marked as 100% complete. You can still see the task when using the -All parameter with `Get-MyTask` or `Show-MyTask`. At some point you might want to remove completed tasks from the master XML file. You can use `Remove-MyTask` to permanently delete them. Or use the `Archive-MyTask` command to move them to an archive xml file.
 
-
 ## Format Views
+
 The module includes a format.ps1xml file that defines a default display when you run `Get-MyTask`. You will get a slightly different set of properties when you run `Get-MyTask | Format-List`. There is also a custom table view called Category which will create a table grouped by the Category property. You should sort the tasks first: `Get-MyTask | Sort-Object Category | Format-Table -view category`.
 
 ![](./images/show-mytask-2.png)
 
-## Archiving and Removing ##
+## Archiving and Removing
+
 Over time your task file might get quite large. Even though the default behavior is to ignore completed tasks, you have an option to archive them to a separate XML file using `Save-MyTask` which has an alias of `Archive-MyTask`:
 
-```
+```powershell
 Get-Mytask -Completed | Archive-MyTask
 ```
 
 There is an option to archive tasks when you run `Complete-MyTask`. There are no commands in this module for working with the archived XML file at this time. Or you can completely delete a task with `Remove-MyTask`.
 
 ## Email Reminders
+
 If you are running this module on a Windows platform that includes the PSScheduledJob module, you can create a scheduled PowerShell job that will send you a daily email with tasks that are due in 3 days or less. The default is a plain text message but you can also send it as HTML. Use the `Enable-EmailReminder` command to set up the job. 
 
 You should read full help and examples for all commands as well as the [about_MyTasks](./docs/about_MyTasks.md) help file.
@@ -95,7 +110,7 @@ You should read full help and examples for all commands as well as the [about_My
 - [Get-EmailReminder](./docs/Get-EmailReminder.md)
 
 ## Limitations
+
 Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
 
-
-*last updated 5 February 2018*
+*last updated 18 June 2018*
