@@ -2,19 +2,27 @@
 
 This PowerShell module is designed as a task or simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell Core. You can install the latest version from the PowerShell Gallery. You will need the -Scope parameter for PowerShell Core.
 
-    Install-Module MyTasks [-scope currentuser]
-     
-Task data is stored in an XML file in the user's Documents folder. Here are a few highlights.
+```powershell
+Install-Module MyTasks [-scope currentuser]
+```
 
-## Class based 
+Task data is stored in an XML file. Here are a few highlights.
+
+## Class based
 
 This module requires at least PowerShell version 5.0 since is uses a class definition for the task object. While you could use the object's properties and methods directly, you should use the appropriate module command.
 
 ## XML Data
 
-All of the task information is stored in an XML file. The commands in this module will read in, update, and remove items as needed using PowerShell commands such as `Select-XML`.
+All of the task information is stored in an XML file. The commands in this module will read in, update, and remove items as needed using PowerShell commands such as `Select-XML`. By default these files are stored in your Documents folder (on Windows systems) or in Home (on Linux). You can change the default location by using the `Set-myTaskPath` command. This is helpful if you are sharing task information between laptops via a service like Dropbox.
 
-## Categories 
+```powershell
+Set-MyTaskPath Drop:\mytasks\
+```
+
+If you use this feature, you'll need to make sure you run this command before doing anything. It is recommended to put this command in a PowerShell profile script.
+
+## Categories
 
 The Task object includes a Category property. The module will define a default set of categories, but users can create their own by using the MyTaskCategory commands:
 
@@ -22,7 +30,7 @@ The Task object includes a Category property. The module will define a default s
 + Get-MyTaskCategory
 + Remove-MyTaskCategory
 
-## Basic Usage 
+## Basic Usage
 
 You create a task with at least a name and category. The default due date will be 7 days from the current date and time.
 
@@ -62,7 +70,7 @@ The default behavior is to display incomplete tasks due in the next 30 days. Loo
 
 There is also a command called `Show-MyTask` which is really nothing more than a wrapper to `Get-MyTask`. The "Show" command will write output directly to the host. Incomplete tasks that are overdue will be displayed in red text. Tasks that will be due in 24 hours will be displayed in yellow. If you select all tasks then completed items will be displayed in green. This command may not work in the PowerShell ISE.
 
-![](./images/show-mytask-1.png)
+![show my tasks](./images/show-mytask-1.png)
 
 When a task is finished you can mark it as complete.
 
@@ -76,7 +84,7 @@ The task will remain but be marked as 100% complete. You can still see the task 
 
 The module includes a format.ps1xml file that defines a default display when you run `Get-MyTask`. You will get a slightly different set of properties when you run `Get-MyTask | Format-List`. There is also a custom table view called Category which will create a table grouped by the Category property. You should sort the tasks first: `Get-MyTask | Sort-Object Category | Format-Table -view category`.
 
-![](./images/show-mytask-2.png)
+![formatted views](./images/show-mytask-2.png)
 
 ## Archiving and Removing
 
@@ -90,27 +98,28 @@ There is an option to archive tasks when you run `Complete-MyTask`. There are no
 
 ## Email Reminders
 
-If you are running this module on a Windows platform that includes the PSScheduledJob module, you can create a scheduled PowerShell job that will send you a daily email with tasks that are due in 3 days or less. The default is a plain text message but you can also send it as HTML. Use the `Enable-EmailReminder` command to set up the job. 
+If you are running this module on a Windows platform that includes the PSScheduledJob module, you can create a scheduled PowerShell job that will send you a daily email with tasks that are due in 3 days or less. The default is a plain text message but you can also send it as HTML. Use the `Enable-EmailReminder` command to set up the job.
 
 You should read full help and examples for all commands as well as the [about_MyTasks](./docs/about_MyTasks.md) help file.
 
-- [Add-MyTaskCategory](./docs/Add-MyTaskCategory.md)
-- [Backup-MyTaskFile](./docs/Backup-MyTaskFile.md)
-- [Complete-MyTask](./docs/Complete-MyTask.md)
-- [Get-MyTask](./docs/Get-MyTask.md)
-- [Get-MyTaskCategory](./docs/Get-MyTaskCategory.md)
-- [New-MyTask](./docs/New-MyTask.md)
-- [Remove-MyTask](./docs/Remove-MyTask.md)
-- [Remove-MyTaskCategory](./docs/Remove-MyTaskCategory.md)
-- [Save-MyTask](./docs/Save-MyTask.md)
-- [Set-MyTask](./docs/Set-MyTask.md)
-- [Show-MyTask](./docs/Show-MyTask.md)
-- [Enable-EmailReminder](./docs/Enable-EmailReminder.md)
-- [Disable-EmailReminder](./docs/Disable-EmailReminder.md)
-- [Get-EmailReminder](./docs/Get-EmailReminder.md)
++ [Add-MyTaskCategory](./docs/Add-MyTaskCategory.md)
++ [Backup-MyTaskFile](./docs/Backup-MyTaskFile.md)
++ [Complete-MyTask](./docs/Complete-MyTask.md)
++ [Get-MyTask](./docs/Get-MyTask.md)
++ [Get-MyTaskCategory](./docs/Get-MyTaskCategory.md)
++ [New-MyTask](./docs/New-MyTask.md)
++ [Remove-MyTask](./docs/Remove-MyTask.md)
++ [Remove-MyTaskCategory](./docs/Remove-MyTaskCategory.md)
++ [Save-MyTask](./docs/Save-MyTask.md)
++ [Set-MyTask](./docs/Set-MyTask.md)
++ [Show-MyTask](./docs/Show-MyTask.md)
++ [Enable-EmailReminder](./docs/Enable-EmailReminder.md)
++ [Disable-EmailReminder](./docs/Disable-EmailReminder.md)
++ [Get-EmailReminder](./docs/Get-EmailReminder.md)
++ [Set-MyTaskPath](./docs/Set-MyTaskPath.md)
 
 ## Limitations
 
 Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
 
-*last updated 18 June 2018*
+*last updated 20 June 2018*
