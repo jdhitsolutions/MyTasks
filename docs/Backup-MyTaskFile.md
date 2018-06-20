@@ -8,6 +8,7 @@ schema: 2.0.0
 # Backup-MyTaskFile
 
 ## SYNOPSIS
+
 Create a backup copy of the MyTask XML source file.
 
 ## SYNTAX
@@ -17,11 +18,13 @@ Backup-MyTaskFile [[-Destination] <String>] [-Passthru] [-WhatIf] [-Confirm] [<C
 ```
 
 ## DESCRIPTION
+
 Use this command to create a backup copy of the source XML file. The default behavior is to create an XML file in your Documents or Home directory with the format MyTasks_Backup_YYYYMMDD.xml. You can also specify an alternate filename.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
+
 ```
 PS C:\> backup-mytaskfile -Passthru
 
@@ -37,6 +40,7 @@ Mode                LastWriteTime         Length Name
 Create a backup copy of the source XML file to the default location,
 
 ### EXAMPLE 2
+
 ```
 PS C:\> Backup-MyTaskFile -Destination c:\work\taskback.xml
 ```
@@ -46,6 +50,7 @@ Create a backup copy of the source XML file to specified file.
 ## PARAMETERS
 
 ### -Destination
+
 Enter the filename and path for the backup xml file.
 
 ```yaml
@@ -61,6 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -Passthru
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -74,6 +80,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -87,6 +94,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -100,6 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -111,6 +120,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None
 
 ## NOTES
+
+Learn more about PowerShell:
+http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 

@@ -8,6 +8,7 @@ schema: 2.0.0
 # Show-MyTask
 
 ## SYNOPSIS
+
 Display all active tasks with color highlights.
 
 ## SYNTAX
@@ -28,19 +29,22 @@ Show-MyTask [-Category <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This command is very similar to Get-MyTask in terms of what it displays. However, this version writes to the console and uses Write-Host to colorize critical tasks. Those that are due in the next 24 hours will be displayed in yellow. Those that are overdue will be displayed in Red. If you use the -All parameter, any completed tasks will be displayed in Green.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```powershell
 PS C:\> Show-MyTask
 ```
 
 You will get a colorized output of Get-MyTask for tasks due in the next 30 days.
 
 ### EXAMPLE 2
-```
+
+```powershell
 PS C:\> Show-MyTask -category Work
 ```
 
@@ -49,6 +53,7 @@ You will get a colorized output of Get-MyTask for all items in the Work category
 ## PARAMETERS
 
 ### -All
+
 Display all tasks including those that are completed.
 
 ```yaml
@@ -64,6 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -Category
+
 Display all tasks that belong to the specified category.
 
 ```yaml
@@ -80,6 +86,7 @@ Accept wildcard characters: False
 ```
 
 ### -DaysDue
+
 Get tasks due in this number of days. This is the default behavior.
 
 ```yaml

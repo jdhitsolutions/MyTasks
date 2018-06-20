@@ -8,6 +8,7 @@ schema: 2.0.0
 # Add-MyTaskCategory
 
 ## SYNOPSIS
+
 Add a custom category for MyTasks
 
 ## SYNTAX
@@ -17,11 +18,13 @@ Add-MyTaskCategory [-Category] <String[]> [-WhatIf] [-Confirm] [<CommonParameter
 ```
 
 ## DESCRIPTION
+
 By default the MyTasks module ships with default categories of Work, Personal, Customer and other. But you can add your own categories. They will be stored in the Documents folder in a file called MyCategory.txt. It is recommended that you use the MyTaskCategory commands to modify this file. As soon as you add a custom category, the default categories are discarded. If you wish to use them, then add them back with this command. See examples.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
+
 ```
 PS C:\> Add-MyTaskCategory -Category Training
 ```
@@ -29,6 +32,7 @@ PS C:\> Add-MyTaskCategory -Category Training
 Add a Training category.
 
 ### EXAMPLE 2
+
 ```
 PS C:\> Add-MyTaskCategory -Category Other,Work,Personal,Team
 PS C:\> Get-MyTaskCategory 
@@ -45,6 +49,7 @@ Add several categories and then display them.
 ## PARAMETERS
 
 ### -Category
+
 Enter a new task category.
 
 ```yaml
@@ -60,6 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -73,6 +79,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -86,6 +93,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -97,6 +105,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None
 
 ## NOTES
+
 Learn more about PowerShell:
 http://jdhitsolutions.com/blog/essential-powershell-resources/
 

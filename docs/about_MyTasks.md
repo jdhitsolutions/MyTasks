@@ -50,11 +50,11 @@ unique id for each task.
 All task information is stored in an XML file which is created in the user's
 documents folder. On Linux with PowerShell Core the $home folder will be used.
 This path is stored as a global variable myTaskPath and will have a value like:
-C:\Users\Jeff\Documents\myTasks.xml. There is also an XML file for archiving 
-completed tasks. This too is in the Documents or $home folder and can be 
+C:\Users\Jeff\Documents\myTasks.xml. There is also an XML file for archiving
+completed tasks. This too is in the Documents or $home folder and can be
 referenced via the myTaskArchivePath variable.
 
-As tasks are created, modified, completed and archived, these XML files are 
+As tasks are created, modified, completed and archived, these XML files are
 updated. `Select-XML` is used extensively to make this process as efficient as
 possible.
 
@@ -73,11 +73,11 @@ default settings. For example, you might want to add a priority category
 such as High, Medium and Low.
 
 The module is designed to look for a specific text file of category names.
-Instead of manually creating the text file, it is strongly recommended to 
+Instead of manually creating the text file, it is strongly recommended to
 use the MyTaskCategory commands.
 
-+ Add-MyTaskCategory 
-+ Get-MyTaskCategory 
++ Add-MyTaskCategory
++ Get-MyTaskCategory
 + Remove-MyTaskCategory
 
 The commands should be self-explanatory. It is also recommended to keep your
@@ -101,7 +101,7 @@ mytask objects. During this process the OverDue property is calculated based
 on comparing the current date to the DueDate. All tasks will be assigned an
 ID value. Tasks are sorted by due date in descending order and completed
 tasks are filtered out by default. This means that you might see gaps in the
-IDs. Use the -All property to display everything or -Completed to see only 
+IDs. Use the -All property to display everything or -Completed to see only
 completed  tasks.
 
 The module includes a custom format type extension file which includes
@@ -146,7 +146,7 @@ will set the Progress to 100 and set the hidden Completed property to TRUE.
 
     Get-MyTask -id 6 | Complete-MyTask
 
-The completed task will remain in the task XML file until you archive it or 
+The completed task will remain in the task XML file until you archive it or
 delete it. You can delete any task from the XML file with `Remove-MyTask`.
 
 ### Archive and Backup

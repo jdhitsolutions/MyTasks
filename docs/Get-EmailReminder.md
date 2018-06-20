@@ -8,7 +8,8 @@ schema: 2.0.0
 # Get-EmailReminder
 
 ## SYNOPSIS
-Get the email reminder job
+
+Get the email reminder job.
 
 ## SYNTAX
 
@@ -17,11 +18,13 @@ Get-EmailReminder [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Use this command to get information about email reminder job.
 
 ## EXAMPLES
 
 ### Example 1
+
 ```powershell
 PS C:\> Get-EmailReminder
 
@@ -30,21 +33,25 @@ Frequency  : Daily
 At         : 08:00:00
 To         : artd@company.com
 From       : artd@company.com
-MailServer : smtp.company.com
+MailServer : mail.company.com
 Port       : 587
 UseSSL     : True
 AsHTML     : True
-LastRun    : 2/5/2018 10:31:41 AM
+LastRun    : 6/19/2018 8:00:08 AM
 LastState  : Completed
+Started    : 6/19/2018 8:00:06 AM
+Ended      : 6/19/2018 8:00:08 AM
+Result     : {[6/19/2018 8:00:08 AM] Message (Tasks Due in the Next 3 Days) sent to artd@company.com from artd@company.com}
 Enabled    : True
+Errors     :
+Warnings   :
 ```
-
 
 ## PARAMETERS
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -55,8 +62,11 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 ### System.Object
 
 ## NOTES
+
 Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
+
 ## RELATED LINKS
+
 [Disable-EmailReminder]()
 
 [Enable-EmailReminder]()

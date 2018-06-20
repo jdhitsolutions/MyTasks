@@ -282,7 +282,7 @@ Team</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -915,7 +915,7 @@ ID  Name                      Description             DueDate OverDue Category  
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>To</maml:name>
           <maml:Description>
-            <maml:para>Enter your email address</maml:para>
+            <maml:para>Enter your email address.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -956,6 +956,30 @@ ID  Name                      Description             DueDate OverDue Category  
             <maml:uri />
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Days</maml:name>
+          <maml:Description>
+            <maml:para>Specify the number of days that tasks are due.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>3</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TaskPath</maml:name>
+          <maml:Description>
+            <maml:para>If you use an alternate path for task files that you normally set with Set-myTaskPath, enter it here.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -1047,7 +1071,7 @@ ID  Name                      Description             DueDate OverDue Category  
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>To</maml:name>
         <maml:Description>
-          <maml:para>Enter your email address</maml:para>
+          <maml:para>Enter your email address.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1092,6 +1116,30 @@ ID  Name                      Description             DueDate OverDue Category  
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Days</maml:name>
+        <maml:Description>
+          <maml:para>Specify the number of days that tasks are due.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>3</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>TaskPath</maml:name>
+        <maml:Description>
+          <maml:para>If you use an alternate path for task files that you normally set with Set-myTaskPath, enter it here.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
@@ -1121,7 +1169,7 @@ ID  Name                      Description             DueDate OverDue Category  
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Enable-EmailReminder -to artd@company.com -UseSSL -Port 587 -mailCredential artd@company.com -SMTPServer smtp.company.com -AsHtml -TaskCredential artd</dev:code>
+        <dev:code>PS C:\&gt; Enable-EmailReminder -to artd@company.com -UseSSL -Port 587 -mailCredential artd@company.com -SMTPServer smtp.company.com -AsHtml -TaskCredential mycomputer\artd</dev:code>
         <dev:remarks>
           <maml:para>This will enable an email job to send an HTML email to artd@company.com using the specified email settings. The From field will be the same as the To field since it wasn't specified. You have to re-enter your credentials for the TaskCredential paramter in order to access the network.</maml:para>
         </dev:remarks>
@@ -1144,7 +1192,7 @@ ID  Name                      Description             DueDate OverDue Category  
       <command:verb>Get</command:verb>
       <command:noun>EmailReminder</command:noun>
       <maml:description>
-        <maml:para>Get the email reminder job</maml:para>
+        <maml:para>Get the email reminder job.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1191,13 +1239,18 @@ Frequency  : Daily
 At         : 08:00:00
 To         : artd@company.com
 From       : artd@company.com
-MailServer : smtp.company.com
+MailServer : mail.company.com
 Port       : 587
 UseSSL     : True
 AsHTML     : True
-LastRun    : 2/5/2018 10:31:41 AM
+LastRun    : 6/19/2018 8:00:08 AM
 LastState  : Completed
-Enabled    : True</dev:code>
+Started    : 6/19/2018 8:00:06 AM
+Ended      : 6/19/2018 8:00:08 AM
+Result     : {[6/19/2018 8:00:08 AM] Message (Tasks Due in the Next 3 Days) sent to artd@company.com from artd@company.com}
+Enabled    : True
+Errors     :
+Warnings   :</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1265,7 +1318,7 @@ Enabled    : True</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Completed</maml:name>
           <maml:Description>
-            <maml:para>Display only completed tasks from the source XML file</maml:para>
+            <maml:para>Display only completed tasks from the source XML file.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -1348,7 +1401,7 @@ Enabled    : True</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Completed</maml:name>
         <maml:Description>
-          <maml:para>Display only completed tasks from the source XML file</maml:para>
+          <maml:para>Display only completed tasks from the source XML file.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1947,7 +2000,7 @@ ID  Name                      Description             DueDate OverDue Category  
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
           <maml:name>InputObject</maml:name>
           <maml:Description>
-            <maml:para>A myTask object from Get-MyTask</maml:para>
+            <maml:para>A myTask object from Get-MyTask.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">MyTask</command:parameterValue>
           <dev:type>
@@ -1984,7 +2037,7 @@ ID  Name                      Description             DueDate OverDue Category  
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>Name</maml:name>
           <maml:Description>
-            <maml:para>Enter task name</maml:para>
+            <maml:para>Enter task name.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2021,7 +2074,7 @@ ID  Name                      Description             DueDate OverDue Category  
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
         <maml:name>InputObject</maml:name>
         <maml:Description>
-          <maml:para>A myTask object from Get-MyTask</maml:para>
+          <maml:para>A myTask object from Get-MyTask.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">MyTask</command:parameterValue>
         <dev:type>
@@ -2033,7 +2086,7 @@ ID  Name                      Description             DueDate OverDue Category  
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>Name</maml:name>
         <maml:Description>
-          <maml:para>Enter task name</maml:para>
+          <maml:para>Enter task name.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2132,7 +2185,7 @@ What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-
       <command:verb>Remove</command:verb>
       <command:noun>MyTaskCategory</command:noun>
       <maml:description>
-        <maml:para>Remove a custom MyTask category</maml:para>
+        <maml:para>Remove a custom MyTask category.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -2293,7 +2346,7 @@ What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Passthru</maml:name>
           <maml:Description>
-            <maml:para></maml:para>
+            <maml:para>Write the saved task to the pipeline.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -2341,7 +2394,7 @@ What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Passthru</maml:name>
         <maml:Description>
-          <maml:para></maml:para>
+          <maml:para>Write the saved task to the pipeline.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -2586,7 +2639,7 @@ Mode                LastWriteTime         Length Name
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Set-MyTask</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
           <maml:name>Name</maml:name>
           <maml:Description>
             <maml:para>Enter the name of a task to modify.</maml:para>
@@ -2856,7 +2909,7 @@ Mode                LastWriteTime         Length Name
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="0" aliases="none">
         <maml:name>Name</maml:name>
         <maml:Description>
           <maml:para>Enter the name of a task to modify.</maml:para>
@@ -3023,7 +3076,7 @@ ID  Name                      Description             DueDate OverDue Category  
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>The MyTasks module relies on global variables to know where your task-related files are stored. The default on Windows systems is your Documents folder. In Linux it is your home folder. Use this command to modify the path. It will then update all of the related variables.</maml:para>
+      <maml:para>The MyTasks module relies on global variables to know where your task-related files are stored. The default on Windows systems is your Documents folder. In Linux it is your home folder. Use this command to modify the path. It will then update all of the related variables. If you specify an alternate path that relies on a PSDrive, the values will be converted to full file system paths.</maml:para>
       <maml:para>It is recommended that you modify your PowerShell profile to import this module and then run this command to reflect the correct location.</maml:para>
     </maml:description>
     <command:syntax>
@@ -3063,6 +3116,17 @@ ID  Name                      Description             DueDate OverDue Category  
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Passthru</maml:name>
+          <maml:Description>
+            <maml:para>Display the new task variable values.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -3094,6 +3158,18 @@ ID  Name                      Description             DueDate OverDue Category  
         <maml:name>WhatIf</maml:name>
         <maml:Description>
           <maml:para>Shows what would happen if the cmdlet runs.The cmdlet is not run.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Passthru</maml:name>
+        <maml:Description>
+          <maml:para>Display the new task variable values.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>

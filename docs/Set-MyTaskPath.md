@@ -14,14 +14,14 @@ Update the myTask variables
 ## SYNTAX
 
 ```
-Set-MyTaskPath [-Path] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-MyTaskPath [-Path] <String> [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-The MyTasks module relies on global variables to know where your task-related files are stored. The default on Windows systems is your Documents folder. In Linux it is your home folder. Use this command to modify the path. It will then update all of the related variables.
+The MyTasks module relies on global variables to know where your task-related files are stored. The default on Windows systems is your Documents folder. In Linux it is your home folder. Use this command to modify the path. It will then update all of the related variables. If you specify an alternate path that relies on a PSDrive, the values will be converted to full file system paths.
 
-It is recommended that you modify your PowerShell profile to import this module and then run this command to reflect the correct location. 
+It is recommended that you modify your PowerShell profile to import this module and then run this command to reflect the correct location.
 
 ## EXAMPLES
 
@@ -83,10 +83,24 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### CommonParameters
+### -Passthru
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+Display the new task variable values.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

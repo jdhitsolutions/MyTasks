@@ -1,5 +1,15 @@
 Changelog for MyTasks
 
+v1.6.0
+Fixed bug saving XML to non-filesystem paths (Issue #28)
+Update Set-MyTaskPath to support -Passthru (Issue #25)
+Updated Get-EmailReminder to include additional details (Issue #18)
+Fixed CSS bug in email scriptblock
+Updated Enable-EmailReminder to let user specify number of days (Issue #29)
+Updated Enable-EmailReminder to let user specify alternate path (Issue #30)
+updated Pester tests
+updated documentation
+
 v1.5.1
 fixed bug with myTaskCategory (Issue #27)
 

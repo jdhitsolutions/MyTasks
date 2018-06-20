@@ -162,7 +162,7 @@ Function New-MyTask {
         # Generate and set the ValidateSet 
         if (Test-Path -Path $global:myTaskCategory) {           
             $arrSet = Get-Content -Path $global:myTaskCategory | 
-            where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
+                where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
         }
         else {
             $arrSet = $myTaskDefaultCategories
@@ -240,7 +240,9 @@ Function New-MyTask {
 
                     if ($PSCmdlet.ShouldProcess($task.name)) {
                         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Saving to existing file"
-                        $in.Save($mytaskPath)
+                        #need to save to a filesystem path
+                       # $save = Convert-Path $mytaskPath
+                        $in.Save($myTaskPath)
                     }
                 }
                 else {
@@ -261,7 +263,9 @@ Function New-MyTask {
                 $newXML.ReplaceChild($declare, $newXML.FirstChild) | Out-Null
                 #save the file
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Saving the new file to $myTaskPath"
-                $newxml.Save($mytaskPath)
+                #need to save to a filesystem path
+               # $save = Convert-Path $mytaskPath
+                $newxml.Save($myTaskPath)
             }
         }
 
@@ -291,7 +295,8 @@ Function Set-MyTask {
             Position = 0,
             Mandatory,
             HelpMessage = "Enter the name of a task",
-            ParameterSetName = "Name"
+            ParameterSetName = "Name",
+            ValueFromPipelineByPropertyName
         )]
         [ValidateNotNullorEmpty()]
         [string]$Name,
@@ -421,7 +426,9 @@ Function Set-MyTask {
         If ($PSCmdlet.ShouldProcess($TaskName)) {
             #update source
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Saving task file"
-            $in.Save($MyTaskPath)
+            #need to save to a filesystem path
+            #$save = Convert-Path $mytaskPath
+            $in.Save($mytaskpath)
      
             #pass object to the pipeline
             if ($Passthru) {
@@ -509,7 +516,9 @@ Function Remove-MyTask {
                 $node.ParentNode.objects
                 #save file
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating $MyTaskPath"
-                $in.Save($mytaskPath)
+                #need to save to a filesystem path
+               # $save = Convert-Path $mytaskPath
+                $in.Save($mytaskpath)
             } #should process
         }
         else {
@@ -891,7 +900,9 @@ Function Complete-MyTask {
 
             #save
             If ($PSCmdlet.ShouldProcess($task.name)) {
-                $in.Save($MyTaskPath)
+                #$save = Convert-Path $mytaskPath
+
+                $in.Save($mytaskpath)
 
                 if ($Archive) {
                     Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Archiving completed task"
@@ -1153,7 +1164,9 @@ Function Save-MyTask {
                 $out.Save($Path)
 
                 #save task file after saving archive
-                $in.Save($mytaskPath)
+                #need to save to a filesystem path
+                #$save = Convert-Path $mytaskPath
+                $in.Save($mytaskpath)
                 If ($Passthru) {
                     Get-Item -Path $Path
                 }
@@ -1194,9 +1207,11 @@ Function Enable-EmailReminder {
         [PSCredential]$MailCredential,
         [Parameter(HelpMessage = "Send an HTML body email")]
         [switch]$AsHtml,
+        [int]$Days = 3,
         [Parameter(Mandatory, HelpMessage = "Re-enter your local user credentials for the scheduled job task")]
         [ValidateNotNullOrEmpty()]
-        [PSCredential]$TaskCredential
+        [PSCredential]$TaskCredential,
+        [string]$TaskPath = $mytaskPath
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
@@ -1221,12 +1236,13 @@ Function Enable-EmailReminder {
         $hash | Out-String | Write-Verbose
         #define the job scriptblock
         $sb = {
-            Param([hashtable]$Hash)
+            Param([hashtable]$Hash,[int]$Dayy,[string]$myPath)
             #uncomment for troubleshooting
             #$PSBoundParameters | out-string | write-host -ForegroundColor cyan
             #get tasks for the next 3 days as the body
 
-            $data = Get-MyTask -Days 3
+            Set-MyTaskPath -Path $myPath    
+            $data = Get-MyTask -Days $Days
             if ($data) {
                 if ($hash.BodyAsHTML) {
                     Write-Host "[$((Get-Date).ToString())] Sending as HTML" -ForegroundColor green
@@ -1244,8 +1260,8 @@ Function Enable-EmailReminder {
                     table, tr, td, th { padding: 2px; margin: 0px }
                     tr:nth-child(odd) {background-color: lightgray}
                     table { width:95%;margin-left:5px; margin-bottom:20px;}
-                    .alert {color: red ! overdue}
-                    .warn {color: yellow ! impending}
+                    .alert {color: red ;}
+                    .warn {color:#ff8c00;}
                     </style>
                     <br>
                     <H1>My Tasks</H1>
@@ -1258,17 +1274,15 @@ Function Enable-EmailReminder {
                         #check the value of the percent free memory column and assign a class to the row
                         if ($html.table.tr[$i].td[4] -eq 'True') {                                          
                             $class.value = "alert"  
-                            #$html.table.tr[$i].ChildNodes[4].Attributes.Append($class) | Out-Null
                             $html.table.tr[$i].Attributes.Append($class) | Out-Null
                         }
                         elseif ((($html.table.tr[$i].td[3] -as [DateTime]) - (Get-Date)).totalHours -le 24 ) {
                             $class.value = "warn"  
-                            #$html.table.tr[$i].ChildNodes[4].Attributes.Append($class) | Out-Null
                             $html.table.tr[$i].Attributes.Append($class) | Out-Null
                         }
                     }
                     
-                    $Body = Convertto-html -body $html.InnerXml -Head $head | Out-String
+                    $Body = ConvertTo-HTML -body $html.InnerXml -Head $head | Out-String
 
                 }
                 else {
@@ -1293,7 +1307,7 @@ Function Enable-EmailReminder {
             Catch {
                 throw $_
             }
-        }
+        } #define scriptblock
     } #begin
 
     Process {
@@ -1324,7 +1338,7 @@ Function Enable-EmailReminder {
                 ScriptBlock        = $sb
                 Name               = "myTasksEmail"
                 Trigger            = $Trigger 
-                ArgumentList       = $hash
+                ArgumentList       = $hash,$Days,$TaskPath
                 MaxResultCount     = 5
                 ScheduledJobOption = $opt
                 Credential         = $TaskCredential
@@ -1389,7 +1403,7 @@ Function Get-EmailReminder {
         Try {
             #get the last run
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting last job run"
-            $last = Get-Job $t.name -Newest 1 -ErrorAction stop
+            $last = Get-Job -name $t.name -Newest 1 -ErrorAction stop
         }
         Catch {
             $last = [PSCustomObject]@{
@@ -1409,7 +1423,12 @@ Function Get-EmailReminder {
             AsHTML     = $hash.BodyAsHTML
             LastRun    = $last.PSEndTime
             LastState  = $last.State
+            Started    = $last.psBeginTime
+            Ended      = $last.psEndTime
+            Result     = $last.output
             Enabled    = $t.Enabled
+            Errors     = $last.Errors
+            Warnings   = $last.warnings
         }
     } #process
 
@@ -1430,7 +1449,7 @@ Function Set-MyTaskPath {
     )
 
     If ($pscmdlet.ShouldProcess("$path", "Update task path")) {
-        $global:mytaskhome = $Path
+        $global:mytaskhome = Convert-Path $Path
         
         #path to the category file
         $global:myTaskCategory = Join-Path -Path $mytaskhome -ChildPath myTaskCategory.txt
@@ -1442,7 +1461,7 @@ Function Set-MyTaskPath {
         $global:myTaskArchivePath = Join-Path -Path $mytaskhome -ChildPath myTasksArchive.xml
 
         if ($passthru) {
-            Get-Variable myTaskHome,myTaskPath,myTaskArchivePath,myTaskCategory
+            Get-Variable myTaskHome, myTaskPath, myTaskArchivePath, myTaskCategory
         }
     }
 } #close Set-MyTaskPath

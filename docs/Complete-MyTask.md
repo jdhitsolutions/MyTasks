@@ -8,6 +8,7 @@ schema: 2.0.0
 # Complete-MyTask
 
 ## SYNOPSIS
+
 Mark a MyTask item as completed.
 
 ## SYNTAX
@@ -31,11 +32,13 @@ Complete-MyTask -ID <Int32> [-CompletedDate <DateTime>] [-Archive] [-Passthru] [
 ```
 
 ## DESCRIPTION
+
 Use this command to mark a MyTask work item as completed. This will automatically set the progress to 100% and mark the item as completed. It will not remove it from the source XML file unless you use the -Archive parameter. This will complete the task and move it to the default archive file, myTasksArchive.xml.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
+
 ```
 PS C:\> get-mytask -id 6 | Complete-MyTask -Passthru
 
@@ -47,6 +50,7 @@ ID  Name                      Description             DueDate OverDue Category  
 Get MyTask with an ID of 6 and mark it as complete. By default nothing is written to the pipeline unless you use -Passthru.
 
 ### EXAMPLE 2
+
 ```
 PS C:\> Complete-MyTask -Name "setup CEO laptop" -archive
 ```
@@ -54,6 +58,7 @@ PS C:\> Complete-MyTask -Name "setup CEO laptop" -archive
 Mark the task as completed and archive it to the myTasksArchive.xml file.
 
 ### EXAMPLE 3
+
 ```
 PS C:\> Complete-MyTask -Name "update-resume" -CompletedDate "4/1/2017 4:00PM"
 ```
@@ -63,6 +68,7 @@ Mark the task as completed using the specified date.
 ## PARAMETERS
 
 ### -Archive
+
 Move the task to the default archive file. There is no provision for specifying an alternate file.
 
 ```yaml
@@ -78,6 +84,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
+
 Enter the name of a task.
 
 ```yaml
@@ -107,6 +114,7 @@ Accept wildcard characters: False
 ```
 
 ### -Task
+
 A MyTask item.
 
 ```yaml
@@ -122,6 +130,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -135,6 +144,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -148,6 +158,7 @@ Accept wildcard characters: False
 ```
 
 ### -CompletedDate
+
 The date you completed the task. The default is the now.
 
 ```yaml
@@ -163,7 +174,10 @@ Accept wildcard characters: False
 ```
 
 ### -ID
-Enter the task ID```yaml
+
+Enter the task ID
+
+```yaml
 Type: Int32
 Parameter Sets: ID
 Aliases:
@@ -187,6 +201,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None
 
 ## NOTES
+
 Learn more about PowerShell:
 http://jdhitsolutions.com/blog/essential-powershell-resources/
 

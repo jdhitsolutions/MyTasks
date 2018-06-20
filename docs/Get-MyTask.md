@@ -8,6 +8,7 @@ schema: 2.0.0
 # Get-MyTask
 
 ## SYNOPSIS
+
 Get MyTask work items.
 
 ## SYNTAX
@@ -43,6 +44,7 @@ Get-MyTask [-Category <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This command reads MyTask items from the source XML file and creates a list of MyTask objects. The default behavior is to display uncompleted tasks for all categories due in the next 30 days. But you can limit the results through different parameters.
 
 Note that the the ID property will be assigned to all tasks in the source XML file, so depending on what parameters you use, you probably won't see a consecutive list of ID numbers.
@@ -50,7 +52,8 @@ Note that the the ID property will be assigned to all tasks in the source XML fi
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```powershell
 PS C:\> Get-MyTask
 
 ID  Name                      Description             DueDate OverDue Category     Progress
@@ -62,7 +65,8 @@ ID  Name                      Description             DueDate OverDue Category  
 Get active tasks due in the next 30 days.
 
 ### EXAMPLE 2
-```
+
+```powershell
 PS C:\> Get-MyTask -all 
 
 ID  Name                      Description             DueDate OverDue Category     Progress
@@ -80,7 +84,8 @@ ID  Name                      Description             DueDate OverDue Category  
 Get all tasks including completed.
 
 ### EXAMPLE 3
-```
+
+```powershell
 PS C:\>get-mytask -Category work
 
 ID  Name                      Description             DueDate OverDue Category     Progress
@@ -92,7 +97,8 @@ ID  Name                      Description             DueDate OverDue Category  
 Get all active tasks in the Work category.
 
 ### EXAMPLE 4
-```
+
+```powershell
 PS C:\> get-mytask -daysdue 90
 
 ID  Name                      Description             DueDate OverDue Category     Progress
@@ -104,7 +110,8 @@ ID  Name                      Description             DueDate OverDue Category  
 Get all active tasks due in the next 90 days
 
 ### EXAMPLE 5
-```
+
+```powershell
 PS C:\> get-mytask -id 4 | format-list -View all
 
 
@@ -126,6 +133,7 @@ Get a single task and view all properties using the custom list view
 ## PARAMETERS
 
 ### -All
+
 Display all tasks fronm the source XML file
 
 ```yaml
@@ -141,6 +149,7 @@ Accept wildcard characters: False
 ```
 
 ### -Category
+
 Display active tasks from the specified category.
 
 ```yaml
@@ -157,7 +166,8 @@ Accept wildcard characters: False
 ```
 
 ### -Completed
-Display only completed tasks from the source XML file
+
+Display only completed tasks from the source XML file.
 
 ```yaml
 Type: SwitchParameter
@@ -172,6 +182,7 @@ Accept wildcard characters: False
 ```
 
 ### -DaysDue
+
 Display active tasks due in the next specified number of days
 
 ```yaml
@@ -187,6 +198,7 @@ Accept wildcard characters: False
 ```
 
 ### -ID
+
 Display a given task by its ID number.
 
 ```yaml
@@ -202,7 +214,9 @@ Accept wildcard characters: False
 ```
 
 ### -Name
+
 The name of a given task.
+
 ```yaml
 Type: String
 Parameter Sets: Name
@@ -216,6 +230,7 @@ Accept wildcard characters: True
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -227,6 +242,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### MyTask
 
 ## NOTES
+
 Learn more about PowerShell:
 http://jdhitsolutions.com/blog/essential-powershell-resources/
 

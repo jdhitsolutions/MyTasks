@@ -8,6 +8,7 @@ schema: 2.0.0
 # Set-MyTask
 
 ## SYNOPSIS
+
 Modify or change a MyTask work item.
 
 ## SYNTAX
@@ -31,6 +32,7 @@ Set-MyTask [-ID <Int32>] [-NewName <String>] [-Description <String>] [-DueDate <
 ```
 
 ## DESCRIPTION
+
 Use this command to change a MyTask work item. You can specify a task by name or ID, although it might be just as easy to pipe from Get-MyTask.
 
 Use Complete-MyTask to mark an item as completed.
@@ -38,7 +40,8 @@ Use Complete-MyTask to mark an item as completed.
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```powershell
 PS C:\> PS S:\> Set-MyTask -Name "Finish DSC Training" -Progress 70 -duedate "12/31/2017" -Passthru
 
 ID  Name                      Description             DueDate OverDue Category     Progress
@@ -49,7 +52,8 @@ ID  Name                      Description             DueDate OverDue Category  
 Set the progress value and a new due date for the 'Finish DSC Training' task.
 
 ### EXAMPLE 2
-```
+
+```powershell
 PS C:\> get-mytask -ID 9 | set-mytask -Progress 10 -Category Projects
 ```
 
@@ -58,6 +62,7 @@ Get the task with ID 9 and pipe to Set-MyTask which changes the progress value a
 ## PARAMETERS
 
 ### -Category
+
 Set the task category.
 
 ```yaml
@@ -74,6 +79,7 @@ Accept wildcard characters: False
 ```
 
 ### -Description
+
 Set the comment or description for the task.
 
 ```yaml
@@ -89,6 +95,7 @@ Accept wildcard characters: False
 ```
 
 ### -DueDate
+
 Set when the task is due for completion.
 
 ```yaml
@@ -104,6 +111,7 @@ Accept wildcard characters: False
 ```
 
 ### -ID
+
 Enter the task ID to identify task you wish to modify.
 
 ```yaml
@@ -119,6 +127,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
+
 Enter the name of a task to modify.
 
 ```yaml
@@ -129,11 +138,12 @@ Aliases:
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -NewName
+
 Give the task a new name.
 
 ```yaml
@@ -149,6 +159,7 @@ Accept wildcard characters: False
 ```
 
 ### -Passthru
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -162,6 +173,7 @@ Accept wildcard characters: False
 ```
 
 ### -Progress
+
 Set a progress completion value between 0 and 100.
 
 ```yaml
@@ -177,6 +189,7 @@ Accept wildcard characters: False
 ```
 
 ### -Task
+
 A task object usually piped from Get-MyTask.
 
 ```yaml
@@ -192,6 +205,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -205,6 +219,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -218,6 +233,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -233,10 +249,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### MyTask
 
 ## NOTES
+
 Learn more about PowerShell:
 http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 
 [Get-MyTask]()
+
 [Complete-MyTask]()
