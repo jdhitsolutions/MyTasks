@@ -7,7 +7,7 @@
 The commands in the module are intended to be used as a simple solution for
 personal project management or as a more extensive To-Do list. The goal is
 to put all of your work items at your fingertips in a PowerShell session. At
-a  glance you should be able to see project status and update your tasks.
+a glance you should be able to see project status and update your tasks.
 
 ## LONG DESCRIPTION
 
@@ -41,7 +41,7 @@ A MyTask object might look like this:
 
 The class methods are invoked by the different functions within this module.
 The ID property is calculated at run time when all the tasks are loaded
-into  the PowerShell session. These numbers might change in the same way
+into the PowerShell session. These numbers might change in the same way
 that job numbers change from session to session. The hidden TaskID is the
 unique id for each task.
 
@@ -169,7 +169,7 @@ Or you can specify your own location and file name.
 
 Finally, if you have a number of completed tasks that you wish to save but
 not be imported every time you run `Get-MyTask`, you can archive them to a
-separate  XML file. The command is technically called `Save-MyTask` but you
+separate XML file. The command is technically called `Save-MyTask` but you
 can also use its alias `Archive-MyTask`.
 
     PS C:\> archive-mytask
@@ -194,9 +194,9 @@ task XML file.
 
 If you are running this module on a Windows platform with the PSScheduled jobs
 module you can create a scheduled PowerShell job to send a daily email message
-showing tasks that are due in the next 3 days.  The default behavior is to send
+showing tasks that are due in the next 3 days. The default behavior is to send
 a text message but you can send an HTML message which will add color coding to
-highlight overdue and impending tasks. 
+highlight overdue and impending tasks.
 
 Use `Enable-EmailReminder` to set up the scheduled job. The default time is
 8:00AM daily but you can pick a different time. The job name is hard coded.
