@@ -1,4 +1,6 @@
-﻿Copyright (c) 2016-2018 JDH Information Technology Solutions, Inc.
+MIT License
+
+Copyright (c) 2016-2018 JDH Information Technology Solutions, Inc.
 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
