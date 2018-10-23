@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -13,7 +13,7 @@ Create a backup copy of the MyTask XML source file.
 
 ## SYNTAX
 
-```
+```yaml
 Backup-MyTaskFile [[-Destination] <String>] [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ Use this command to create a backup copy of the source XML file. The default beh
 
 ### EXAMPLE 1
 
-```
+```powershell
 PS C:\> backup-mytaskfile -Passthru
 
 
@@ -41,7 +41,7 @@ Create a backup copy of the source XML file to the default location,
 
 ### EXAMPLE 2
 
-```
+```powershell
 PS C:\> Backup-MyTaskFile -Destination c:\work\taskback.xml
 ```
 
@@ -121,8 +121,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell:
-http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 

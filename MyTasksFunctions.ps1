@@ -1,4 +1,3 @@
-#requires -version 5.0
 
 #region class definition
 
@@ -119,6 +118,9 @@ Function _ImportTasks {
 Function New-MyTask {
 
     [cmdletbinding(SupportsShouldProcess, DefaultParameterSetName = "Date")]
+    [OutputType("MyTask")]
+    [Alias("nmt", "task")]
+
     Param(
         [Parameter(
             Position = 0, 
@@ -214,8 +216,7 @@ Function New-MyTask {
         @{Name = 'TaskCreated'; Expression = {Get-Date -Date $task.TaskCreated -Format 's'}}, 
         @{Name = 'TaskModified'; Expression = {Get-Date -Date $task.TaskModified -Format 's'}}, 
         TaskID, 
-        Completed  | 
-            ConvertTo-Xml
+        Completed  |  ConvertTo-Xml
 
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $($newXML | out-string)"
         
@@ -241,7 +242,7 @@ Function New-MyTask {
                     if ($PSCmdlet.ShouldProcess($task.name)) {
                         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Saving to existing file"
                         #need to save to a filesystem path
-                       # $save = Convert-Path $mytaskPath
+                        # $save = Convert-Path $mytaskPath
                         $in.Save($myTaskPath)
                     }
                 }
@@ -264,7 +265,7 @@ Function New-MyTask {
                 #save the file
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Saving the new file to $myTaskPath"
                 #need to save to a filesystem path
-               # $save = Convert-Path $mytaskPath
+                # $save = Convert-Path $mytaskPath
                 $newxml.Save($myTaskPath)
             }
         }
@@ -285,6 +286,9 @@ Function New-MyTask {
 Function Set-MyTask {
 
     [cmdletbinding(SupportsShouldProcess, DefaultParameterSetName = "Name")]
+    [OutputType("None", "MyTask")]
+    [Alias("smt")]
+
     Param (
         [Parameter(
             ParameterSetName = "Task",
@@ -351,7 +355,7 @@ Function Set-MyTask {
         [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
 
-        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Cleaning PSBoundparameters"
+        Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Cleaning PSBoundParameters"
         $PSBoundParameters.Remove("Verbose")  | Out-Null
         $PSBoundParameters.Remove("WhatIf")   | Out-Null
         $PSBoundParameters.Remove("Confirm")  | Out-Null
@@ -445,6 +449,9 @@ Function Set-MyTask {
 
 Function Remove-MyTask {
     [cmdletbinding(SupportsShouldProcess, DefaultParameterSetName = "Name")]
+    [OutputType("None")]
+    [Alias("rmt")]
+
     Param(
         [Parameter(
             Position = 0,
@@ -517,7 +524,7 @@ Function Remove-MyTask {
                 #save file
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating $MyTaskPath"
                 #need to save to a filesystem path
-               # $save = Convert-Path $mytaskPath
+                # $save = Convert-Path $mytaskPath
                 $in.Save($mytaskpath)
             } #should process
         }
@@ -535,6 +542,8 @@ Function Remove-MyTask {
 
 Function Get-MyTask {
     [cmdletbinding(DefaultParameterSetName = "Days")]
+    [OutputType("MyTask")]
+    [Alias("gmt")]
 
     Param(
         [Parameter(
@@ -543,7 +552,7 @@ Function Get-MyTask {
         )]
         [string]$Name,
         [Parameter(ParameterSetName = "ID")]
-        [int]$ID,
+        [int[]]$ID,
         [Parameter(ParameterSetName = "All")]
         [switch]$All,
         [Parameter(ParameterSetName = "Completed")]
@@ -627,7 +636,8 @@ Function Get-MyTask {
 
             "ID" {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving Task by ID: $ID"
-                $results = $tasks.where( {$_.id -eq $ID})
+                #$results = $tasks.where( {$_.id -eq $ID})
+                $results = $tasks.where({$_.id -match "^($($id -join '|'))$" })
             } #id
 
             "All" { 
@@ -672,6 +682,9 @@ Function Show-MyTask {
     #this may not work in the PowerShell ISE
 
     [cmdletbinding(DefaultParameterSetName = "Days")]
+    [OutputType("None")]
+    [Alias("shmt")]
+
     Param(
         [Parameter(ParameterSetName = "all")]
         [switch]$All,
@@ -799,6 +812,9 @@ Function Show-MyTask {
 Function Complete-MyTask {
 
     [cmdletbinding(SupportsShouldProcess, DefaultParameterSetName = "Name")]
+    [OutputType("None", "MyTask")]
+    [Alias("cmt")]
+
     Param (
         [Parameter(
             ParameterSetName = "Task",
@@ -929,6 +945,8 @@ Function Complete-MyTask {
 
 Function Get-MyTaskCategory {
     [cmdletbinding()]
+    [OutputType([System.String])]
+
     Param()
 
     Begin {
@@ -954,6 +972,8 @@ Function Get-MyTaskCategory {
 Function Add-MyTaskCategory {
 
     [cmdletbinding(SupportsShouldProcess)]
+    [OutputType("None")]
+
     Param(
         [Parameter(
             Position = 0,
@@ -997,6 +1017,8 @@ Function Add-MyTaskCategory {
 Function Remove-MyTaskCategory {
 
     [cmdletbinding(SupportsShouldProcess)]
+    [OutputType("None")]
+
     Param(
         [Parameter(
             Position = 0,
@@ -1039,6 +1061,8 @@ Function Remove-MyTaskCategory {
 Function Backup-MyTaskFile {
 
     [cmdletbinding(SupportsShouldProcess)]
+    [OutputType("None", "System.IO.FileInfo")]
+
     Param(
         [Parameter(
             Position = 0,
@@ -1095,6 +1119,9 @@ Function Backup-MyTaskFile {
 Function Save-MyTask {
 
     [cmdletbinding(SupportsShouldProcess)]
+    [OutputType("None", "myTask")]
+    [Alias("Archive-MyTask")]
+
     Param(
         [Parameter(Position = 0)]
         [ValidateNotNullorEmpty()]
@@ -1183,7 +1210,10 @@ Function Save-MyTask {
 }
 
 Function Enable-EmailReminder {
+    #this function requires the PSScheduledJob module
     [cmdletbinding(SupportsShouldProcess)]
+    [OutputType("None")]
+
     Param(
         [Parameter(Position = 0, HelpMessage = "What time do you want to send your daily email reminder?")]
         [ValidateNotNullOrEmpty()]
@@ -1236,7 +1266,7 @@ Function Enable-EmailReminder {
         $hash | Out-String | Write-Verbose
         #define the job scriptblock
         $sb = {
-            Param([hashtable]$Hash,[int]$Dayy,[string]$myPath)
+            Param([hashtable]$Hash, [int]$Dayy, [string]$myPath)
             #uncomment for troubleshooting
             #$PSBoundParameters | out-string | write-host -ForegroundColor cyan
             #get tasks for the next 3 days as the body
@@ -1248,23 +1278,23 @@ Function Enable-EmailReminder {
                     Write-Host "[$((Get-Date).ToString())] Sending as HTML" -ForegroundColor green
                     #css to be embedded in the html document
                     $head = @"
-                    <Title>Upcoming Tasks</Title>
-                    <style>
-                    body { background-color:rgb(199, 194, 194);
-                        font-family:Tahoma;
-                        font-size:12pt; }
-                    td, th { border:1px solid black; 
-                             border-collapse:collapse; }
-                    th { color:white;
-                         background-color:black; }
-                    table, tr, td, th { padding: 2px; margin: 0px }
-                    tr:nth-child(odd) {background-color: lightgray}
-                    table { width:95%;margin-left:5px; margin-bottom:20px;}
-                    .alert {color: red ;}
-                    .warn {color:#ff8c00;}
-                    </style>
-                    <br>
-                    <H1>My Tasks</H1>
+<Title>Upcoming Tasks</Title>
+<style>
+body { background-color:rgb(199, 194, 194);
+    font-family:Tahoma;
+    font-size:12pt; }
+td, th { border:1px solid black; 
+            border-collapse:collapse; }
+th { color:white;
+        background-color:black; }
+table, tr, td, th { padding: 2px; margin: 0px }
+tr:nth-child(odd) {background-color: lightgray}
+table { width:95%;margin-left:5px; margin-bottom:20px;}
+.alert {color: red ;}
+.warn {color:#ff8c00;}
+</style>
+<br>
+<H1>My Tasks</H1>
 "@
                     [xml]$html = $data | ConvertTo-HTML -Fragment
                     
@@ -1338,7 +1368,7 @@ Function Enable-EmailReminder {
                 ScriptBlock        = $sb
                 Name               = "myTasksEmail"
                 Trigger            = $Trigger 
-                ArgumentList       = $hash,$Days,$TaskPath
+                ArgumentList       = $hash, $Days, $TaskPath
                 MaxResultCount     = 5
                 ScheduledJobOption = $opt
                 Credential         = $TaskCredential
@@ -1359,6 +1389,8 @@ Function Enable-EmailReminder {
 
 Function Disable-EmailReminder {
     [cmdletbinding(SupportsShouldProcess)]
+    [OutputType("None")]
+
     Param()
     Begin {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
@@ -1366,16 +1398,21 @@ Function Disable-EmailReminder {
 
     Process {
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Processing"
-        Try {
-            if (Get-ScheduledJob -Name myTasksEmail -ErrorAction stop) {
-                #The cmdlet appears to ignore -WhatIf so I'll handle it myself
-                if ($PSCmdlet.ShouldProcess("myTasksEmail")) {
-                    Unregister-ScheduledJob -Name myTasksEmail -ErrorAction stop
-                } #should process
-            } #if task found
+        if ((Get-Module PSScheduledJob) -And (($PSVersionTable.Platform -eq 'Win32NT') -OR ($PSVersionTable.PSEdition -eq 'Desktop'))) {
+            Try {
+                if (Get-ScheduledJob -Name myTasksEmail -ErrorAction stop) {
+                    #The cmdlet appears to ignore -WhatIf so I'll handle it myself
+                    if ($PSCmdlet.ShouldProcess("myTasksEmail")) {
+                        Unregister-ScheduledJob -Name myTasksEmail -ErrorAction stop
+                    } #should process
+                } #if task found
+            }
+            Catch {
+                Write-Warning "Can't find any matching scheduled jobs with the name 'myTasksEmail'."
+            }
         }
-        Catch {
-            Write-Warning "Can't find any matching scheduled jobs with the name 'myTasksEmail'."
+        else {
+            Write-Warning "This command requires the PSScheduledJob module on a Windows platform."
         }
     } #process
 
@@ -1396,6 +1433,7 @@ Function Get-EmailReminder {
 
     Process {
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting scheduled job myTasksEmail"
+        if ((Get-Module PSScheduledJob) -And (($PSVersionTable.Platform -eq 'Win32NT') -OR ($PSVersionTable.PSEdition -eq 'Desktop'))) {
         $t = Get-ScheduledJob myTasksEmail
 
         $hash = $t.InvocationInfo.Parameters[0].where( {$_.name -eq "argumentlist"}).value
@@ -1430,6 +1468,10 @@ Function Get-EmailReminder {
             Errors     = $last.Errors
             Warnings   = $last.warnings
         }
+    }
+    else {
+        Write-Warning "This command requires the PSScheduledJob module on a Windows platform."
+    }
     } #process
 
     End {
@@ -1441,6 +1483,7 @@ Function Get-EmailReminder {
 
 Function Set-MyTaskPath {
     [cmdletbinding(SupportsShouldProcess)]
+    [OutputType("None",[System.Management.Automation.PSVariable])]
     Param(
         [Parameter(Mandatory, HelpMessage = "Enter the path to your new myTaskPath directory")]
         [ValidateScript( {Test-Path $_})]

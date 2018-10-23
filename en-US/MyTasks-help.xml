@@ -824,7 +824,7 @@ ID  Name                      Description             DueDate OverDue Category  
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>This command will create a daily PowerShell scheduled job to send you an email with tasks that are due in the next 3 days. The default is a text message but you can send it as HTML which will include color coding for overdue tasks.</maml:para>
+      <maml:para>This command will create a daily PowerShell scheduled job to send you an email with tasks that are due in the next 3 days. The default is a text message but you can send it as HTML which will include color coding for overdue tasks. This command requires the PSScheduledJob module.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1171,7 +1171,7 @@ ID  Name                      Description             DueDate OverDue Category  
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Enable-EmailReminder -to artd@company.com -UseSSL -Port 587 -mailCredential artd@company.com -SMTPServer smtp.company.com -AsHtml -TaskCredential mycomputer\artd</dev:code>
         <dev:remarks>
-          <maml:para>This will enable an email job to send an HTML email to artd@company.com using the specified email settings. The From field will be the same as the To field since it wasn't specified. You have to re-enter your credentials for the TaskCredential paramter in order to access the network.</maml:para>
+          <maml:para>This will enable an email job to send an HTML email to artd@company.com using the specified email settings. The From field will be the same as the To field since it wasn't specified. You have to re-enter your credentials for the TaskCredential parameter in order to access the network.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1196,7 +1196,7 @@ ID  Name                      Description             DueDate OverDue Category  
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Use this command to get information about email reminder job.</maml:para>
+      <maml:para>Use this command to get information about email reminder job. This command requires the PSScheduledJob module.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1286,7 +1286,7 @@ Warnings   :</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>All</maml:name>
           <maml:Description>
-            <maml:para>Display all tasks fronm the source XML file</maml:para>
+            <maml:para>Display all tasks from the source XML file.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -1349,9 +1349,9 @@ Warnings   :</dev:code>
           <maml:Description>
             <maml:para>Display a given task by its ID number.</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">Int32[]</command:parameterValue>
           <dev:type>
-            <maml:name>Int32</maml:name>
+            <maml:name>Int32[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -1377,7 +1377,7 @@ Warnings   :</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>All</maml:name>
         <maml:Description>
-          <maml:para>Display all tasks fronm the source XML file</maml:para>
+          <maml:para>Display all tasks from the source XML file.</maml:para>
         </maml:Description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1427,9 +1427,9 @@ Warnings   :</dev:code>
         <maml:Description>
           <maml:para>Display a given task by its ID number.</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Int32[]</command:parameterValue>
         <dev:type>
-          <maml:name>Int32</maml:name>
+          <maml:name>Int32[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -1487,7 +1487,7 @@ ID  Name                      Description             DueDate OverDue Category  
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Get-MyTask -all 
+        <dev:code>PS C:\&gt; Get-MyTask -all
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
@@ -1640,7 +1640,7 @@ Customer</dev:code>
       <command:verb>New</command:verb>
       <command:noun>MyTask</command:noun>
       <maml:description>
-        <maml:para>Create a new MyTask itemn</maml:para>
+        <maml:para>Create a new MyTask item</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1987,7 +1987,7 @@ ID  Name                      Description             DueDate OverDue Category  
       <command:verb>Remove</command:verb>
       <command:noun>MyTask</command:noun>
       <maml:description>
-        <maml:para>Remove a MyTask work item.</maml:para>
+        <maml:para>Remove a MyTask item.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -2323,8 +2323,7 @@ What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Use this command to archive or save MyTask items to a new XML file.  They will be removed from the active XML source file. </maml:para>
-      <maml:para>When you run the command by default all completed tasks will be removed from the tasks XML file and stored in a file called myTasksArchive.xml in the user's documents folder. You also have the option of archiving specific tasks. This will move the task to the new file in its current state. See examples.</maml:para>
+      <maml:para>Use this command to archive or save MyTask items to a new XML file.  They will be removed from the active XML source file. When you run the command by default all completed tasks will be removed from the tasks XML file and stored in a file called myTasksArchive.xml in the user's documents folder. You also have the option of archiving specific tasks. This will move the task to the new file in its current state. See examples.</maml:para>
       <maml:para>This command has an alias of Archive-MyTask.</maml:para>
       <maml:para>Note: Currently there are no commands in this module for working with the archived task XML file.</maml:para>
     </maml:description>
@@ -2482,7 +2481,7 @@ What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; archive-mytask</dev:code>
         <dev:remarks>
-          <maml:para>Uaing the alias, archive all completed tasks to myTaskArchive.xml.</maml:para>
+          <maml:para>Using the alias, archive all completed tasks to myTaskArchive.xml.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -3201,7 +3200,7 @@ ID  Name                      Description             DueDate OverDue Category  
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -3213,7 +3212,12 @@ ID  Name                      Description             DueDate OverDue Category  
         </dev:remarks>
       </command:example>
     </command:examples>
-    <command:relatedLinks />
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-MyTask</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
@@ -3336,7 +3340,7 @@ ID  Name                      Description             DueDate OverDue Category  
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

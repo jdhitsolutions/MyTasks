@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -14,32 +14,38 @@ Get MyTask work items.
 ## SYNTAX
 
 ### Days (Default)
-```
+
+```yaml
 Get-MyTask [-DaysDue <Int32>] [<CommonParameters>]
 ```
 
 ### Name
-```
+
+```yaml
 Get-MyTask [[-Name] <String>] [<CommonParameters>]
 ```
 
 ### ID
-```
-Get-MyTask [-ID <Int32>] [<CommonParameters>]
+
+```yaml
+Get-MyTask [-ID <Int32[]>] [<CommonParameters>]
 ```
 
 ### All
-```
+
+```yaml
 Get-MyTask [-All] [<CommonParameters>]
 ```
 
 ### Completed
-```
+
+```yaml
 Get-MyTask [-Completed] [<CommonParameters>]
 ```
 
 ### Category
-```
+
+```yaml
 Get-MyTask [-Category <String>] [<CommonParameters>]
 ```
 
@@ -67,7 +73,7 @@ Get active tasks due in the next 30 days.
 ### EXAMPLE 2
 
 ```powershell
-PS C:\> Get-MyTask -all 
+PS C:\> Get-MyTask -all
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
@@ -134,7 +140,7 @@ Get a single task and view all properties using the custom list view
 
 ### -All
 
-Display all tasks fronm the source XML file
+Display all tasks from the source XML file.
 
 ```yaml
 Type: SwitchParameter
@@ -202,7 +208,7 @@ Accept wildcard characters: False
 Display a given task by its ID number.
 
 ```yaml
-Type: Int32
+Type: Int32[]
 Parameter Sets: ID
 Aliases:
 
@@ -243,8 +249,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell:
-http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 

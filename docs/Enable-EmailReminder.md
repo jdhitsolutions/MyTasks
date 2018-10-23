@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -13,7 +13,7 @@ Enable a daily scheduled email job
 
 ## SYNTAX
 
-```
+```yaml
 Enable-EmailReminder [[-Time] <DateTime>] [-SMTPServer <String>] -To <String> [-From <String>] [-UseSSL]
  [-Port <Int32>] [-MailCredential <PSCredential>] [-AsHtml] [-Days <Int32>] -TaskCredential <PSCredential>
  [-TaskPath <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
@@ -21,7 +21,7 @@ Enable-EmailReminder [[-Time] <DateTime>] [-SMTPServer <String>] -To <String> [-
 
 ## DESCRIPTION
 
-This command will create a daily PowerShell scheduled job to send you an email with tasks that are due in the next 3 days. The default is a text message but you can send it as HTML which will include color coding for overdue tasks.
+This command will create a daily PowerShell scheduled job to send you an email with tasks that are due in the next 3 days. The default is a text message but you can send it as HTML which will include color coding for overdue tasks. This command requires the PSScheduledJob module.
 
 ## EXAMPLES
 
@@ -31,7 +31,7 @@ This command will create a daily PowerShell scheduled job to send you an email w
 PS C:\> Enable-EmailReminder -to artd@company.com -UseSSL -Port 587 -mailCredential artd@company.com -SMTPServer smtp.company.com -AsHtml -TaskCredential mycomputer\artd
 ```
 
-This will enable an email job to send an HTML email to artd@company.com using the specified email settings. The From field will be the same as the To field since it wasn't specified. You have to re-enter your credentials for the TaskCredential paramter in order to access the network.
+This will enable an email job to send an HTML email to artd@company.com using the specified email settings. The From field will be the same as the To field since it wasn't specified. You have to re-enter your credentials for the TaskCredential parameter in order to access the network.
 
 ## PARAMETERS
 
@@ -245,7 +245,6 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS

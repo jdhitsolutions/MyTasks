@@ -1,4 +1,3 @@
-#requires -version 5.0
 
 #region variables
 
@@ -20,33 +19,28 @@ $global:mytaskPath = Join-Path -Path $mytaskhome -ChildPath myTasks.xml
 $global:myTaskArchivePath = Join-Path -Path $mytaskhome -ChildPath myTasksArchive.xml
 
 #default task categories
-$myTaskDefaultCategories = "Work","Personal","Other","Customer"
+$myTaskDefaultCategories = "Work", "Personal", "Other", "Customer"
 
 #endregion
 
 #dot source functions
 . $psscriptroot\MyTasksFunctions.ps1
 
-#define some aliases
-$aliases = @()
-$aliases+= Set-Alias -Name gmt -Value Get-MyTask -PassThru
-$aliases+= Set-Alias -Name smt -Value Set-MyTask -PassThru
-$aliases+= Set-Alias -Name shmt -Value Show-MyTask -PassThru
-$aliases+= Set-Alias -Name rmt -Value Remove-MyTask -PassThru
-$aliases+= Set-Alias -Name cmt -Value Complete-MyTask -PassThru
-$aliases+= Set-Alias -Name nmt -Value New-MyTask -PassThru
-$aliases+= Set-Alias -name task -value New-MyTask -PassThru
-$aliases+= Set-Alias -Name Archive-MyTask -Value Save-MyTask -PassThru
+$cmd = "Get-MyTask", "Set-MyTask", "Complete-MyTask", "Remove-MyTask"
+Register-ArgumentCompleter -CommandName $cmd -ParameterName Name -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
 
-#define a hashtable of parameters to splat to Export-ModuleMember
-$exportParams = @{
-#Variable = "myTaskPath","myTaskDefaultCategories","myTaskArchivePath","mytaskhome"
-Function = "New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask",
-"Show-MyTask","Complete-MyTask","Get-MyTaskCategory","Add-MyTaskCategory",
-"Remove-MyTaskCategory","Backup-MyTaskFile","Save-MyTask","Enable-EmailReminder",
-"Disable-EmailReminder","Get-EmailReminder","Set-MyTaskPath"
-Alias = $aliases.Name
+    [xml]$In = Get-Content -Path $MyTaskPath -Encoding UTF8
+
+    #$in.objects.object.childnodes.where( {$_.Name -eq 'Name'}).'#text'
+    foreach ($obj in $in.Objects.object) {
+        $obj.Property | ForEach-Object -Begin {$propHash = [ordered]@{}} -Process {
+            $propHash.Add($_.name, $_.'#text')
+        } 
+        $propHash  |
+        foreach-object {
+        # completion text,listitem text,result type,Tooltip
+        [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', "Due: $($_.DueDate) Completed: $($_.completed)")
+    }
+  }
 }
-
-#exported via manifest
-Export-ModuleMember @exportParams

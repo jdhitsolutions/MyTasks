@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -13,15 +13,13 @@ Archive completed or other tasks to a new file.
 
 ## SYNTAX
 
-```
+```yaml
 Save-MyTask [[-Path] <String>] [-Task <MyTask[]>] [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Use this command to archive or save MyTask items to a new XML file.  They will be removed from the active XML source file. 
-
-When you run the command by default all completed tasks will be removed from the tasks XML file and stored in a file called myTasksArchive.xml in the user's documents folder. You also have the option of archiving specific tasks. This will move the task to the new file in its current state. See examples.
+Use this command to archive or save MyTask items to a new XML file.  They will be removed from the active XML source file. When you run the command by default all completed tasks will be removed from the tasks XML file and stored in a file called myTasksArchive.xml in the user's documents folder. You also have the option of archiving specific tasks. This will move the task to the new file in its current state. See examples.
 
 This command has an alias of Archive-MyTask.
 
@@ -35,7 +33,7 @@ Note: Currently there are no commands in this module for working with the archiv
 PS C:\> archive-mytask
 ```
 
-Uaing the alias, archive all completed tasks to myTaskArchive.xml.
+Using the alias, archive all completed tasks to myTaskArchive.xml.
 
 ### EXAMPLE 2
 
@@ -145,8 +143,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell:
-http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 

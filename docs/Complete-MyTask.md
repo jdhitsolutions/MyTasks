@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -14,19 +14,22 @@ Mark a MyTask item as completed.
 ## SYNTAX
 
 ### Name (Default)
-```
+
+```yaml
 Complete-MyTask [-Name] <String> [-CompletedDate <DateTime>] [-Archive] [-Passthru] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### Task
-```
+
+```yaml
 Complete-MyTask [-Task <MyTask>] [-CompletedDate <DateTime>] [-Archive] [-Passthru] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### ID
-```
+
+```yaml
 Complete-MyTask -ID <Int32> [-CompletedDate <DateTime>] [-Archive] [-Passthru] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
@@ -39,7 +42,7 @@ Use this command to mark a MyTask work item as completed. This will automaticall
 
 ### EXAMPLE 1
 
-```
+```powershell
 PS C:\> get-mytask -id 6 | Complete-MyTask -Passthru
 
 ID  Name                      Description             DueDate OverDue Category     Progress
@@ -51,7 +54,7 @@ Get MyTask with an ID of 6 and mark it as complete. By default nothing is writte
 
 ### EXAMPLE 2
 
-```
+```powershell
 PS C:\> Complete-MyTask -Name "setup CEO laptop" -archive
 ```
 
@@ -59,7 +62,7 @@ Mark the task as completed and archive it to the myTasksArchive.xml file.
 
 ### EXAMPLE 3
 
-```
+```powershell
 PS C:\> Complete-MyTask -Name "update-resume" -CompletedDate "4/1/2017 4:00PM"
 ```
 
@@ -190,6 +193,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -202,8 +206,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell:
-http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 

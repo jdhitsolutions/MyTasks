@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -13,13 +13,13 @@ Get the email reminder job.
 
 ## SYNTAX
 
-```
+```yaml
 Get-EmailReminder [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Use this command to get information about email reminder job.
+Use this command to get information about email reminder job. This command requires the PSScheduledJob module.
 
 ## EXAMPLES
 

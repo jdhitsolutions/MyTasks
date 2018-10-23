@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -9,19 +9,19 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Remove a MyTask work item.
+Remove a MyTask item.
 
 ## SYNTAX
 
 ### Name (Default)
 
-```
+```yaml
 Remove-MyTask [-Name] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Object
 
-```
+```yaml
 Remove-MyTask -InputObject <MyTask> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -41,7 +41,6 @@ What if: Performing the operation "Copy File" on target "Item: C:\Users\Jeff\Doc
 \Jeff\documents\MyTasks_Backup_201760822.xml".
 What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-9c7c-df55dd0d135a".
 ```
-
 The command supports Whatif.
 
 ### EXAMPLE 2
@@ -115,6 +114,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -129,8 +129,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell:
-http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 

@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -13,7 +13,7 @@ Remove the task email reminder job.
 
 ## SYNTAX
 
-```
+```yaml
 Disable-EmailReminder [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 

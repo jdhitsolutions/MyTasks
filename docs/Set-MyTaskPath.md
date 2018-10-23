@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -13,7 +13,7 @@ Update the myTask variables
 
 ## SYNTAX
 
-```
+```yaml
 Set-MyTaskPath [-Path] <String> [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -100,6 +100,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -112,4 +113,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
+
 ## RELATED LINKS
+
+[Get-MyTask]()

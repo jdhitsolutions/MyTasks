@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -13,7 +13,7 @@ Add a custom category for MyTasks
 
 ## SYNTAX
 
-```
+```yaml
 Add-MyTaskCategory [-Category] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ By default the MyTasks module ships with default categories of Work, Personal, C
 
 ### EXAMPLE 1
 
-```
+```powershell
 PS C:\> Add-MyTaskCategory -Category Training
 ```
 
@@ -33,7 +33,7 @@ Add a Training category.
 
 ### EXAMPLE 2
 
-```
+```powershell
 PS C:\> Add-MyTaskCategory -Category Other,Work,Personal,Team
 PS C:\> Get-MyTaskCategory 
 
@@ -106,8 +106,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell:
-http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 

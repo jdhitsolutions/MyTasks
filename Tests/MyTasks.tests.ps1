@@ -1,7 +1,5 @@
 
-import-module ..\Mytasks.psd1 -Force
-
-
+import-module $PSScriptRoot\..\Mytasks.psd1 -Force
 
 InModuleScope MyTasks {
 

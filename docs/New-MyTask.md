@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -9,20 +9,20 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Create a new MyTask itemn
+Create a new MyTask item
 
 ## SYNTAX
 
 ### Date (Default)
 
-```
+```yaml
 New-MyTask [-Name] <String> [-DueDate <DateTime>] [-Description <String>] [-Passthru] [-WhatIf] [-Confirm]
  -Category <String> [<CommonParameters>]
 ```
 
 ### Days
 
-```
+```yaml
 New-MyTask [-Name] <String> [-Days <Int32>] [-Description <String>] [-Passthru] [-WhatIf] [-Confirm]
  -Category <String> [<CommonParameters>]
 ```
@@ -194,8 +194,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell:
-http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 

@@ -1,6 +1,6 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: MyTasks
+Module Name: mytasks
 online version:
 schema: 2.0.0
 ---
@@ -14,19 +14,22 @@ Modify or change a MyTask work item.
 ## SYNTAX
 
 ### Name (Default)
-```
+
+```yaml
 Set-MyTask [-Name] <String> [-NewName <String>] [-Description <String>] [-DueDate <DateTime>]
  [-Progress <Int32>] [-Passthru] [-WhatIf] [-Confirm] [-Category <String>] [<CommonParameters>]
 ```
 
 ### Task
-```
+
+```yaml
 Set-MyTask [-Task <MyTask>] [-NewName <String>] [-Description <String>] [-DueDate <DateTime>]
  [-Progress <Int32>] [-Passthru] [-WhatIf] [-Confirm] [-Category <String>] [<CommonParameters>]
 ```
 
 ### ID
-```
+
+```yaml
 Set-MyTask [-ID <Int32>] [-NewName <String>] [-Description <String>] [-DueDate <DateTime>] [-Progress <Int32>]
  [-Passthru] [-WhatIf] [-Confirm] [-Category <String>] [<CommonParameters>]
 ```
@@ -250,8 +253,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell:
-http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 

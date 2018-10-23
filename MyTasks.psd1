@@ -9,7 +9,7 @@
 RootModule = 'MyTasks.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.6.0'
+ModuleVersion = '1.7.0'
 
 # ID used to uniquely identify this module
 GUID = '6a5db6e0-9669-4178-a176-54b4931aa4e2'
@@ -24,7 +24,7 @@ CompanyName = 'JDH Information Technology Solutions, Inc.'
 Copyright = '(c) 2016-2018 JDH Information Technology Solutions, Inc. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'A tool set for managing tasks or to-do projects in PowerShell.'
+Description = 'A tool set for managing tasks or to-do projects in PowerShell. Task data is stored in XML and managed through a PowerShell class.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '5.0'
