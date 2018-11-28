@@ -1,5 +1,11 @@
 # Change Log for MyTasks
 
+## v1.8.0
+
++ Fixed Task Category bug (Issue #26) Thank you @shaneis
++ revised Pester test for category fix
++ Updated `README.md`
+
 ## v1.7.0
 
 + file cleanup for PowerShell Gallery
@@ -22,7 +28,7 @@
 
 ## v1.5.1
 
-+ fixed bug with myTaskCategory (Issue #27)
++ fixed bug with MyTaskCategory (Issue #27)
 
 ## v1.5.0
 
@@ -48,7 +54,7 @@
 + Added CompletedDate parameter to Complete-MyTask (Issue #13)
 + Added option to complete a task by ID (Issue #11)
 + Changed default for `Get-MyTask` and `Show-MyTask` to display tasks due in next 30 days. (Issue #12)
-+ fixed bug in `Show-Mytask` where completed tasks were displaying in red
++ fixed bug in `Show-MyTask` where completed tasks were displaying in red
 + Made parameters for `New-MyTask` more positional (Issue #14)
 + Updated help documentation
 
@@ -80,7 +86,7 @@
 + when none have been defined yet.
 + Modified `Show-MyTask` to work under the Windows 10
 + PowerShell ISE (Issue #2)
-+ Modified `Remove-Mytask` to accept MyTask as an input object (Issue #3)
++ Modified `Remove-MyTask` to accept MyTask as an input object (Issue #3)
 + Help files are NOT updated yet to reflect these changes.
 + Updated `README.md`
 
@@ -109,8 +115,8 @@
 
 ## v0.0.15
 
-+ fixed a regular expression bug in `Show-Mytask` that wasn't properly capturing completed tasks.
-+ Modified `Show-Mytask` to display completed tasks in green.
++ fixed a regular expression bug in `Show-MyTask` that wasn't properly capturing completed tasks.
++ Modified `Show-MyTask` to display completed tasks in green.
 + Added command `Save-MyTasks` move completed tasks to an archive file.
 + Modified `Complete-MyTask` with an option to archive.
 
@@ -128,8 +134,8 @@
 ## v0.0.12
 
 + Added `Backup-MyTask`
-+ modified format.ps1xml file to display DueDate without time when using tables. Format-List will show full DueDate value.
-+ Added parameter to New-MyTask to allow specifying a number of days instead of an actual date.
++ modified `mytasks.format.ps1xml` file to display DueDate without time when using tables. Format-List will show full DueDate value.
++ Added parameter to `New-MyTask` to allow specifying a number of days instead of an actual date.
 
 ## v0.0.11
 
@@ -154,15 +160,15 @@
 
 ## v0.0.8
 
-+ updated format.ps1xml file with new views
-+ updated format.ps1xml to format DueDate
++ updated `MyTasks.format.ps1xml` file with new views
++ updated `MyTasks.format.ps1xml` to format DueDate
 + added verbose output to commands
 + Modified `Get-MyTask` to support filtering by Category
 + Modified `Show-MyTask` to display in yellow if due date is 24 hours or less
 
 ## v0.0.7
 
-+ added format.ps1xml
++ added `MyTasks.format.ps1xml`
 + fixed a bug in `Set-MyTask` when there was an empty value
 + updated module files
 
@@ -175,7 +181,7 @@
 ## v0.0.5
 
 + Added `Set-MyTask` function
-+ Modified `Get-Mytask` to take name as a positional parameter
++ Modified `Get-MyTask` to take name as a positional parameter
 + added command aliases
 + Updated module files
 

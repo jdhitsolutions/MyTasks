@@ -1,4 +1,8 @@
 
+if (get-module MyTasks) {
+    Remove-Module MyTasks
+}
+
 import-module $PSScriptRoot\..\Mytasks.psd1 -Force
 
 InModuleScope MyTasks {
@@ -86,16 +90,17 @@ InModuleScope MyTasks {
     
         Set-MyTaskPath TestDrive:
 
-        <#  #need absolute path for XML files
-new-Item -Name Documents -ItemType Directory -path TestDrive:
-$home = $TestDrive
-$mytaskhome = Join-Path $home -childpath Documents
-$mytaskPath = Join-Path $home\Documents -child "myTasks.xml" 
-$myTaskArchivePath = Join-Path -Path $home\Documents -ChildPath "myTasksArchive.xml"
-$myTaskCategory = Join-Path -path $home\Documents -childpath "myTaskCategory.txt" #>
+        <#  
+        need absolute path for XML files
+        new-Item -Name Documents -ItemType Directory -path TestDrive:
+        $home = $TestDrive
+        $mytaskhome = Join-Path $home -childpath Documents
+        $mytaskPath = Join-Path $home\Documents -child "myTasks.xml" 
+        $myTaskArchivePath = Join-Path -Path $home\Documents -ChildPath "myTasksArchive.xml"
+        $myTaskCategory = Join-Path -path $home\Documents -childpath "myTaskCategory.txt" 
+        #>
 
         Add-MyTaskCategory -Category Work, Personal, Other, Training, Testing
-
 
         It "Should create a new task" {
             $a = New-MyTask -Name Test1 -DueDate $Due -Category Testing -Passthru

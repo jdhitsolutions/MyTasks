@@ -14,7 +14,7 @@ This module requires at least PowerShell version 5.0 since is uses a class defin
 
 ## XML Data
 
-All of the task information is stored in an XML file. The commands in this module will read in, update, and remove items as needed using PowerShell commands such as `Select-XML`. By default these files are stored in your Documents folder (on Windows systems) or in Home (on Linux). You can change the default location by using the `Set-myTaskPath` command. This is helpful if you are sharing task information between laptops via a service like Dropbox.
+All of the task information is stored in an XML file. The commands in this module will read in, update, and remove items as needed using PowerShell commands such as `Select-XML`. By default these files are stored in your Documents folder (on Windows systems) or in Home (on Linux). You can change the default location by using the [Set-myTaskPath](./docs/Set-MyTaskPath.md) command. This is helpful if you are sharing task information between laptops via a service like Dropbox.
 
 ```powershell
 Set-MyTaskPath Drop:\mytasks\
@@ -24,11 +24,11 @@ If you use this feature, you'll need to make sure you run this command before do
 
 ## Categories
 
-The Task object includes a Category property. The module will define a default set of categories, but users can create their own by using the MyTaskCategory commands:
+The Task object includes a Category property. The module will define a default set of categories ("Work","Personal","Customer","Other"), but users can create their own by using the MyTaskCategory commands:
 
-+ Add-MyTaskCategory
-+ Get-MyTaskCategory
-+ Remove-MyTaskCategory
++ [Add-MyTaskCategory](./docs/Add-MyTaskCategory.md)
++ [Get-MyTaskCategory](./docs/Get-MyTaskCategory.md)
++ [Remove-MyTaskCategory](./docs/Remove-MyTaskCategory.md)
 
 ## Basic Usage
 
@@ -50,13 +50,13 @@ You can use `Set-MyTask` to modify a task.
 Get-MyTask Pluralsight | Set-Mytask -DueDate 3/1/2018
 ```
 
-Because the task has a Progress property, you can use `Set-MyTask` to update that as well.
+Because the task has a Progress property, you can use [Set-MyTask](./docs/Set-MyTask.md) to update that as well.
 
 ```powershell
 Set-Mytask "book review" -Progress 60
 ```
 
-To view tasks you can use `Get-MyTask`. Normally, you will use `Get-MyTask` to display tasks, all, some or a single item:
+To view tasks you can use `Get-MyTask`. Normally, you will use [Get-MyTask](./docs/Get-MyTask.md) to display tasks, all, some or a single item:
 
 ```powershell
 PS S:\> get-mytask -name MemoryTools
@@ -66,9 +66,9 @@ ID  Name         Description                DueDate OverDue Category  Progress
 8   MemoryTools  update module            7/22/2018 False   Projects        10
 ```
 
-The default behavior is to display incomplete tasks due in the next 30 days. Look at the help for [Get-MyTask](.\docs\Get-MyTask.md) for more information.
+The default behavior is to display incomplete tasks due in the next 30 days. Look at the help for `Get-MyTask` for more information.
 
-There is also a command called `Show-MyTask` which is really nothing more than a wrapper to `Get-MyTask`. The "Show" command will write output directly to the host. Incomplete tasks that are overdue will be displayed in red text. Tasks that will be due in 24 hours will be displayed in yellow. If you select all tasks then completed items will be displayed in green. This command may not work in the PowerShell ISE.
+There is also a command called [Show-MyTask](./docs/Show-MyTask.md) which is really nothing more than a wrapper to `Get-MyTask`. The "Show" command will write output directly to the host. Incomplete tasks that are overdue will be displayed in red text. Tasks that will be due in 24 hours will be displayed in yellow. If you select all tasks then completed items will be displayed in green. This command may not work in the PowerShell ISE.
 
 ![show my tasks](./images/show-mytask-1.png)
 
@@ -78,7 +78,7 @@ When a task is finished you can mark it as complete.
 Complete-MyTask -name "order coffee"
 ```
 
-The task will remain but be marked as 100% complete. You can still see the task when using the -All parameter with `Get-MyTask` or `Show-MyTask`. At some point you might want to remove completed tasks from the master XML file. You can use `Remove-MyTask` to permanently delete them. Or use the `Archive-MyTask` command to move them to an archive xml file.
+The task will remain but be marked as 100% complete. You can still see the task when using the -All parameter with `Get-MyTask` or `Show-MyTask`. At some point you might want to remove completed tasks from the master XML file. You can use [Remove-MyTask](./docs/Remove-MyTask.md) to permanently delete them. Or use the `Archive-MyTask` command to move them to an archive xml file.
 
 ## Format Views
 
@@ -94,11 +94,11 @@ Over time your task file might get quite large. Even though the default behavior
 Get-Mytask -Completed | Archive-MyTask
 ```
 
-There is an option to archive tasks when you run `Complete-MyTask`. There are no commands in this module for working with the archived XML file at this time. Or you can completely delete a task with `Remove-MyTask`.
+There is an option to archive tasks when you run [Complete-MyTask](./docs/Complete-MyTask.md). There are no commands in this module for working with the archived XML file at this time. Or you can completely delete a task with `Remove-MyTask`.
 
 ## Email Reminders
 
-If you are running this module on a Windows platform that includes the PSScheduledJob module, you can create a scheduled PowerShell job that will send you a daily email with tasks that are due in 3 days or less. The default is a plain text message but you can also send it as HTML. Use the `Enable-EmailReminder` command to set up the job.
+If you are running this module on a Windows platform that includes the PSScheduledJob module, you can create a scheduled PowerShell job that will send you a daily email with tasks that are due in 3 days or less. The default is a plain text message but you can also send it as HTML. Use the [Enable-EmailReminder](./docs/Enable-EmailReminder.md) command to set up the job.
 
 You should read full help and examples for all commands as well as the [about_MyTasks](./docs/about_MyTasks.md) help file.
 
@@ -122,4 +122,4 @@ You should read full help and examples for all commands as well as the [about_My
 
 Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
 
-*last updated 22 October 2018*
+*last updated 28 November 2018*
