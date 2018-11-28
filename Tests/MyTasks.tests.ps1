@@ -34,11 +34,22 @@ InModuleScope MyTasks {
         Set-MyTaskPath TestDrive:
 
         It "Default categories are Work,Personal,Other, and Customer" {
-            $myTaskDefaultCategories.count | Should be 4
-            $myTaskDefaultCategories -join "-"| Should Match "Work"
-            $myTaskDefaultCategories -join "-"| Should Match "Personal"
-            $myTaskDefaultCategories -join "-"| Should Match "Other"
-            $myTaskDefaultCategories -join "-"| Should Match "Customer"
+            $script:myTaskDefaultCategories.count | Should be 4
+            $script:myTaskDefaultCategories -join "-"| Should Match "Work"
+            $script:myTaskDefaultCategories -join "-"| Should Match "Personal"
+            $script:myTaskDefaultCategories -join "-"| Should Match "Other"
+            $script:myTaskDefaultCategories -join "-"| Should Match "Customer"
+        }
+        
+        
+        It "keeps the default categories when a new one is added" {
+            Add-MyTaskCategory -Category 'ToDo'
+            $c = Get-Content -Path $myTaskCategory -Raw
+            $c | Should Match 'Work'
+            $c | Should Match 'Personal'
+            $c | Should Match 'Other'
+            $c | Should Match 'Customer'
+            $c | Should Match 'ToDo'
         }
 
         It "Adds a Testing category to $myTaskCategory" {
@@ -50,16 +61,16 @@ InModuleScope MyTasks {
 
         It "Adds multiple categories" {
             Add-MyTaskCategory -Category Work, Personal, Other, Training, Demo
-            (Get-MyTaskCategory).count| Should be 6
+            (Get-MyTaskCategory).count| Should be 8
         }
 
         It "Should dynamically recognize all category values" {
-            (get-command new-mytask).parameters["Category"].attributes.validvalues.count | Should be 6
+            (get-command new-mytask).parameters["Category"].attributes.validvalues.count | Should be 8
         }
 
         It "Can remove a category" {
             Remove-MyTaskCategory -Category Demo
-            (Get-MyTaskCategory).count| Should be 5
+            (Get-MyTaskCategory).count| Should be 7
         }
     
     } #describe my categories

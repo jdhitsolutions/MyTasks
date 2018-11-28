@@ -167,7 +167,7 @@ Function New-MyTask {
                 where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
         }
         else {
-            $arrSet = $myTaskDefaultCategories
+            $arrSet = $script:myTaskDefaultCategories
         }
         $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($arrSet)
 
@@ -336,7 +336,7 @@ Function Set-MyTask {
             $arrSet = Get-Content -Path $global:myTaskCategory -Encoding Unicode | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
         }
         else {
-            $arrSet = $myTaskDefaultCategories
+            $arrSet = $script:myTaskDefaultCategories
         }
         $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($arrSet)
 
@@ -583,7 +583,7 @@ Function Get-MyTask {
             $arrSet = Get-Content -Path $global:myTaskCategory | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
         }
         else {
-            $arrSet = $myTaskDefaultCategories
+            $arrSet = $script:myTaskDefaultCategories
         }
 
         $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($arrSet)
@@ -714,7 +714,7 @@ Function Show-MyTask {
                 where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
         }
         else {
-            $arrSet = $myTaskDefaultCategories
+            $arrSet = $script:myTaskDefaultCategories
         }
         $ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($arrSet)
 
@@ -961,7 +961,7 @@ Function Get-MyTaskCategory {
         else {
             #Display the defaults
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving module default categories"
-            $myTaskDefaultCategories
+            $script:myTaskDefaultCategories
         }
     } #process
     End {
@@ -991,7 +991,7 @@ Function Add-MyTaskCategory {
         #create it
         if (-Not (Test-Path -Path $global:myTaskCategory)) {
             Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Creating new user category file $global:myTaskCategory"
-            Set-Content -Value "" -Path $global:myTaskCategory -Encoding Unicode
+            Set-Content -Value $script:myTaskDefaultCategories -Path $global:myTaskCategory -Encoding Unicode
         }
         #get current contents
         $current = Get-Content -Path $global:myTaskCategory -Encoding Unicode | where-object {$_ -match "\w+"}

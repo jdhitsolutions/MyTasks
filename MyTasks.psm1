@@ -19,7 +19,7 @@ $global:mytaskPath = Join-Path -Path $mytaskhome -ChildPath myTasks.xml
 $global:myTaskArchivePath = Join-Path -Path $mytaskhome -ChildPath myTasksArchive.xml
 
 #default task categories
-$myTaskDefaultCategories = "Work", "Personal", "Other", "Customer"
+$script:myTaskDefaultCategories = "Work", "Personal", "Other", "Customer"
 
 #endregion
 
