@@ -7,34 +7,8 @@ Import-Module -Name "$PSScriptRoot\..\Mytasks.psd1" -Force
 
 InModuleScope MyTasks {
 
-    Describe 'The Module' {
-
-        $Module = Get-Module -Name MyTasks
-        It 'should have 15 functions' {
-            $Module.ExportedFunctions.count | Should -Be 15
-        }
-
-        It 'should have 8 aliases command' {
-            $Module.ExportedAliases.Count | Should -Be 8
-        }
-
-        It 'should not export any variables' {
-            $Module.ExportedVariables.Count | Should -Be 0
-        } 
-
-        It 'should have a formatting xml file' {
-            $Module.ExportedFormatFiles.Count | Should -Be 1
-        }
-
-        It 'requires PowerShell 5.0' {
-            $Module.PowerShellVersion | Should -Be '5.0'
-        }
-    } #describe my module
-
-
     Describe 'Categories' {
         BeforeAll {
-            #$myTaskCategory = "TestDrive:\myTaskCategory.txt"
             Set-MyTaskPath 'TestDrive:'
         }
 
@@ -89,17 +63,7 @@ InModuleScope MyTasks {
 
         $Due = (Get-Date).AddDays(30).Date
     
-        Set-MyTaskPath 'TestDrive:'
-
-        <#  
-        need absolute path for XML files
-        new-Item -Name Documents -ItemType Directory -path TestDrive:
-        $home = $TestDrive
-        $mytaskhome = Join-Path $home -childpath Documents
-        $mytaskPath = Join-Path $home\Documents -child "myTasks.xml" 
-        $myTaskArchivePath = Join-Path -Path $home\Documents -ChildPath "myTasksArchive.xml"
-        $myTaskCategory = Join-Path -path $home\Documents -childpath "myTaskCategory.txt" 
-        #>
+        Set-MyTaskPath -path 'TestDrive:'
 
         Add-MyTaskCategory -Category Work, Personal, Other, Training, Testing
 
@@ -165,7 +129,7 @@ InModuleScope MyTasks {
             {Show-MyTask | Get-Member -ErrorAction Stop} | Should -Throw
         }
 
-        It "should complete a task' {
+        It 'should complete a task' {
             {Complete-Mytask -Name Test1 -ErrorAction Stop} | Should -Not -Throw
             (Get-MyTask -Completed | Measure-Object).Count | Should -Be 1
         }
@@ -175,16 +139,15 @@ InModuleScope MyTasks {
         }
 
         Context 'Archive' {
-
-            $SavePath = $TestDrive | Join-Path -ChildPath "Archive.xml"
+        
             It 'should complete and archive a task' {
                 {Complete-Mytask -Name Test2 -Archive -ErrorAction Stop} | Should -Not -Throw
                 (Get-MyTask -All | Where-Object {-not $_.Completed}).Count | Should -Be 3
             }
 
-            It 'should archive or save a task' {
-                Get-MyTask -Completed | Save-MyTask -Path $SavePath
-                $SavePath | Should -Exist
+            It "should archive or save a task" {
+                Get-MyTask -Completed | Save-MyTask 
+                $myTaskArchivePath | Should -Exist
                 Get-MyTask -Name Test1 -WarningAction SilentlyContinue | Should -BeNull
                 (Get-MyTask -All).Count | Should -Be 3
             }
@@ -205,19 +168,17 @@ InModuleScope MyTasks {
     
             It 'should backup the task file' {
                 {Backup-MyTaskFile -ErrorAction Stop} | Should -Not -Throw
-                #dir TestDrive: -Recurse | out-string | write-host
                 'TestDrive:\MyTasks_Backup_*.xml' | Should -Exist
             }
         }
     } #describe my tasks
 
-    Describe 'Set-MyTaskPath (TaskVariables)' {
+    Describe 'Set-MyTaskPath' -Tag variables {
+
         BeforeAll {
-            $NewFolder = $TestDrive | 
-                Join-Path -ChildPath MyTasks |
-                New-Item -Path $New -ItemType Directory
-                
+            $NewFolder = New-Item -path $TestDrive -name MyTasks -ItemType Directory
             Set-MyTaskPath -Path $NewFolder.Fullname
+            $target = $NewFolder.FullName.Replace("\", "\\")
         }
         
         $VariableTests = @(
@@ -227,9 +188,9 @@ InModuleScope MyTasks {
             @{ Variable = 'mytaskPath' }
         )
         
-        It 'should update $<Variable>' -TestCases $VariableTests {
+        It "should update <Variable>" -TestCases $VariableTests {
             param($Variable)
-            Get-Variable $Variable -ValueOnly | Should -Match $NewFolder.Fullname
+            Get-Variable $Variable -ValueOnly | Should -Match "^$target"
         }
     } #describe task variables
     
@@ -241,29 +202,28 @@ InModuleScope MyTasks {
     #>
         Mock Register-ScheduledJob { 1 } -Verifiable
         Mock Unregister-ScheduledJob {} -Verifiable
-        Mock Get-ScheduledJob { } -ParameterFilter {$Name -eq "myTasksEmail"}
-        Mock Get-ScheduledJob { $True } -ParameterFilter {$Name -eq "myTasksEmail"}
         Mock Get-ScheduledJob { $False } -ParameterFilter {$Name -eq "myTasksEmail"}
-    
+        
         #create a credential
         $Password = ConvertTo-SecureString -String "Password" -AsPlainText -Force
         $Credential = [PSCredential]::new("localhost\me", $Password)
-    
+        
         It 'should require a standard email address' {
-            {Enable-EmailReminder -To foo@company.com -TaskCredential $Credential }| Should -Not -Throw
+            {Enable-EmailReminder -To foo@company.com -TaskCredential $Credential } | Should -Not -Throw
             {Enable-EmailReminder -To foo -TaskCredential $Credential}  | Should -Throw
         } 
-
-        It 'should fail if a job already exists' {
-            $Reminders = Enable-EmailReminder -To foo@company.com -TaskCredential $Credential -WarningAction SilentlyContinue
-            $Reminders.Count | Should -Be 0
-        } 
-
+        
         It 'should register a scheduled job' {
             $Reminders = Enable-EmailReminder -To foo@company.com -TaskCredential $Credential 
             $Reminders.Count | Should -Be 1
             
             Assert-MockCalled Register-ScheduledJob
+        } 
+        It 'should fail if a job already exists' {
+            Mock Get-ScheduledJob { $True } -ParameterFilter {$Name -eq "myTasksEmail"}
+            $Reminders = Enable-EmailReminder -To foo@company.com -TaskCredential $Credential -WarningAction SilentlyContinue
+            $reminders | out-string | write-host -ForegroundColor cyan
+            $Reminders.Count | Should -Be 0
         } 
 
         It 'should get a job result' {
@@ -303,7 +263,7 @@ InModuleScope MyTasks {
          
             Assert-MockCalled Get-ScheduledJob
             Assert-MockCalled Get-Job
-            #$r | out-string | write-host -ForegroundColor CYAN
+           
             $Reminder | Should -BeOfType PSCustomobject
             $Reminder.Task | Should -Be "myTasksEmail"
             $Reminder.LastState | Should -Be "Completed"
@@ -317,4 +277,5 @@ InModuleScope MyTasks {
             Assert-MockCalled Unregister-ScheduledJob
         } 
     }   #describe email settings 
-} #in module
+
+} #in module scope

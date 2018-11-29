@@ -114,7 +114,7 @@ Function _ImportTasks {
 
 } #_ImportTasks
 
-#exported functions 
+# region exported functions 
 Function New-MyTask {
 
     [cmdletbinding(SupportsShouldProcess, DefaultParameterSetName = "Date")]
@@ -637,7 +637,7 @@ Function Get-MyTask {
             "ID" {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving Task by ID: $ID"
                 #$results = $tasks.where( {$_.id -eq $ID})
-                $results = $tasks.where({$_.id -match "^($($id -join '|'))$" })
+                $results = $tasks.where( {$_.id -match "^($($id -join '|'))$" })
             } #id
 
             "All" { 
@@ -1141,6 +1141,7 @@ Function Save-MyTask {
         [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
         Write-Verbose "[$((Get-Date).TimeofDay) EGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n" 
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Using parameter set $($PSCmdlet.ParameterSetName)"
+
     }
 
     Process {
@@ -1355,9 +1356,10 @@ table { width:95%;margin-left:5px; margin-bottom:20px;}
         }
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Validating Requirements"
         if ((Get-Module PSScheduledJob) -And (($PSVersionTable.Platform -eq 'Win32NT') -OR ($PSVersionTable.PSEdition -eq 'Desktop'))) {
+            
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Creating a Daily job trigger for $($Time.TimeofDay)"
             $trigger = New-JobTrigger -Daily -At $Time
-
+                
             $opt = New-ScheduledJobOption -RunElevated -RequireNetwork 
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Registering the scheduled job"
             if ($AsHtml) {
@@ -1372,7 +1374,7 @@ table { width:95%;margin-left:5px; margin-bottom:20px;}
                 MaxResultCount     = 5
                 ScheduledJobOption = $opt
                 Credential         = $TaskCredential
-            }
+            } 
             $regParams | Out-String | Write-Verbose
             Register-ScheduledJob  @regParams     
         }
@@ -1434,44 +1436,44 @@ Function Get-EmailReminder {
     Process {
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting scheduled job myTasksEmail"
         if ((Get-Module PSScheduledJob) -And (($PSVersionTable.Platform -eq 'Win32NT') -OR ($PSVersionTable.PSEdition -eq 'Desktop'))) {
-        $t = Get-ScheduledJob myTasksEmail
+            $t = Get-ScheduledJob myTasksEmail
 
-        $hash = $t.InvocationInfo.Parameters[0].where( {$_.name -eq "argumentlist"}).value
+            $hash = $t.InvocationInfo.Parameters[0].where( {$_.name -eq "argumentlist"}).value
         
-        Try {
-            #get the last run
-            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting last job run"
-            $last = Get-Job -name $t.name -Newest 1 -ErrorAction stop
-        }
-        Catch {
-            $last = [PSCustomObject]@{
-                PSEndTime = "11/30/1999" -as [datetime]
-                State     = "The task has not yet run"
+            Try {
+                #get the last run
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting last job run"
+                $last = Get-Job -name $t.name -Newest 1 -ErrorAction stop
+            }
+            Catch {
+                $last = [PSCustomObject]@{
+                    PSEndTime = "11/30/1999" -as [datetime]
+                    State     = "The task has not yet run"
+                }
+            }
+            [pscustomobject]@{
+                Task       = $t.Name
+                Frequency  = $t.JobTriggers.Frequency
+                At         = $t.JobTriggers.at.TimeOfDay
+                To         = $hash.To
+                From       = $hash.From
+                MailServer = $hash.SMTPServer
+                Port       = $hash.Port
+                UseSSL     = $hash.UseSSL
+                AsHTML     = $hash.BodyAsHTML
+                LastRun    = $last.PSEndTime
+                LastState  = $last.State
+                Started    = $last.psBeginTime
+                Ended      = $last.psEndTime
+                Result     = $last.output
+                Enabled    = $t.Enabled
+                Errors     = $last.Errors
+                Warnings   = $last.warnings
             }
         }
-        [pscustomobject]@{
-            Task       = $t.Name
-            Frequency  = $t.JobTriggers.Frequency
-            At         = $t.JobTriggers.at.TimeOfDay
-            To         = $hash.To
-            From       = $hash.From
-            MailServer = $hash.SMTPServer
-            Port       = $hash.Port
-            UseSSL     = $hash.UseSSL
-            AsHTML     = $hash.BodyAsHTML
-            LastRun    = $last.PSEndTime
-            LastState  = $last.State
-            Started    = $last.psBeginTime
-            Ended      = $last.psEndTime
-            Result     = $last.output
-            Enabled    = $t.Enabled
-            Errors     = $last.Errors
-            Warnings   = $last.warnings
+        else {
+            Write-Warning "This command requires the PSScheduledJob module on a Windows platform."
         }
-    }
-    else {
-        Write-Warning "This command requires the PSScheduledJob module on a Windows platform."
-    }
     } #process
 
     End {
@@ -1483,7 +1485,7 @@ Function Get-EmailReminder {
 
 Function Set-MyTaskPath {
     [cmdletbinding(SupportsShouldProcess)]
-    [OutputType("None",[System.Management.Automation.PSVariable])]
+    [OutputType("None", [System.Management.Automation.PSVariable])]
     Param(
         [Parameter(Mandatory, HelpMessage = "Enter the path to your new myTaskPath directory")]
         [ValidateScript( {Test-Path $_})]
@@ -1509,4 +1511,5 @@ Function Set-MyTaskPath {
     }
 } #close Set-MyTaskPath
 
+#endregion
 

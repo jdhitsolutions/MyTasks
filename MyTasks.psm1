@@ -32,7 +32,6 @@ Register-ArgumentCompleter -CommandName $cmd -ParameterName Name -ScriptBlock {
 
     [xml]$In = Get-Content -Path $MyTaskPath -Encoding UTF8
 
-    #$in.objects.object.childnodes.where( {$_.Name -eq 'Name'}).'#text'
     foreach ($obj in $in.Objects.object) {
         $obj.Property | ForEach-Object -Begin {$propHash = [ordered]@{}} -Process {
             $propHash.Add($_.name, $_.'#text')
