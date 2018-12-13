@@ -824,7 +824,8 @@ ID  Name                      Description             DueDate OverDue Category  
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>This command will create a daily PowerShell scheduled job to send you an email with tasks that are due in the next 3 days. The default is a text message but you can send it as HTML which will include color coding for overdue tasks. This command requires the PSScheduledJob module.</maml:para>
+      <maml:para>This command will create a daily PowerShell scheduled job to send you an email with tasks that are due in the next 3 days. You can specify a different number of days. The default mail message is a text message but you can send it as HTML which will include color coding for overdue tasks. If you are using a custom path for your tasks, be sure you have run Set-MyTaskPath first and verified the settings before enabling an email reminder.</maml:para>
+      <maml:para>This command requires the PSScheduledJob module.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -886,7 +887,7 @@ ID  Name                      Description             DueDate OverDue Category  
             <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>25</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SMTPServer</maml:name>
@@ -979,7 +980,7 @@ ID  Name                      Description             DueDate OverDue Category  
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>$myTaskHome</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -1030,7 +1031,7 @@ ID  Name                      Description             DueDate OverDue Category  
           <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>25</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SMTPServer</maml:name>
@@ -1138,7 +1139,7 @@ ID  Name                      Description             DueDate OverDue Category  
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>$myTaskHome</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -1154,7 +1155,7 @@ ID  Name                      Description             DueDate OverDue Category  
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None</maml:name>
+          <maml:name>ScheduledJob</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

@@ -21,7 +21,9 @@ Enable-EmailReminder [[-Time] <DateTime>] [-SMTPServer <String>] -To <String> [-
 
 ## DESCRIPTION
 
-This command will create a daily PowerShell scheduled job to send you an email with tasks that are due in the next 3 days. The default is a text message but you can send it as HTML which will include color coding for overdue tasks. This command requires the PSScheduledJob module.
+This command will create a daily PowerShell scheduled job to send you an email with tasks that are due in the next 3 days. You can specify a different number of days. The default mail message is a text message but you can send it as HTML which will include color coding for overdue tasks. If you are using a custom path for your tasks, be sure you have run Set-MyTaskPath first and verified the settings before enabling an email reminder.
+
+This command requires the PSScheduledJob module.
 
 ## EXAMPLES
 
@@ -94,7 +96,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 25
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -239,12 +241,13 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: $myTaskHome
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -253,7 +256,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None
+### ScheduledJob
 
 ## NOTES
 

@@ -8,7 +8,7 @@
 RootModule = 'MyTasks.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.8.0'
+ModuleVersion = '1.8.2'
 
 # ID used to uniquely identify this module
 GUID = '6a5db6e0-9669-4178-a176-54b4931aa4e2'

@@ -1,5 +1,11 @@
 # Change Log for MyTasks
 
+## v1.8.2
+
++ Fixed bugs with email reminder. Typo in a parameter name.
++ Added parameter validation for `-Days` in `Enable-EmailReminder`
++ Help updates
+
 ## v1.8.0
 
 + Fixed Task Category bug (Issue #26) Thank you @shaneis

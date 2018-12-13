@@ -1238,11 +1238,14 @@ Function Enable-EmailReminder {
         [PSCredential]$MailCredential,
         [Parameter(HelpMessage = "Send an HTML body email")]
         [switch]$AsHtml,
+        [ValidateNotNullOrEmpty()]
+        [ValidateScript({$_ -gt 0})]
         [int]$Days = 3,
         [Parameter(Mandatory, HelpMessage = "Re-enter your local user credentials for the scheduled job task")]
         [ValidateNotNullOrEmpty()]
         [PSCredential]$TaskCredential,
-        [string]$TaskPath = $mytaskPath
+        [ValidateNotNullOrEmpty()]
+        [string]$TaskPath = $mytaskHome
     )
     Begin {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting $($myinvocation.mycommand)"
@@ -1267,12 +1270,14 @@ Function Enable-EmailReminder {
         $hash | Out-String | Write-Verbose
         #define the job scriptblock
         $sb = {
-            Param([hashtable]$Hash, [int]$Dayy, [string]$myPath)
-            #uncomment for troubleshooting
+            Param([hashtable]$Hash, [int]$Days, [string]$myPath)
+            #uncomment Write-Host lines for troubleshooting
             #$PSBoundParameters | out-string | write-host -ForegroundColor cyan
             #get tasks for the next 3 days as the body
 
             Set-MyTaskPath -Path $myPath    
+            #get-variable mytask* | out-string | Write-Host
+            write-host "[$((Get-Date).ToString())] Getting tasks for the next $days days."
             $data = Get-MyTask -Days $Days
             if ($data) {
                 if ($hash.BodyAsHTML) {
@@ -1322,18 +1327,17 @@ table { width:95%;margin-left:5px; margin-bottom:20px;}
                 }
             }
             else {
-                Write-Warning "No tasks found due in the next 3 days."
+                Write-Warning "No tasks found due in the next $days days."
                 #bail out
                 return
             }
             $hash.Add("Body", $body)
-            $hash.Add("Subject", "Tasks Due in the Next 3 Days")
+            $hash.Add("Subject", "Tasks Due in the Next $days Days")
             $hash.Add("ErrorAction", "Stop")
             Try {
                 Send-MailMessage @hash
                 #if you receive the job I wanted to display some sort of result
                 Write-Output "[$((Get-Date).ToString())] Message ($($hash.subject)) sent to $($hash.to) from $($hash.from)" 
-                Write-Host "[$((Get-Date).ToString())] Message ($($hash.subject)) sent to $($hash.to) from $($hash.from)" -ForegroundColor green
             }
             Catch {
                 throw $_

@@ -85,7 +85,6 @@ InModuleScope MyTasks {
             
             $Task.ID | Should -Be 2
             $Task.Name | Should -Be "Test1"
-            $Task.DueDate.Year | Should -Be (Get-Date).Year
             $Task.Category | Should -Be 'Testing'
             $Task.DueDate  | Should -Be $Due
             $Task.Overdue | Should -Be $False

@@ -12,7 +12,7 @@ a glance you should be able to see project status and update your tasks.
 ## LONG DESCRIPTION
 
 The core of this module is an object defined in a PowerShell class. The
-class has a number of properties, some of which are hidden meaning you won't
+class has a number of properties, some of which are hidden, meaning you won't
 see them unless you specify the property name.
 
 Note: ID and OverDue values are calculated at run time.
@@ -34,7 +34,7 @@ A MyTask object might look like this:
     ID           : 8
     Name         : Lab Setup
     Description  : DSC Labs
-    DueDate      : 9/1/2017 12:00:00 AM
+    DueDate      : 9/1/2018 12:00:00 AM
     Overdue      : False
     Category     : Work
     Progress     : 0
@@ -102,12 +102,12 @@ on comparing the current date to the DueDate. All tasks will be assigned an
 ID value. Tasks are sorted by due date in descending order and completed
 tasks are filtered out by default. This means that you might see gaps in the
 IDs. Use the -All property to display everything or -Completed to see only
-completed  tasks.
+completed tasks.
 
 The module includes a custom format type extension file which includes
 several custom views. You can try commands like these:
 
-    Get-Mytask | format-table -view Category
+    Get-Mytask | Sort-Object Category | format-table -view Category
     Get-Mytask | format-list -view All
 
 The second command is especially useful as it will display all properties,
@@ -133,11 +133,11 @@ these properties:
 You can specify a task by its name or ID, although it might be easiest to
 use `Get-MyTask` and pipe to `Set-MyTask`.
 
-    Get-MyTask -id 6 | Set-MyTask -Progress 33 -DueDate 8/20/2017 -Passthru
+    Get-MyTask -id 6 | Set-MyTask -Progress 33 -DueDate 8/20/2018 -Passthru
 
     ID  Name            Description          DueDate OverDue Category     Progress
     --  ----            -----------          ------- ------- --------     --------
-    6   Rebuild DC02                       8/20/2017 False   Work               33
+    6   Rebuild DC02                       8/20/2018 False   Work               33
 
 ### Completing a Task
 
@@ -163,7 +163,7 @@ folder using a timestamp filename.
 
     Mode                LastWriteTime         Length Name
     ----                -------------         ------ ----
-    -a----        7/19/2017   6:19 PM          16461 MyTasks_Backup_20170719.xml
+    -a----        7/19/2018   6:19 PM          16461 MyTasks_Backup_20180719.xml
 
 Or you can specify your own location and file name.
 
@@ -192,16 +192,16 @@ task XML file.
 
 ### Email Reminder
 
-If you are running this module on a Windows platform with the PSScheduled jobs
-module you can create a scheduled PowerShell job to send a daily email message
-showing tasks that are due in the next 3 days. The default behavior is to send
-a text message but you can send an HTML message which will add color coding to
-highlight overdue and impending tasks.
+ If you are running this module on a Windows platform with the PSScheduled
+jobs module you can create a scheduled PowerShell job to send a daily email
+message showing tasks that are due in the next 3 days or whatever you choose.
+The default behavior is to send a text message but you can send an HTML
+message which will add color coding to highlight overdue and impending tasks.
 
 Use `Enable-EmailReminder` to set up the scheduled job. The default time is
 8:00AM daily but you can pick a different time. The job name is hard coded.
 You will need to re-enter your current credentials for the task so that the
-task scheduler has access to the network. Use `Disable-EmailReminder` to remove
+task scheduler has access to the network. Run `Disable-EmailReminder` to remove
 the task in case you want to change it. `Get-EmailReminder` will show you the
 current state of the task.
 
@@ -209,7 +209,8 @@ current state of the task.
 
 This module is not intended as a full-feature project management tool. It is
 intended to serve as a light-weight reminder or to-do list system. However,
-feature requests and comments are welcome on the project's GitHub site.
+feature requests and comments are welcome on the project's GitHub site at
+https://github.com/jdhitsolutions/MyTasks.
 
 ## TROUBLESHOOTING NOTE
 
@@ -219,6 +220,6 @@ There are no known issues at this time.
 
 ## KEYWORDS
 
-- task
-- project
-- to-do
++ task
++ project
++ to-do
