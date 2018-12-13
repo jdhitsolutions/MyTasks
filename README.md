@@ -122,4 +122,4 @@ You should read full help and examples for all commands as well as the [about_My
 
 Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
 
-*last updated 28 November 2018*
+*last updated 13 December 2018*
