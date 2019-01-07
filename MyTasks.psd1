@@ -8,7 +8,7 @@
 RootModule = 'MyTasks.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.8.2'
+ModuleVersion = '1.9.0'
 
 # ID used to uniquely identify this module
 GUID = '6a5db6e0-9669-4178-a176-54b4931aa4e2'
@@ -20,7 +20,7 @@ Author = 'Jeff Hicks'
 CompanyName = 'JDH Information Technology Solutions, Inc.'
 
 # Copyright statement for this module
-Copyright = '(c) 2016-2018 JDH Information Technology Solutions, Inc. All rights reserved.'
+Copyright = '(c) 2016-2019 JDH Information Technology Solutions, Inc. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'A tool set for managing tasks or to-do projects in PowerShell. Task data is stored in XML and managed through a PowerShell class.'
@@ -65,7 +65,7 @@ FormatsToProcess = "MyTasks.format.ps1xml"
 FunctionsToExport = @("New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask",
 "Show-MyTask","Complete-MyTask","Get-MyTaskCategory","Add-MyTaskCategory",
 "Remove-MyTaskCategory","Backup-MyTaskFile","Save-MyTask","Enable-EmailReminder",
-"Disable-EmailReminder","Get-EmailReminder","Set-MyTaskPath")
+"Disable-EmailReminder","Get-EmailReminder","Set-MyTaskPath","Get-MyTaskArchive")
 
 # Cmdlets to export from this module
 # CmdletsToExport = '*'

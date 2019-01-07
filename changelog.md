@@ -1,5 +1,15 @@
 # Change Log for MyTasks
 
+## v1.9.0
+
++ Updated autocompleter to get task names and enclose in quotes
++ Fixed bug in `Get-EmailReminder` to determine if the command is supported.
++ Modified `Save-MyTask` to provide more detail when using -Whatif.
++ Added `Get-MyTaskArchive` command.
++ Updated class and commands to better handle OverDue values.
++ Modified `MyTasks.format.ps1xml` to support myTaskArchive type
++ Updated help
+
 ## v1.8.2
 
 + Fixed bugs with email reminder. Typo in a parameter name.

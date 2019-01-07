@@ -187,8 +187,7 @@ You can also archive a file when completing it.
 
 Although this will automatically archive it to the myTasksArchive.xml file.
 There is no provision to specify an alternate location like `Save-MyTask`.
-Currently there are no commands in this module for working with the archived
-task XML file.
+Use the `Get-MyTaskArchive` to retrieve archived tasks.
 
 ### Email Reminder
 

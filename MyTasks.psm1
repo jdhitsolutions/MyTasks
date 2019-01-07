@@ -6,7 +6,7 @@ if ($isLinux) {
     $global:mytaskhome = $home
 }
 else {
-    $global:mytaskhome = "$home\Documents" 
+    $global:mytaskhome = "$home\Documents"
 }
 
 #path to the category file
@@ -31,15 +31,18 @@ Register-ArgumentCompleter -CommandName $cmd -ParameterName Name -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
 
     [xml]$In = Get-Content -Path $MyTaskPath -Encoding UTF8
-
-    foreach ($obj in $in.Objects.object) {
+    $tasks = foreach ($obj in $in.Objects.object) {
         $obj.Property | ForEach-Object -Begin {$propHash = [ordered]@{}} -Process {
             $propHash.Add($_.name, $_.'#text')
-        } 
-        $propHash  |
-        foreach-object {
-        # completion text,listitem text,result type,Tooltip
-        [System.Management.Automation.CompletionResult]::new($_.Name, $_.Name, 'ParameterValue', "Due: $($_.DueDate) Completed: $($_.completed)")
+        } -end {$prophash}
     }
-  }
+    ($tasks).where( {$_.name -like "$wordToComplete*"}) | foreach-object {
+        # completion text,listitem text,result type,Tooltip
+        [System.Management.Automation.CompletionResult]::new("'$($_.Name)'", "'$($_.Name)'", 'ParameterValue', "Due: $($_.DueDate -as [datetime]) Completed: $($_.completed)")
+    }
 }
+
+#define default properties for myTaskArchive
+
+Update-TypeData -TypeName myTaskArchive -MemberType AliasProperty -MemberName Completed -Value TaskModified -force
+Update-TypeData -TypeName myTaskArchive -MemberType AliasProperty -MemberName Creeated -Value TaskCreated -force

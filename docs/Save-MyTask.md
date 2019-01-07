@@ -23,8 +23,6 @@ Use this command to archive or save MyTask items to a new XML file.  They will b
 
 This command has an alias of Archive-MyTask.
 
-Note: Currently there are no commands in this module for working with the archived task XML file.
-
 ## EXAMPLES
 
 ### EXAMPLE 1
@@ -150,3 +148,5 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 [Get-MyTask]()
 
 [Complete-MyTask]()
+
+[Get-MyTaskArchive]()

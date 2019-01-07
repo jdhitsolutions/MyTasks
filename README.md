@@ -94,7 +94,9 @@ Over time your task file might get quite large. Even though the default behavior
 Get-Mytask -Completed | Archive-MyTask
 ```
 
-There is an option to archive tasks when you run [Complete-MyTask](./docs/Complete-MyTask.md). There are no commands in this module for working with the archived XML file at this time. Or you can completely delete a task with `Remove-MyTask`.
+There is an option to archive tasks when you run [Complete-MyTask](./docs/Complete-MyTask.md). T. Or you can completely delete a task with `Remove-MyTask`.
+
+Use the `Get-myTaskArchive` to view archived tasks.
 
 ## Email Reminders
 
@@ -102,24 +104,25 @@ If you are running this module on a Windows platform that includes the PSSchedul
 
 You should read full help and examples for all commands as well as the [about_MyTasks](./docs/about_MyTasks.md) help file.
 
-+ [Add-MyTaskCategory](./docs/Add-MyTaskCategory.md)
-+ [Backup-MyTaskFile](./docs/Backup-MyTaskFile.md)
-+ [Complete-MyTask](./docs/Complete-MyTask.md)
-+ [Get-MyTask](./docs/Get-MyTask.md)
-+ [Get-MyTaskCategory](./docs/Get-MyTaskCategory.md)
-+ [New-MyTask](./docs/New-MyTask.md)
-+ [Remove-MyTask](./docs/Remove-MyTask.md)
-+ [Remove-MyTaskCategory](./docs/Remove-MyTaskCategory.md)
-+ [Save-MyTask](./docs/Save-MyTask.md)
-+ [Set-MyTask](./docs/Set-MyTask.md)
-+ [Show-MyTask](./docs/Show-MyTask.md)
-+ [Enable-EmailReminder](./docs/Enable-EmailReminder.md)
-+ [Disable-EmailReminder](./docs/Disable-EmailReminder.md)
-+ [Get-EmailReminder](./docs/Get-EmailReminder.md)
-+ [Set-MyTaskPath](./docs/Set-MyTaskPath.md)
++ [Add-MyTaskCategory](docs/Add-MyTaskCategory.md)
++ [Backup-MyTaskFile](docs/Backup-MyTaskFile.md)
++ [Complete-MyTask](docs/Complete-MyTask.md)
++ [Get-MyTask](docs/Get-MyTask.md)
++ [Get-MyTaskCategory](docs/Get-MyTaskCategory.md)
++ [New-MyTask](docs/New-MyTask.md)
++ [Remove-MyTask](docs/Remove-MyTask.md)
++ [Remove-MyTaskCategory](docs/Remove-MyTaskCategory.md)
++ [Save-MyTask](docs/Save-MyTask.md)
++ [Set-MyTask](docs/Set-MyTask.md)
++ [Show-MyTask](docs/Show-MyTask.md)
++ [Enable-EmailReminder](docs/Enable-EmailReminder.md)
++ [Disable-EmailReminder](docs/Disable-EmailReminder.md)
++ [Get-EmailReminder](docs/Get-EmailReminder.md)
++ [Set-MyTaskPath](docs/Set-MyTaskPath.md)
++ [Get-MyTaskArchive](docs/Get-MyTaskArchive.md)
 
 ## Limitations
 
 Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
 
-*last updated 13 December 2018*
+*last updated 04 January 2019*

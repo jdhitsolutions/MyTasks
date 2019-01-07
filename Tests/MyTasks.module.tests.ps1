@@ -8,7 +8,7 @@ Describe 'MyTasks' {
 
     $Module = Get-Module -Name MyTasks
     It 'should have 15 functions' {
-        $Module.ExportedFunctions.count | Should -Be 15
+        $Module.ExportedFunctions.count | Should -Be 16
     }
 
     It 'should have 8 aliases command' {
@@ -17,7 +17,7 @@ Describe 'MyTasks' {
 
     It 'should not export any variables' {
         $Module.ExportedVariables.Count | Should -Be 0
-    } 
+    }
 
     $modvariables = @(
         @{Variable = 'myTaskArchivePath'}
@@ -60,7 +60,8 @@ Describe "Functions" {
         @{Name = 'Get-MyTaskCategory'}
         @{Name = 'Remove-MyTaskCategory'}
         @{Name = 'Backup-MyTaskFile'}
-        @{Name = 'Set-MyTaskPath'}            
+        @{Name = 'Set-MyTaskPath'}
+        @{Name = 'Get-myTaskArchive'}
     )
 
     It "<Name> has external help defined with at least one example" -TestCases $cmds {
@@ -70,7 +71,7 @@ Describe "Functions" {
         $help.Examples | Should -Not -BeNullOrEmpty
     }
 
-    Context 'Enable-EmailReminder' { 
+    Context 'Enable-EmailReminder' {
         $cmd = Get-Command -Name Enable-EmailReminder
         $params = "TO", "TASKCREDENTIAL"
         Foreach ($item in $params) {
@@ -80,7 +81,7 @@ Describe "Functions" {
         }
     }
 
-    Context 'New-MyTask' { 
+    Context 'New-MyTask' {
         $cmd = Get-Command -Name New-MyTask
         $params = "NAME", "CATEGORY"
         Foreach ($item in $params) {
@@ -95,7 +96,7 @@ Describe "Functions" {
             }
         }
     }
-    Context 'Set-MyTask' { 
+    Context 'Set-MyTask' {
         $cmd = Get-Command -Name Set-MyTask
         $params = "NAME"
         Foreach ($item in $params) {
@@ -111,7 +112,7 @@ Describe "Functions" {
             }
         }
     }
-    Context 'Save-MyTask' { 
+    Context 'Save-MyTask' {
         $cmd = Get-Command -Name Save-MyTask
         $params = "TASK"
         Foreach ($item in $params) {
@@ -120,7 +121,7 @@ Describe "Functions" {
             }
         }
     }
-    Context 'Remove-MyTask' { 
+    Context 'Remove-MyTask' {
         $cmd = Get-Command -Name Remove-MyTask
         $params = "NAME", 'INPUTOBJECT'
         Foreach ($item in $params) {
@@ -129,7 +130,7 @@ Describe "Functions" {
             }
         }
     }
-    Context 'Complete-MyTask' { 
+    Context 'Complete-MyTask' {
         $cmd = Get-Command -Name Complete-MyTask
         $params = "NAME", 'ID'
         Foreach ($item in $params) {
@@ -139,7 +140,7 @@ Describe "Functions" {
         }
     }
 
-    Context 'Add-MyTaskCategory' { 
+    Context 'Add-MyTaskCategory' {
         $cmd = Get-Command -Name Add-MyTaskCategory
         $params = "CATEGORY"
         Foreach ($item in $params) {
@@ -154,7 +155,7 @@ Describe "Functions" {
         }
     }
 
-    Context 'Remove-MyTaskCategory' { 
+    Context 'Remove-MyTaskCategory' {
         $cmd = Get-Command -Name Remove-MyTaskCategory
         $params = "CATEGORY"
         Foreach ($item in $params) {
@@ -169,7 +170,7 @@ Describe "Functions" {
         }
     }
 
-    Context 'Set-MyTaskPath' { 
+    Context 'Set-MyTaskPath' {
         $cmd = Get-Command -Name Set-MyTaskPath
         $params = "PATH"
         Foreach ($item in $params) {
@@ -178,5 +179,9 @@ Describe "Functions" {
             }
         }
     }
+
+    Context 'Get-MyTaskArchive' {
         
+    }
+
 } #describe functions

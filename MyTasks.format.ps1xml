@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<!-- 
+<!--
 
 Any changes made to this file may be overwritten in future module updates
 
@@ -79,9 +79,9 @@ Any changes made to this file may be overwritten in future module updates
                     </TableRowEntry>
                 </TableRowEntries>
             </TableControl>
-        </View>    
+        </View>
         <View>
-          <Name>Category</Name>            
+          <Name>Category</Name>
             <ViewSelectedBy>
                 <TypeName>MyTask</TypeName>
             </ViewSelectedBy>
@@ -89,7 +89,7 @@ Any changes made to this file may be overwritten in future module updates
                 <PropertyName>Category</PropertyName>
             </GroupBy>
                <TableControl>
-                <TableHeaders>                    
+                <TableHeaders>
                     <TableColumnHeader>
                         <Label>Name</Label>
                         <Width>28</Width>
@@ -119,7 +119,7 @@ Any changes made to this file may be overwritten in future module updates
                 <TableRowEntries>
                     <TableRowEntry>
                         <Wrap/>
-                        <TableColumnItems>                          
+                        <TableColumnItems>
                             <TableColumnItem>
                                 <PropertyName>Name</PropertyName>
                             </TableColumnItem>
@@ -131,7 +131,7 @@ Any changes made to this file may be overwritten in future module updates
                                 <FormatString>{0:d}</FormatString>
                             </TableColumnItem>
                                 <TableColumnItem>
-                                <PropertyName>OverDue</PropertyName>                           
+                                <PropertyName>OverDue</PropertyName>
                             </TableColumnItem>
                              <TableColumnItem>
                                 <PropertyName>Progress</PropertyName>
@@ -141,7 +141,7 @@ Any changes made to this file may be overwritten in future module updates
                 </TableRowEntries>
             </TableControl>
         </View>
-        <View>    
+        <View>
             <Name>default</Name>
             <ViewSelectedBy>
                 <TypeName>MyTask</TypeName>
@@ -174,7 +174,7 @@ Any changes made to this file may be overwritten in future module updates
                          <ListItem>
                         <PropertyName>TaskModified</PropertyName>
                         </ListItem>
-                     </ListItems>                   
+                     </ListItems>
                    </ListEntry>
                 </ListEntries>
             </ListControl>
@@ -221,10 +221,86 @@ Any changes made to this file may be overwritten in future module updates
                          <ListItem>
                         <PropertyName>TaskID</PropertyName>
                         </ListItem>
-                     </ListItems>                   
+                     </ListItems>
                    </ListEntry>
                 </ListEntries>
             </ListControl>
+        </View>
+        <View>
+            <Name>default</Name>
+            <ViewSelectedBy>
+                <TypeName>MyTaskArchive</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>ID</Label>
+                        <Width>3</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Name</Label>
+                        <Width>25</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Description</Label>
+                        <Width>20</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Created</Label>
+                        <Width>10</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>DueDate</Label>
+                        <Width>10</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Completed</Label>
+                        <Width>10</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Category</Label>
+                        <Width>12</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <Wrap/>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>ID</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Name</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Description</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>TaskCreated</PropertyName>
+                                <FormatString>{0:d}</FormatString>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>DueDate</PropertyName>
+                                <FormatString>{0:d}</FormatString>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>TaskModified</PropertyName>
+                                <FormatString>{0:d}</FormatString>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Category</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
         </View>
       </ViewDefinitions>
 </Configuration>
