@@ -19,7 +19,7 @@
 + Modified `MyTasks.format.ps1xml` to support myTaskArchive type
 + Updated help
 
-## v1.8.2ex
+## v1.8.2
 
 + Fixed bugs with email reminder. Typo in a parameter name.
 + Added parameter validation for `-Days` in `Enable-EmailReminder`
