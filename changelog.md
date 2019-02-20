@@ -1,5 +1,14 @@
 # Change Log for MyTasks
 
+## v2.0.0
+
++ Updated manifest to require PowerShell 5.1 and support for both Desktop and Core PSEditions *Breaking Change*
++ Added `Get-MyTaskPath` command (Issue #36)
++ Added a format.ps1xml file for `Get-MyTaskPath`
++ Modified code to determine home folder to use `[Environment]::GetFolderPath([Environment+SpecialFolder]::MyDocuments)` Thank you @kilasuit and @thecliguy (Issue #35) *Breaking Change*
++ Fixed bug in `Show-Mytask` where year is displayed in 2 digits instead of 4 on Linux platforms.
++ documentation updates
+
 ## v1.9.0
 
 + Updated autocompleter to get task names and enclose in quotes
@@ -10,7 +19,7 @@
 + Modified `MyTasks.format.ps1xml` to support myTaskArchive type
 + Updated help
 
-## v1.8.2
+## v1.8.2ex
 
 + Fixed bugs with email reminder. Typo in a parameter name.
 + Added parameter validation for `-Days` in `Enable-EmailReminder`

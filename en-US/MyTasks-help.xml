@@ -1780,6 +1780,71 @@ Customer</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Get-MyTaskPath</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>MyTaskPath</command:noun>
+      <maml:description>
+        <maml:para>Get current values of the myTask variables</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The myTasks module relies on a number of global variables to keep track of the necessary files. While you can use Get-Variable to see the current value, this command simplifies the entire process.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-MyTaskPath</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>myTaskPath</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; get-mytaskpath
+
+
+myTaskHome        : C:\Users\Jeff\dropbox\mytasks
+myTaskPath        : C:\Users\Jeff\dropbox\mytasks\myTasks.xml
+myTaskArchivePath : C:\Users\Jeff\dropbox\mytasks\myTasksArchive.xml
+myTaskCategory    : C:\Users\Jeff\dropbox\mytasks\myTaskCategory.txt</dev:code>
+        <dev:remarks>
+          <maml:para>Display the current locations. You can modify them using Set-MyTaskPath.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Set-MyTaskPath</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>New-MyTask</command:name>
       <command:verb>New</command:verb>
       <command:noun>MyTask</command:noun>

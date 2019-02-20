@@ -61,7 +61,7 @@ Class MyTask {
         $this.Refresh()
     }
     #used for importing from XML
-    MyTask([string]$Name, [datetime]$DueDate, [string]$Description, [string]$Category,[boolean]$Completed) {
+    MyTask([string]$Name, [datetime]$DueDate, [string]$Description, [string]$Category, [boolean]$Completed) {
         write-verbose "[CLASS  ] Constructing with due date, description and category"
         $this.Name = $Name
         $this.DueDate = $DueDate
@@ -96,7 +96,7 @@ Function _ImportTasks {
         }
         $propHash | Out-String | Write-Verbose
         Try {
-            $tmp = New-Object -TypeName MyTask -ArgumentList $propHash.Name, $propHash.DueDate, $propHash.Description, $propHash.Category,$propHash.completed
+            $tmp = New-Object -TypeName MyTask -ArgumentList $propHash.Name, $propHash.DueDate, $propHash.Description, $propHash.Category, $propHash.completed
 
             #set additional properties
             $tmp.TaskID = $prophash.TaskID
@@ -204,7 +204,7 @@ Function New-MyTask {
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Calculating due date in $Days days"
             $DueDate = (Get-Date).AddDays($Days)
         }
-        $task = New-Object -TypeName MyTask -ArgumentList $Name, $DueDate, $Description, $Category,$False
+        $task = New-Object -TypeName MyTask -ArgumentList $Name, $DueDate, $Description, $Category, $False
 
         #convert to xml
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Converting to XML"
@@ -545,7 +545,7 @@ Function Get-MyTask {
     [cmdletbinding(DefaultParameterSetName = "Days")]
     [OutputType("MyTask")]
     [Alias("gmt")]
-    
+
     Param(
         [Parameter(
             Position = 0,
@@ -746,7 +746,7 @@ Function Show-MyTask {
             $table = ($tasks | Format-Table -AutoSize | Out-String -Stream).split("`r`n")
 
             #define a regular expression pattern to match the due date
-            [regex]$rx = "\b\d{1,2}\/\d{1,2}\/\d{4}\b"
+            [regex]$rx = "\b\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})\b"
 
             Write-Host "`n"
             Write-Host $table[1] -ForegroundColor Cyan
@@ -755,7 +755,7 @@ Function Show-MyTask {
             #define a parameter hashtable to splat to Write-Host to better
             #handle colors in the PowerShell ISE under Windows 10
             $phash = @{
-                Object = $Null
+                object = $Null
             }
             $table[3..$table.count] | foreach-object {
 
@@ -766,6 +766,8 @@ Function Show-MyTask {
                 if ($rx.IsMatch($_)) {
                     $hours = (($rx.Match($_).Value -as [datetime]) - (Get-Date)).totalhours
                 }
+
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Hours = $hours"
 
                 #test if task is complete
                 if ($_ -match '\b100\b$') {
@@ -790,12 +792,13 @@ Function Show-MyTask {
                     $hours = 999
                 }
                 else {
-                    if ($pHash.ContainsKey("foregroundcolor")) {
+                    if ($pHash.ContainsKey("ForegroundColor")) {
                         #remove foreground color so that Write-Host uses
                         #the current default
-                        $pHash.Remove("foregroundcolor")
+                        $pHash.Remove("ForegroundColor")
                     }
                 }
+
                 Write-Host @pHash
 
             } #foreach
@@ -1182,7 +1185,7 @@ Function Save-MyTask {
             foreach ($node in $completed.node) {
                 $imp = $out.ImportNode($node.ParentNode, $True)
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Archiving $($node.parentnode.property[0].'#text')"
-                if ($PSCmdlet.ShouldProcess( $($node.parentnode.property[0].'#text') ,"Archiving")) {
+                if ($PSCmdlet.ShouldProcess( $($node.parentnode.property[0].'#text') , "Archiving")) {
                     $parent.AppendChild($imp) | Out-Null
                     #remove from existing file
                     $in.objects.RemoveChild($node.parentnode) | Out-Null
@@ -1241,7 +1244,7 @@ Function Enable-EmailReminder {
         [Parameter(HelpMessage = "Send an HTML body email")]
         [switch]$AsHtml,
         [ValidateNotNullOrEmpty()]
-        [ValidateScript({$_ -gt 0})]
+        [ValidateScript( {$_ -gt 0})]
         [int]$Days = 3,
         [Parameter(Mandatory, HelpMessage = "Re-enter your local user credentials for the scheduled job task")]
         [ValidateNotNullOrEmpty()]
@@ -1517,6 +1520,19 @@ Function Set-MyTaskPath {
     }
 } #close Set-MyTaskPath
 
+Function Get-MyTaskPath {
+    [cmdletbinding()]
+    Param()
+
+    [PSCustomObject]@{
+        PSTypeName = "myTaskPath"
+        myTaskHome        = $global:mytaskhome
+        myTaskPath        = $global:myTaskPath
+        myTaskArchivePath = $global:myTaskArchivePath
+        myTaskCategory    = $global:myTaskCategory
+    }
+}
+
 
 Function Get-MyTaskArchive {
     [cmdletbinding(DefaultParameterSetName = "Name")]
@@ -1606,7 +1622,7 @@ Function Get-MyTaskArchive {
 
             "Category" {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving tasks for category $Category"
-                $results = $tasks.Where({$_.Category -eq $Category})
+                $results = $tasks.Where( {$_.Category -eq $Category})
             } #category
 
         } #switch
@@ -1614,8 +1630,8 @@ Function Get-MyTaskArchive {
         #display tasks if found otherwise display a warning
         if ($results.count -ge 1) {
             $results.foreach( {
-              $_.psobject.typenames.insert(0, "myTaskArchive")})
-           $results
+                    $_.psobject.typenames.insert(0, "myTaskArchive")})
+            $results
         }
         else {
             Write-Warning "No tasks found matching your criteria"
@@ -1627,6 +1643,8 @@ Function Get-MyTaskArchive {
     } #end
 
 } #Get-MyTask
+
+
 
 #endregion
 

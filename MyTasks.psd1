@@ -8,7 +8,9 @@
 RootModule = 'MyTasks.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.9.0'
+ModuleVersion = '2.0.0'
+
+CompatiblePSEditions = @("Desktop","Core")
 
 # ID used to uniquely identify this module
 GUID = '6a5db6e0-9669-4178-a176-54b4931aa4e2'
@@ -26,7 +28,7 @@ Copyright = '(c) 2016-2019 JDH Information Technology Solutions, Inc. All rights
 Description = 'A tool set for managing tasks or to-do projects in PowerShell. Task data is stored in XML and managed through a PowerShell class.'
 
 # Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '5.0'
+PowerShellVersion = '5.1'
 
 # Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''
@@ -56,7 +58,7 @@ PowerShellVersion = '5.0'
 # TypesToProcess = @()
 
 # Format files (.ps1xml) to be loaded when importing this module
-FormatsToProcess = "MyTasks.format.ps1xml"
+FormatsToProcess = "MyTasks.format.ps1xml","mytaskpath.format.ps1xml"
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 # NestedModules = @()
@@ -65,7 +67,8 @@ FormatsToProcess = "MyTasks.format.ps1xml"
 FunctionsToExport = @("New-MyTask","Set-MyTask","Remove-MyTask","Get-MyTask",
 "Show-MyTask","Complete-MyTask","Get-MyTaskCategory","Add-MyTaskCategory",
 "Remove-MyTaskCategory","Backup-MyTaskFile","Save-MyTask","Enable-EmailReminder",
-"Disable-EmailReminder","Get-EmailReminder","Set-MyTaskPath","Get-MyTaskArchive")
+"Disable-EmailReminder","Get-EmailReminder","Set-MyTaskPath","Get-MyTaskArchive",
+"Get-MyTaskPath")
 
 # Cmdlets to export from this module
 # CmdletsToExport = '*'

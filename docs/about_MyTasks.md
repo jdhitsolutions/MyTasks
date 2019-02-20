@@ -54,6 +54,10 @@ C:\Users\Jeff\Documents\myTasks.xml. There is also an XML file for archiving
 completed tasks. This too is in the Documents or $home folder and can be
 referenced via the myTaskArchivePath variable.
 
+NOTE: Starting with version 2.0.0 of this module the home location is determined
+by using [Environment]::GetFolderPath([Environment+SpecialFolder]::MyDocuments)
+Use the `Get-MyTaskPath` command to view your current settings.
+
 As tasks are created, modified, completed and archived, these XML files are
 updated. `Select-XML` is used extensively to make this process as efficient as
 possible.

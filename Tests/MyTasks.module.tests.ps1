@@ -7,8 +7,8 @@ Import-Module -Name "$PSScriptRoot\..\Mytasks.psd1" -Force
 Describe 'MyTasks' {
 
     $Module = Get-Module -Name MyTasks
-    It 'should have 15 functions' {
-        $Module.ExportedFunctions.count | Should -Be 16
+    It 'should have 17 functions' {
+        $Module.ExportedFunctions.count | Should -Be 17
     }
 
     It 'should have 8 aliases command' {
@@ -30,16 +30,16 @@ Describe 'MyTasks' {
         param ($Variable)
         {Get-Variable -Name $variable -Scope global} | Should -Not -Throw
     }
-    It 'should have a formatting xml file' {
-        $Module.ExportedFormatFiles.Count | Should -Be 1
+    It 'should have 2 formatting xml files' {
+        $Module.ExportedFormatFiles.Count | Should -Be 2
     }
 
     It 'should have an about help topic' {
         {Get-Help about_mytasks} | Should -Not -Throw
     }
 
-    It 'requires PowerShell 5.0' {
-        $Module.PowerShellVersion | Should -Be '5.0'
+    It 'requires PowerShell 5.1' {
+        $Module.PowerShellVersion | Should -Be '5.1'
     }
 } #describe my module
 
@@ -62,6 +62,7 @@ Describe "Functions" {
         @{Name = 'Backup-MyTaskFile'}
         @{Name = 'Set-MyTaskPath'}
         @{Name = 'Get-myTaskArchive'}
+        @{Name = 'Get-MyTaskPath'}
     )
 
     It "<Name> has external help defined with at least one example" -TestCases $cmds {
@@ -181,6 +182,10 @@ Describe "Functions" {
     }
 
     Context 'Get-MyTaskArchive' {
+
+    }
+
+    Context 'Get-MyTaskPath' {
         
     }
 

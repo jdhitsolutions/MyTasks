@@ -1,13 +1,8 @@
 
 #region variables
 
-#path to user defined categories
-if ($isLinux) {
-    $global:mytaskhome = $home
-}
-else {
-    $global:mytaskhome = "$home\Documents"
-}
+#set default location that should work cross platform
+$global:myTaskHome = [Environment]::GetFolderPath([Environment+SpecialFolder]::MyDocuments)
 
 #path to the category file
 $global:myTaskCategory = Join-Path -Path $mytaskhome -ChildPath myTaskCategory.txt

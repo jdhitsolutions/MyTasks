@@ -1,6 +1,6 @@
 # MyTasks
 
-This PowerShell module is designed as a task or simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell Core. You can install the latest version from the PowerShell Gallery. You will need the -Scope parameter for PowerShell Core.
+This PowerShell module is designed as a task or simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell Core with a few limitations. You can install the latest version from the PowerShell Gallery. You will need the -Scope parameter for PowerShell Core.
 
 ```powershell
 Install-Module MyTasks [-scope currentuser]
@@ -41,13 +41,13 @@ New-MyTask "return library books" -Category personal
 You can also specify a due date.
 
 ```powershell
-New-MyTask "Pluralsight" -duedate "2/1/2018" -description "renew subscription" -category other
+New-MyTask "Pluralsight" -duedate "2/1/2019" -description "renew subscription" -category other
 ```
 
 You can use `Set-MyTask` to modify a task.
 
 ```powershell
-Get-MyTask Pluralsight | Set-Mytask -DueDate 3/1/2018
+Get-MyTask Pluralsight | Set-Mytask -DueDate 3/1/2019
 ```
 
 Because the task has a Progress property, you can use [Set-MyTask](./docs/Set-MyTask.md) to update that as well.
@@ -63,7 +63,7 @@ PS S:\> get-mytask -name MemoryTools
 
 ID  Name         Description                DueDate OverDue Category  Progress
 --  ----         -----------                ------- ------- --------  --------
-8   MemoryTools  update module            7/22/2018 False   Projects        10
+8   MemoryTools  update module            7/22/2019 False   Projects        10
 ```
 
 The default behavior is to display incomplete tasks due in the next 30 days. Look at the help for `Get-MyTask` for more information.
@@ -94,7 +94,7 @@ Over time your task file might get quite large. Even though the default behavior
 Get-Mytask -Completed | Archive-MyTask
 ```
 
-There is an option to archive tasks when you run [Complete-MyTask](./docs/Complete-MyTask.md). T. Or you can completely delete a task with `Remove-MyTask`.
+There is an option to archive tasks when you run [Complete-MyTask](./docs/Complete-MyTask.md). Or you can completely delete a task with `Remove-MyTask`.
 
 Use the `Get-myTaskArchive` to view archived tasks.
 
@@ -119,10 +119,11 @@ You should read full help and examples for all commands as well as the [about_My
 + [Disable-EmailReminder](docs/Disable-EmailReminder.md)
 + [Get-EmailReminder](docs/Get-EmailReminder.md)
 + [Set-MyTaskPath](docs/Set-MyTaskPath.md)
++ [Get-MyTaskPath](docs/Get-MyTaskPath.md)
 + [Get-MyTaskArchive](docs/Get-MyTaskArchive.md)
 
 ## Limitations
 
 Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
 
-*last updated 04 January 2019*
+*last updated 20 February 2019*

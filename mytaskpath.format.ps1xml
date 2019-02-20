@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+format type data generated 02/20/2019 10:30:46
+by BOVINE320\Jeff
+-->
+<Configuration>
+  <ViewDefinitions>
+    <View>
+      <!--Created 02/20/2019 10:30:46 by BOVINE320\Jeff-->
+      <Name>default</Name>
+      <ViewSelectedBy>
+        <TypeName>myTaskPath</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <!--
+            By default the entries use property names, but you can replace them with scriptblocks.
+            <Scriptblock>$_.foo /1mb -as [int]</Scriptblock>
+-->
+              <ListItem>
+                <Label>myTaskHome</Label>
+                <PropertyName>myTaskHome</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>myTaskPath</Label>
+                <PropertyName>myTaskPath</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>myTaskArchivePath</Label>
+                <PropertyName>myTaskArchivePath</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>myTaskCategory</Label>
+                <PropertyName>myTaskCategory</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>
