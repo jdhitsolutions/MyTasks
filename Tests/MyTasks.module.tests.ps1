@@ -4,6 +4,7 @@ if (Get-Module -Name MyTasks) {
 
 Import-Module -Name "$PSScriptRoot\..\Mytasks.psd1" -Force
 
+Write-Host "These tests are designed for Windows PowerShell" -ForegroundColor yellow
 Describe 'MyTasks' {
 
     $Module = Get-Module -Name MyTasks
@@ -11,8 +12,8 @@ Describe 'MyTasks' {
         $Module.ExportedFunctions.count | Should -Be 17
     }
 
-    It 'should have 8 aliases command' {
-        $Module.ExportedAliases.Count | Should -Be 8
+    It 'should have 10 aliases command' {
+        $Module.ExportedAliases.Count | Should -Be 10
     }
 
     It 'should not export any variables' {
@@ -60,9 +61,9 @@ Describe "Functions" {
         @{Name = 'Get-MyTaskCategory'}
         @{Name = 'Remove-MyTaskCategory'}
         @{Name = 'Backup-MyTaskFile'}
-        @{Name = 'Set-MyTaskPath'}
+        @{Name = 'Set-MyTaskHome'}
         @{Name = 'Get-myTaskArchive'}
-        @{Name = 'Get-MyTaskPath'}
+        @{Name = 'Get-MyTaskHome'}
     )
 
     It "<Name> has external help defined with at least one example" -TestCases $cmds {
@@ -171,8 +172,8 @@ Describe "Functions" {
         }
     }
 
-    Context 'Set-MyTaskPath' {
-        $cmd = Get-Command -Name Set-MyTaskPath
+    Context 'Set-MyTaskHome' {
+        $cmd = Get-Command -Name Set-MyTaskHome
         $params = "PATH"
         Foreach ($item in $params) {
             It "should have a mandatory $item parameter" {
@@ -185,8 +186,8 @@ Describe "Functions" {
 
     }
 
-    Context 'Get-MyTaskPath' {
-        
+    Context 'Get-MyTaskHome' {
+
     }
 
 } #describe functions

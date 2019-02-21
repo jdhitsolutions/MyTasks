@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-MyTaskPath
+# Get-MyTaskHome
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Get current values of the myTask variables
 ## SYNTAX
 
 ```yaml
-Get-MyTaskPath [<CommonParameters>]
+Get-MyTaskHome [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,7 +26,7 @@ The myTasks module relies on a number of global variables to keep track of the n
 ### Example 1
 
 ```powershell
-PS C:\> get-mytaskpath
+PS C:\> Get-MyTaskHome
 
 
 myTaskHome        : C:\Users\Jeff\dropbox\mytasks
@@ -59,4 +59,4 @@ http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 
-[Set-MyTaskPath]()
+[Set-MyTaskHome]()

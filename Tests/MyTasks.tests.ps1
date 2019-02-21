@@ -5,11 +5,16 @@ if (Get-Module -Name MyTasks) {
 
 Import-Module -Name "$PSScriptRoot\..\Mytasks.psd1" -Force
 
+Write-Host "These tests are designed for Windows PowerShell" -ForegroundColor yellow
+$current = Get-Module myTasks
+write-Host "Testing $($current.name) version $($current.Version)" -ForegroundColor yellow
+
+
 InModuleScope MyTasks {
 
     Describe 'Categories' {
         BeforeAll {
-            Set-MyTaskPath 'TestDrive:'
+            Set-MyTaskHome 'TestDrive:'
         }
 
         It 'has default categories "Work", "Personal", "Other", and "Customer"' {
@@ -19,11 +24,11 @@ InModuleScope MyTasks {
             $script:myTaskDefaultCategories -join "-"| Should -Match "Other"
             $script:myTaskDefaultCategories -join "-"| Should -Match "Customer"
         }
-        
+
         It 'keeps the default categories when a new one is added' {
             Add-MyTaskCategory -Category ToDo
             $Categories = Get-Content -Path $myTaskCategory -Raw
-            
+
             $Categories | Should -Match 'Work'
             $Categories | Should -Match 'Personal'
             $Categories | Should -Match 'Other'
@@ -34,7 +39,7 @@ InModuleScope MyTasks {
         It 'can add a Testing category to $myTaskCategory' {
             Add-MyTaskCategory -Category Testing
             $Categories = Get-Content -Path $myTaskCategory -Raw
-            
+
             $myTaskCategory | Should -Exist
             $Categories | Should -Match 'Testing'
         }
@@ -52,7 +57,7 @@ InModuleScope MyTasks {
             Remove-MyTaskCategory -Category Demo
             (Get-MyTaskCategory).Count| Should -Be 7
         }
-    
+
     } #describe my categories
 
     Describe 'Tasks' {
@@ -62,8 +67,8 @@ InModuleScope MyTasks {
     #>
 
         $Due = (Get-Date).AddDays(30).Date
-    
-        Set-MyTaskPath -path 'TestDrive:'
+
+        Set-MyTaskHome -path 'TestDrive:'
 
         Add-MyTaskCategory -Category Work, Personal, Other, Training, Testing
 
@@ -81,8 +86,8 @@ InModuleScope MyTasks {
         }
 
         It 'should get tasks by name' {
-            $Task = Get-MyTask -Name Test1 
-            
+            $Task = Get-MyTask -Name Test1
+
             $Task.ID | Should -Be 2
             $Task.Name | Should -Be "Test1"
             $Task.Category | Should -Be 'Testing'
@@ -119,7 +124,7 @@ InModuleScope MyTasks {
         }
 
         It 'should modify a task via the pipeline' {
-            Get-MyTask -Name "Test1" | Set-MyTask -Progress 80 
+            Get-MyTask -Name "Test1" | Set-MyTask -Progress 80
             $Task = Get-MyTask -Name Test1
             $Task.Progress | Should -Be 80
         }
@@ -138,14 +143,14 @@ InModuleScope MyTasks {
         }
 
         Context 'Archive' {
-        
+
             It 'should complete and archive a task' {
                 {Complete-Mytask -Name Test2 -Archive -ErrorAction Stop} | Should -Not -Throw
                 (Get-MyTask -All | Where-Object {-not $_.Completed}).Count | Should -Be 3
             }
 
             It "should archive or save a task" {
-                Get-MyTask -Completed | Save-MyTask 
+                Get-MyTask -Completed | Save-MyTask
                 $myTaskArchivePath | Should -Exist
                 Get-MyTask -Name Test1 -WarningAction SilentlyContinue | Should -BeNull
                 (Get-MyTask -All).Count | Should -Be 3
@@ -156,15 +161,15 @@ InModuleScope MyTasks {
                 $Alias.Name | Should -Be "Archive-MyTask"
                 $Alias.Definition | Should -Be "Save-MyTask"
             }
-        } 
-        
+        }
+
         Context 'Backup' {
             It 'Should remove a task and backup the task file' {
                 {Remove-MyTask -Name Alice } | Should -Not -Throw
                 {Get-MyTask -Name Bob | Remove-MyTask } | Should -Not -Throw
                 (Get-MyTask -All).Count | Should -Be 1
             }
-    
+
             It 'should backup the task file' {
                 {Backup-MyTaskFile -ErrorAction Stop} | Should -Not -Throw
                 'TestDrive:\MyTasks_Backup_*.xml' | Should -Exist
@@ -172,58 +177,58 @@ InModuleScope MyTasks {
         }
     } #describe my tasks
 
-    Describe 'Set-MyTaskPath' -Tag variables {
+    Describe 'Set-MyTaskHome' -Tag variables {
 
         BeforeAll {
             $NewFolder = New-Item -path $TestDrive -name MyTasks -ItemType Directory
-            Set-MyTaskPath -Path $NewFolder.Fullname
+            Set-MyTaskHome -Path $NewFolder.Fullname
             $target = $NewFolder.FullName.Replace("\", "\\")
         }
-        
+
         $VariableTests = @(
             @{ Variable = 'myTaskArchivePath' }
             @{ Variable = 'myTaskCategory' }
             @{ Variable = 'mytaskhome' }
             @{ Variable = 'mytaskPath' }
         )
-        
+
         It "should update <Variable>" -TestCases $VariableTests {
             param($Variable)
             Get-Variable $Variable -ValueOnly | Should -Match "^$target"
         }
     } #describe task variables
-    
+
     Describe EmailSettings {
         <#
     not mocking New-JobTrigger or New-ScheduledJobOption
     Also assuming Pester test is being run on a platform where this will be true
-    if ((Get-Module PSScheduledJob) -And (($PSVersionTable.Platform -eq 'Win32NT') -OR ($PSVersionTable.PSEdition -eq 'Desktop'))) 
+    if ((Get-Module PSScheduledJob) -And (($PSVersionTable.Platform -eq 'Win32NT') -OR ($PSVersionTable.PSEdition -eq 'Desktop')))
     #>
         Mock Register-ScheduledJob { 1 } -Verifiable
         Mock Unregister-ScheduledJob {} -Verifiable
         Mock Get-ScheduledJob { $False } -ParameterFilter {$Name -eq "myTasksEmail"}
-        
+
         #create a credential
         $Password = ConvertTo-SecureString -String "Password" -AsPlainText -Force
         $Credential = [PSCredential]::new("localhost\me", $Password)
-        
+
         It 'should require a standard email address' {
             {Enable-EmailReminder -To foo@company.com -TaskCredential $Credential } | Should -Not -Throw
             {Enable-EmailReminder -To foo -TaskCredential $Credential}  | Should -Throw
-        } 
-        
+        }
+
         It 'should register a scheduled job' {
-            $Reminders = Enable-EmailReminder -To foo@company.com -TaskCredential $Credential 
+            $Reminders = Enable-EmailReminder -To foo@company.com -TaskCredential $Credential
             $Reminders.Count | Should -Be 1
-            
+
             Assert-MockCalled Register-ScheduledJob
-        } 
+        }
         It 'should fail if a job already exists' {
             Mock Get-ScheduledJob { $True } -ParameterFilter {$Name -eq "myTasksEmail"}
             $Reminders = Enable-EmailReminder -To foo@company.com -TaskCredential $Credential -WarningAction SilentlyContinue
             $reminders | out-string | write-host -ForegroundColor cyan
             $Reminders.Count | Should -Be 0
-        } 
+        }
 
         It 'should get a job result' {
             Mock Get-ScheduledJob {
@@ -259,14 +264,14 @@ InModuleScope MyTasks {
             } -ParameterFilter {$Name -eq "myTasksEmail" -and $Newest -eq 1} -Verifiable
 
             $Reminder = Get-EmailReminder
-         
+
             Assert-MockCalled Get-ScheduledJob
             Assert-MockCalled Get-Job
-           
+
             $Reminder | Should -BeOfType PSCustomobject
             $Reminder.Task | Should -Be "myTasksEmail"
             $Reminder.LastState | Should -Be "Completed"
-        } 
+        }
 
         It 'should remove the email job' {
             Mock Get-ScheduledJob {
@@ -274,7 +279,8 @@ InModuleScope MyTasks {
             } -ParameterFilter {$Name -eq 'myTasksEmail'}
             {Disable-EmailReminder} | Should -Not -Throw
             Assert-MockCalled Unregister-ScheduledJob
-        } 
-    }   #describe email settings 
+        }
+    }   #describe email settings
 
 } #in module scope
+

@@ -1,6 +1,6 @@
 # MyTasks
 
-This PowerShell module is designed as a task or simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell Core with a few limitations. You can install the latest version from the PowerShell Gallery. You will need the -Scope parameter for PowerShell Core.
+This PowerShell module is designed as a task or simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell Core with a few limitations. You can install the latest version from the PowerShell Gallery. You will need the `-Scope`parameter for PowerShell Core.
 
 ```powershell
 Install-Module MyTasks [-scope currentuser]
@@ -10,17 +10,95 @@ Task data is stored in an XML file. Here are a few highlights.
 
 ## Class based
 
-This module requires at least PowerShell version 5.0 since is uses a class definition for the task object. While you could use the object's properties and methods directly, you should use the appropriate module command.
+This module uses a class definition for the task object and is designed to work on both Windows PowerShell and PowerShell Core.
+
+```powershell
+Class MyTask {
+
+    <#
+    A class to define a task or to-do item
+    #>
+
+    #Properties
+    # ID and OverDue values are calculated at run time.
+
+    [int]$ID
+    [string]$Name
+    [string]$Description
+    [datetime]$DueDate
+    [bool]$Overdue
+    [String]$Category
+    [ValidateRange(0, 100)][int]$Progress
+    hidden[bool]$Completed
+    hidden[datetime]$TaskCreated = (Get-Date)
+    hidden[datetime]$TaskModified
+    hidden[guid]$TaskID = (New-Guid)
+
+    #Methods
+
+    #set task as completed
+    [void]CompleteTask([datetime]$CompletedDate) {
+        Write-Verbose "[CLASS  ] Completing task: $($this.name)"
+        $this.Completed = $True
+        $this.Progress = 100
+        $this.Overdue = $False
+        $this.TaskModified = $CompletedDate
+    }
+
+    #check if task is overdue and update
+    hidden [void]Refresh() {
+        Write-Verbose "[CLASS  ] Refreshing task $($this.name)"
+        #only mark as overdue if not completed and today is greater than the due date
+        Write-Verbose "[CLASS  ] Comparing $($this.DueDate) due date to $(Get-Date)"
+
+        if ($This.completed) {
+            $this.Overdue = $False
+        }
+        elseif ((Get-Date) -gt $this.DueDate) {
+            $this.Overdue = $True
+        }
+        else {
+            $this.Overdue = $False
+        }
+
+    } #refresh
+
+    #Constructors
+    MyTask([string]$Name) {
+        Write-Verbose "[CLASS  ] Constructing with name: $name"
+        $this.Name = $Name
+        $this.DueDate = (Get-Date).AddDays(7)
+        $this.TaskModified = (Get-Date)
+        $this.Refresh()
+    }
+    #used for importing from XML
+    MyTask([string]$Name, [datetime]$DueDate, [string]$Description, [string]$Category, [boolean]$Completed) {
+        Write-Verbose "[CLASS  ] Constructing with due date, description and category"
+        $this.Name = $Name
+        $this.DueDate = $DueDate
+        $this.Description = $Description
+        $this.Category = $Category
+        $this.TaskModified = $this.TaskCreated
+        $this.Completed = $completed
+        $this.Refresh()
+    }
+
+} #end class definition
+```
+
+While you could use the object's properties and methods directly, you should use the appropriate module command.
 
 ## XML Data
 
-All of the task information is stored in an XML file. The commands in this module will read in, update, and remove items as needed using PowerShell commands such as `Select-XML`. By default these files are stored in your Documents folder (on Windows systems) or in Home (on Linux). You can change the default location by using the [Set-myTaskPath](./docs/Set-MyTaskPath.md) command. This is helpful if you are sharing task information between laptops via a service like Dropbox.
+All of the task information is stored in an XML file. The commands in this module will read in, update, and remove items as needed using PowerShell commands such as `Select-XML`. By default these files are stored in your Documents folder (on Windows systems) or in Home (on Linux). You can change the default location by using the [Set-myTaskHome](./docs/Set-MyTaskHome.md) command. This is helpful if you are sharing task information between laptops via a service like Dropbox.
 
 ```powershell
-Set-MyTaskPath Drop:\mytasks\
+Set-MyTaskHome Drop:\mytasks\
 ```
 
 If you use this feature, you'll need to make sure you run this command before doing anything. It is recommended to put this command in a PowerShell profile script.
+
+You shouldn't have to manage the module related variables directly. Use `Get-MyTaskHome` to view your current settings.
 
 ## Categories
 
@@ -100,7 +178,7 @@ Use the `Get-myTaskArchive` to view archived tasks.
 
 ## Email Reminders
 
-If you are running this module on a Windows platform that includes the PSScheduledJob module, you can create a scheduled PowerShell job that will send you a daily email with tasks that are due in 3 days or less. The default is a plain text message but you can also send it as HTML. Use the [Enable-EmailReminder](./docs/Enable-EmailReminder.md) command to set up the job.
+If you are running this module on Windows PowerShell that includes the PSScheduledJob module, you can create a scheduled PowerShell job that will send you a daily email with tasks that are due in 3 days or less. The default is a plain text message but you can also send it as HTML. Use the [Enable-EmailReminder](./docs/Enable-EmailReminder.md) command to set up the job.
 
 You should read full help and examples for all commands as well as the [about_MyTasks](./docs/about_MyTasks.md) help file.
 
@@ -118,12 +196,12 @@ You should read full help and examples for all commands as well as the [about_My
 + [Enable-EmailReminder](docs/Enable-EmailReminder.md)
 + [Disable-EmailReminder](docs/Disable-EmailReminder.md)
 + [Get-EmailReminder](docs/Get-EmailReminder.md)
-+ [Set-MyTaskPath](docs/Set-MyTaskPath.md)
-+ [Get-MyTaskPath](docs/Get-MyTaskPath.md)
++ [Set-MyTaskHome](docs/Set-MyTaskHome.md)
++ [Get-MyTaskHome](docs/Get-MyTaskHome.md)
 + [Get-MyTaskArchive](docs/Get-MyTaskArchive.md)
 
 ## Limitations
 
 Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
 
-*last updated 20 February 2019*
+*last updated 21 February 2019*

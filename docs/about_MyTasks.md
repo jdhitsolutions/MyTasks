@@ -56,7 +56,10 @@ referenced via the myTaskArchivePath variable.
 
 NOTE: Starting with version 2.0.0 of this module the home location is determined
 by using [Environment]::GetFolderPath([Environment+SpecialFolder]::MyDocuments)
-Use the `Get-MyTaskPath` command to view your current settings.
+Use the `Get-MyTaskHome` command to view your current settings. Use the
+`Set-MyTaskHome` to modify the home variable. All other variables will be set
+from that.
+
 
 As tasks are created, modified, completed and archived, these XML files are
 updated. `Select-XML` is used extensively to make this process as efficient as
@@ -195,7 +198,7 @@ Use the `Get-MyTaskArchive` to retrieve archived tasks.
 
 ### Email Reminder
 
- If you are running this module on a Windows platform with the PSScheduled
+If you are running this module on Windows PowerShell with the PSScheduled
 jobs module you can create a scheduled PowerShell job to send a daily email
 message showing tasks that are due in the next 3 days or whatever you choose.
 The default behavior is to send a text message but you can send an HTML

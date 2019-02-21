@@ -20,6 +20,9 @@ $script:myTaskDefaultCategories = "Work", "Personal", "Other", "Customer"
 
 #dot source functions
 . $psscriptroot\MyTasksFunctions.ps1
+if ($psedition -eq 'Desktop') {
+    . $psscriptroot\emailfunctions.ps1
+}
 
 $cmd = "Get-MyTask", "Set-MyTask", "Complete-MyTask", "Remove-MyTask"
 Register-ArgumentCompleter -CommandName $cmd -ParameterName Name -ScriptBlock {

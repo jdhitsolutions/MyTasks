@@ -1,5 +1,14 @@
 # Change Log for MyTasks
 
+## v2.1.0
+
++ Renamed `Set-MyTaskPath` to `Set-MyTaskHome` and set original name as an alias. (Issue #38)
++ Renamed `Get-MyTaskPath` to `Get-MyTaskHome` and set original name as an alias. (Issue #38)
++ Restructured module to better accommodate Desktop vs Core PSEditions (Issue #37)
++ Manifest updates
++ documentation updates
++ updated pester tests
+
 ## v2.0.0
 
 + Updated manifest to require PowerShell 5.1 and support for both Desktop and Core PSEditions *Breaking Change*

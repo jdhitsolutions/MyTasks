@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-MyTaskPath
+# Set-MyTaskHome
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Update the myTask variables
 ## SYNTAX
 
 ```yaml
-Set-MyTaskPath [-Path] <String> [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-MyTaskHome [-Path] <String> [-Passthru] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,7 +28,7 @@ It is recommended that you modify your PowerShell profile to import this module 
 ### Example 1
 
 ```powershell
-PS C:\> Set-MyTaskpath -path c:\users\pat\dropbox\tasks
+PS C:\> Set-MyTaskHome -path c:\users\pat\dropbox\tasks
 ```
 
 This will put all of the task files in the Dropbox folder and update the corresponding variables.
@@ -53,7 +53,7 @@ Accept wildcard characters: False
 
 ### -Path
 
-Enter the path to your new myTaskPath directory.
+Enter the path to your new myTaskHome directory.
 
 ```yaml
 Type: String
@@ -118,3 +118,5 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 ## RELATED LINKS
 
 [Get-MyTask]()
+
+[Get-MyTaskHome]()
