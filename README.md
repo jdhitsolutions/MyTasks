@@ -1,5 +1,7 @@
 # MyTasks
 
+[![PSGallery Version](https://img.shields.io/powershellgallery/v/myTasks.png?style=for-the-badge&logo=powershell&label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/myTasks/) [![PSGallery Downloads](https://img.shields.io/powershellgallery/dt/MyTasks.png?style=for-the-badge&label=Downloads)](https://www.powershellgallery.com/packages/MyTasks/)
+
 This PowerShell module is designed as a task or simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell Core with a few limitations. You can install the latest version from the PowerShell Gallery. You will need the `-Scope`parameter for PowerShell Core.
 
 ```powershell
