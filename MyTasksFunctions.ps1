@@ -105,6 +105,7 @@ Function _ImportTasks {
             $tmp.TaskModified = $prophash.TaskModified -as [datetime]
             $tmp.Completed = [Convert]::ToBoolean($prophash.Completed)
 
+            $tmp.refresh()
             $tmp
         }
         Catch {

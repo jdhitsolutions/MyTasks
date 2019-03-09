@@ -1,5 +1,12 @@
 # Change Log for MyTasks
 
+## v2.2.0
+
++ Fixed bug where overdue tasks were not displaying in red
++ Added a Table view called DueDate
++ Minor help updates.
++ Minor updates to `README.md`
+
 ## v2.1.0
 
 + Renamed `Set-MyTaskPath` to `Set-MyTaskHome` and set original name as an alias. (Issue #38)

@@ -113,7 +113,7 @@ ID  Name                      Description             DueDate OverDue Category  
 4   Apache Install            Ubuntu 16             9/13/2017 False   work               10
 ```
 
-Get all active tasks due in the next 90 days
+Get all active tasks due in the next 90 days.
 
 ### EXAMPLE 5
 

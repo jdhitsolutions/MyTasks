@@ -115,6 +115,7 @@ The module includes a custom format type extension file which includes
 several custom views. You can try commands like these:
 
     Get-Mytask | Sort-Object Category | format-table -view Category
+    Get-MyTask -days 180 | sort duedate | Format-table -view duedate
     Get-Mytask | format-list -view All
 
 The second command is especially useful as it will display all properties,
