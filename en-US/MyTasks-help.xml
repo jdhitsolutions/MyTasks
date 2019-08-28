@@ -125,7 +125,7 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Add-MyTaskCategory -Category Other,Work,Personal,Team
-PS C:\&gt; Get-MyTaskCategory 
+PS C:\&gt; Get-MyTaskCategory
 
 Training
 Other
@@ -138,6 +138,10 @@ Team</dev:code>
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/348QWyY</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-MyTaskCategory</maml:linkText>
         <maml:uri></maml:uri>
@@ -310,6 +314,10 @@ Mode                LastWriteTime         Length Name
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2Ug1vvU</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Save-MyTask</maml:linkText>
         <maml:uri></maml:uri>
@@ -695,6 +703,10 @@ ID  Name                      Description             DueDate OverDue Category  
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2PmxMT4</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Set-MyTask</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -804,6 +816,10 @@ ID  Name                      Description             DueDate OverDue Category  
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2Pmy4JE</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Enable-EmailReminder</maml:linkText>
         <maml:uri></maml:uri>
@@ -1178,6 +1194,10 @@ ID  Name                      Description             DueDate OverDue Category  
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2PzIgyL</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Disable-EmailReminder</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -1258,6 +1278,10 @@ Warnings   :</dev:code>
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2PhNtuF</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Disable-EmailReminder</maml:linkText>
         <maml:uri></maml:uri>
@@ -1525,7 +1549,7 @@ ID  Name                      Description             DueDate OverDue Category  
 2   Order books               Month of Lunches       8/1/2017 True    Personal            0
 4   Apache Install            Ubuntu 16             9/13/2017 False   work               10</dev:code>
         <dev:remarks>
-          <maml:para>Get all active tasks due in the next 90 days</maml:para>
+          <maml:para>Get all active tasks due in the next 90 days.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -1550,6 +1574,10 @@ TaskID       : c6fdf70c-a2f7-42c2-8e7d-93e4faa669fd</dev:code>
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2PkPZAn</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Show-MyTask</maml:linkText>
         <maml:uri></maml:uri>
@@ -1699,7 +1727,7 @@ ID  Name                      Description             Created    DueDate Complet
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:uri>http://bit.ly/2PjoZBd</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Save-MyTask</maml:linkText>
@@ -1769,6 +1797,10 @@ Customer</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2PezrKb</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Add-MyTaskCategory</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -1837,6 +1869,10 @@ myTaskCategory    : C:\Users\Jeff\dropbox\mytasks\myTaskCategory.txt</dev:code>
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2zoGnKh</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Set-MyTaskHome</maml:linkText>
         <maml:uri></maml:uri>
@@ -2177,6 +2213,10 @@ ID  Name                      Description             DueDate OverDue Category  
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2PzOMWf</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Get-MyTask</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -2278,6 +2318,43 @@ ID  Name                      Description             DueDate OverDue Category  
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Remove-MyTask</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:Description>
+            <maml:para></maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:Description>
+            <maml:para></maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ID</maml:name>
+          <maml:Description>
+            <maml:para>Enter a task ID number</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
@@ -2327,6 +2404,18 @@ ID  Name                      Description             DueDate OverDue Category  
           <maml:uri />
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ID</maml:name>
+        <maml:Description>
+          <maml:para>Enter a task ID number</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -2382,6 +2471,10 @@ What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2Pkh2fk</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Save-MyTask</maml:linkText>
         <maml:uri></maml:uri>
@@ -2512,6 +2605,10 @@ What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2ztxLBT</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-MyTaskCategory</maml:linkText>
         <maml:uri></maml:uri>
@@ -2709,6 +2806,10 @@ Mode                LastWriteTime         Length Name
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2PfQFaf</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-MyTask</maml:linkText>
         <maml:uri></maml:uri>
@@ -3268,6 +3369,10 @@ ID  Name                      Description             DueDate OverDue Category  
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2zvmPne</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Get-MyTask</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -3426,6 +3531,10 @@ ID  Name                      Description             DueDate OverDue Category  
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2PjdhGK</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Get-MyTask</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -3576,6 +3685,10 @@ ID  Name                      Description             DueDate OverDue Category  
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2zqithc</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-MyTask</maml:linkText>
         <maml:uri></maml:uri>
