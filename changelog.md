@@ -1,5 +1,13 @@
 # Change Log for MyTasks
 
+## v2.3.0
+
++ Updates to `Show-MyTask` to better handle long descriptions (Issue #40 and #41)
++ Modified `Remove-MyTask` to remove by ID number (Issue #42)
++ Added online help links
++ Updated `README.md`
++ Updated help documentation
+
 ## v2.2.0
 
 + Fixed bug where overdue tasks were not displaying in red

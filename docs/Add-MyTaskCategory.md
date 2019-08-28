@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: mytasks
-online version:
+Module Name: MyTasks
+online version: http://bit.ly/348QWyY
 schema: 2.0.0
 ---
 
@@ -35,7 +35,7 @@ Add a Training category.
 
 ```powershell
 PS C:\> Add-MyTaskCategory -Category Other,Work,Personal,Team
-PS C:\> Get-MyTaskCategory 
+PS C:\> Get-MyTaskCategory
 
 Training
 Other

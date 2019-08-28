@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: mytasks
-online version:
+Module Name: MyTasks
+online version: http://bit.ly/2zqithc
 schema: 2.0.0
 ---
 

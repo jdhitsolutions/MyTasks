@@ -1,7 +1,7 @@
 ---
 external help file: MyTasks-help.xml
-Module Name: mytasks
-online version:
+Module Name: MyTasks
+online version: http://bit.ly/2Pkh2fk
 schema: 2.0.0
 ---
 
@@ -17,6 +17,12 @@ Remove a MyTask item.
 
 ```yaml
 Remove-MyTask [-Name] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### ID
+
+```yaml
+Remove-MyTask -ID <Int32> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Object
@@ -41,6 +47,7 @@ What if: Performing the operation "Copy File" on target "Item: C:\Users\Jeff\Doc
 \Jeff\documents\MyTasks_Backup_201760822.xml".
 What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-9c7c-df55dd0d135a".
 ```
+
 The command supports Whatif.
 
 ### EXAMPLE 2
@@ -113,9 +120,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ID
+
+Enter a task ID number
+
+```yaml
+Type: Int32
+Parameter Sets: ID
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

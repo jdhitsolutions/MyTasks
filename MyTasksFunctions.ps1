@@ -166,7 +166,7 @@ Function New-MyTask {
         # Generate and set the ValidateSet
         if (Test-Path -Path $global:myTaskCategory) {
             $arrSet = Get-Content -Path $global:myTaskCategory |
-                where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
+                Where-Object {$_ -match "\w+"} | ForEach-Object {$_.Trim()}
         }
         else {
             $arrSet = $script:myTaskDefaultCategories
@@ -335,7 +335,7 @@ Function Set-MyTask {
 
         # Generate and set the ValidateSet
         if (Test-Path -Path $global:myTaskCategory) {
-            $arrSet = Get-Content -Path $global:myTaskCategory -Encoding Unicode | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
+            $arrSet = Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-Object {$_ -match "\w+"} | ForEach-Object {$_.Trim()}
         }
         else {
             $arrSet = $script:myTaskDefaultCategories
@@ -409,7 +409,7 @@ Function Set-MyTask {
 
         #go through all PSBoundParameters other than Name or NewName
 
-        $PSBoundParameters.keys | where-object {$_ -notMatch 'name'} | foreach-object {
+        $PSBoundParameters.keys | Where-Object {$_ -notMatch 'name'} | ForEach-Object {
             #update the task property
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating $_ to $($PSBoundParameters.item($_))"
             $setting = $node.SelectSingleNode("Property[@Name='$_']")
@@ -467,12 +467,19 @@ Function Remove-MyTask {
         [Parameter(
             Position = 0,
             Mandatory,
+            HelpMessage = "Enter a task ID number",
+            ParameterSetName = "ID"
+        )]
+        [int]$ID,
+
+        [Parameter(
+            Position = 0,
+            Mandatory,
             ValueFromPipeline,
             ParameterSetName = "Object"
         )]
         [ValidateNotNullorEmpty()]
         [MyTask]$InputObject
-
     )
 
     Begin {
@@ -494,22 +501,30 @@ Function Remove-MyTask {
     Process {
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Using parameter set: $($PSCmdlet.parameterSetname)"
 
-        if ($Name) {
-            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving task: $Name"
-            Try {
-                $taskID = (Get-MyTask -Name $Name -ErrorAction Stop).TaskID
+        Switch ($pscmdlet.ParameterSetName) {
+            "Name" {
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving task: $Name"
+                Try {
+                    $taskID = (Get-MyTask -Name $Name -ErrorAction Stop).TaskID
+                }
+                Catch {
+                    Write-Warning "Failed to find a task with a name of $Name"
+                    write-warning $_.exception.message
+                    #abort and bail out
+                    return
+                }
+            } #Name
+            "ID" {
+                $TaskID = (Get-MyTask -id $ID).TaskID
+                if (-Not $TaskID) {
+                    #bail out
+                    return
+                }
+            } #ID
+            "Object" {
+                $TaskID = $InputObject.TaskID
             }
-            Catch {
-                Write-Warning "Failed to find a task with a name of $Name"
-                write-warning $_.exception.message
-                #abort and bail out
-                return
-            }
-        } #if $name
-        else {
-            $TaskID = $InputObject.TaskID
         }
-
         #select node by TaskID (GUID)
 
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Identifying task id: $TaskID"
@@ -582,7 +597,7 @@ Function Get-MyTask {
 
         # Generate and set the ValidateSet
         if (Test-Path -Path $global:myTaskCategory) {
-            $arrSet = Get-Content -Path $global:myTaskCategory | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
+            $arrSet = Get-Content -Path $global:myTaskCategory | Where-Object {$_ -match "\w+"} | ForEach-Object {$_.Trim()}
         }
         else {
             $arrSet = $script:myTaskDefaultCategories
@@ -713,7 +728,7 @@ Function Show-MyTask {
         # Generate and set the ValidateSet
         if (Test-Path -Path $global:myTaskCategory) {
             $arrSet = Get-Content -Path $global:myTaskCategory -Encoding Unicode |
-                where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
+                Where-Object {$_ -match "\w+"} | ForEach-Object {$_.Trim()}
         }
         else {
             $arrSet = $script:myTaskDefaultCategories
@@ -744,7 +759,7 @@ Function Show-MyTask {
         $tasks = Get-MyTask @PSBoundParameters
         if ($tasks.count -gt 0) {
             #convert tasks to a text table
-            $table = ($tasks | Format-Table -AutoSize | Out-String -Stream).split("`r`n")
+            $table = ($tasks | Format-Table | Out-String -Stream).split("`r`n")
 
             #define a regular expression pattern to match the due date
             [regex]$rx = "\b\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})\b"
@@ -758,7 +773,7 @@ Function Show-MyTask {
             $phash = @{
                 object = $Null
             }
-            $table[3..$table.count] | foreach-object {
+            $table[3..$table.count] | ForEach-Object {
 
                 #add the incoming object as the object for Write-Host
                 $pHash.object = $_
@@ -791,6 +806,9 @@ Function Show-MyTask {
                 elseif ($hours -le 24 -AND (-Not $complete)) {
                     $phash.ForegroundColor = "Yellow"
                     $hours = 999
+                }
+                elseif ($_ -match "^\s+") {
+                    #use the existing color for tasks with wrapped descriptions
                 }
                 else {
                     if ($pHash.ContainsKey("ForegroundColor")) {
@@ -961,7 +979,7 @@ Function Get-MyTaskCategory {
     Process {
         If (Test-Path -Path $global:myTaskCategory) {
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving user categories from $global:myTaskCategory"
-            Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-object {$_ -match "\w+"}
+            Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-Object {$_ -match "\w+"}
         }
         else {
             #Display the defaults
@@ -999,7 +1017,7 @@ Function Add-MyTaskCategory {
             Set-Content -Value $script:myTaskDefaultCategories -Path $global:myTaskCategory -Encoding Unicode
         }
         #get current contents
-        $current = Get-Content -Path $global:myTaskCategory -Encoding Unicode | where-object {$_ -match "\w+"}
+        $current = Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-Object {$_ -match "\w+"}
     } #begin
 
     Process {
@@ -1039,7 +1057,7 @@ Function Remove-MyTaskCategory {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"
 
         #get current contents
-        $current = Get-Content -Path $global:myTaskCategory -Encoding Unicode| where-object {$_ -match "\w+"}
+        $current = Get-Content -Path $global:myTaskCategory -Encoding Unicode| Where-Object {$_ -match "\w+"}
         #create backup
         $back = Join-Path -path $mytaskhome -ChildPath MyTaskCategory.bak
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Creating backup copy"
@@ -1294,7 +1312,7 @@ Function Get-MyTaskArchive {
 
         # Generate and set the ValidateSet
         if (Test-Path -Path $global:myTaskCategory) {
-            $arrSet = Get-Content -Path $global:myTaskCategory | where-object {$_ -match "\w+"} | foreach-object {$_.Trim()}
+            $arrSet = Get-Content -Path $global:myTaskCategory | Where-Object {$_ -match "\w+"} | ForEach-Object {$_.Trim()}
         }
         else {
             $arrSet = $script:myTaskDefaultCategories

@@ -164,13 +164,13 @@ The task will remain but be marked as 100% complete. You can still see the task 
 
 ## Format Views
 
-The module includes a format.ps1xml file that defines a default display when you run `Get-MyTask`. You will get a slightly different set of properties when you run `Get-MyTask | Format-List`. There is also a custom table view called Category which will create a table grouped by the Category property. You should sort the tasks first:
+The module includes a `format.ps1xml` file that defines a default display when you run `Get-MyTask`. You will get a slightly different set of properties when you run `Get-MyTask | Format-List`. There is also a custom table view called Category which will create a table grouped by the Category property. You should sort the tasks first:
 
 ```powershell
 Get-MyTask | Sort-Object Category | Format-Table -view category
 ```
 
-Or you can use the DueDate table view - sort on DueDate
+Or you can use the `DueDate` table view - sort on DueDate
 
 ```powershell
 Get-MyTask -days 180 | sort duedate | Format-table -view duedate
@@ -218,4 +218,4 @@ You should read full help and examples for all commands as well as the [about_My
 
 Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
 
-*last updated 9 March, 2019*
+Last Updated 2019-08-28 15:54:42Z UTC
