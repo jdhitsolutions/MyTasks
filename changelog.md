@@ -7,6 +7,7 @@
 + Added online help links
 + Updated `README.md`
 + Updated help documentation
++ Updated Pester tests
 
 ## v2.2.0
 

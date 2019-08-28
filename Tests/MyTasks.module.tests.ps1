@@ -73,6 +73,12 @@ Describe "Functions" {
         $help.Examples | Should -Not -BeNullOrEmpty
     }
 
+    It "<Name> has an online help link" -TestCases $cmds {
+        param($Name)
+        $help = Get-Help $Name
+        $help.relatedLinks.navigationlink.uri -match "http:" | Should -Not -BeNullOrEmpty
+    }
+
     Context 'Enable-EmailReminder' {
         $cmd = Get-Command -Name Enable-EmailReminder
         $params = "TO", "TASKCREDENTIAL"
