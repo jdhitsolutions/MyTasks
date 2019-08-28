@@ -1,5 +1,5 @@
 ﻿TOPIC
-    about_mytasks
+    about_MyTasks
 
 SHORT DESCRIPTION
     The commands in the module are intended to be used as a simple solution for
