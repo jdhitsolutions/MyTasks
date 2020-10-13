@@ -1,6 +1,3 @@
-
-#region class definition
-
 Class MyTask {
 
     <#
@@ -27,7 +24,7 @@ Class MyTask {
     #set task as completed
 
     [void]CompleteTask([datetime]$CompletedDate) {
-        write-verbose "[CLASS  ] Completing task: $($this.name)"
+        Write-Verbose "[CLASS  ] Completing task: $($this.name)"
         $this.Completed = $True
         $this.Progress = 100
         $this.Overdue = $False
@@ -54,7 +51,7 @@ Class MyTask {
 
     #Constructors
     MyTask([string]$Name) {
-        write-verbose "[CLASS  ] Constructing with name: $name"
+        Write-Verbose "[CLASS  ] Constructing with name: $name"
         $this.Name = $Name
         $this.DueDate = (Get-Date).AddDays(7)
         $this.TaskModified = (Get-Date)
@@ -62,7 +59,7 @@ Class MyTask {
     }
     #used for importing from XML
     MyTask([string]$Name, [datetime]$DueDate, [string]$Description, [string]$Category, [boolean]$Completed) {
-        write-verbose "[CLASS  ] Constructing with due date, description and category"
+        Write-Verbose "[CLASS  ] Constructing with due date, description and category"
         $this.Name = $Name
         $this.DueDate = $DueDate
         $this.Description = $Description
@@ -91,7 +88,7 @@ Function _ImportTasks {
         Break
     }
     foreach ($obj in $in.Objects.object) {
-        $obj.Property | ForEach-Object -Begin {$propHash = [ordered]@{}} -Process {
+        $obj.Property | ForEach-Object -Begin { $propHash = [ordered]@{} } -Process {
             $propHash.Add($_.name, $_.'#text')
         }
         $propHash | Out-String | Write-Verbose
@@ -166,7 +163,7 @@ Function New-MyTask {
         # Generate and set the ValidateSet
         if (Test-Path -Path $global:myTaskCategory) {
             $arrSet = Get-Content -Path $global:myTaskCategory |
-                Where-Object {$_ -match "\w+"} | ForEach-Object {$_.Trim()}
+                Where-Object { $_ -match "\w+" } | ForEach-Object { $_.Trim() }
         }
         else {
             $arrSet = $script:myTaskDefaultCategories
@@ -210,17 +207,17 @@ Function New-MyTask {
         #convert to xml
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Converting to XML"
         $newXML = $task |
-            Select-object -property Name,
-        Description,
-        @{Name = 'DueDate'; Expression = {Get-Date -Date $task.DueDate -Format 's'}},
-        Category,
-        Progress,
-        @{Name = 'TaskCreated'; Expression = {Get-Date -Date $task.TaskCreated -Format 's'}},
-        @{Name = 'TaskModified'; Expression = {Get-Date -Date $task.TaskModified -Format 's'}},
-        TaskID,
-        Completed  |  ConvertTo-Xml
+            Select-Object -Property Name,
+            Description,
+            @{Name = 'DueDate'; Expression = { Get-Date -Date $task.DueDate -Format 's' } },
+            Category,
+            Progress,
+            @{Name = 'TaskCreated'; Expression = { Get-Date -Date $task.TaskCreated -Format 's' } },
+            @{Name = 'TaskModified'; Expression = { Get-Date -Date $task.TaskModified -Format 's' } },
+            TaskID,
+            Completed | ConvertTo-Xml
 
-        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $($newXML | out-string)"
+        Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] $($newXML | Out-String)"
 
         #add task to disk via XML file
         if (Test-Path -Path $mytaskPath) {
@@ -232,7 +229,7 @@ Function New-MyTask {
             if ($in.objects) {
                 #check if TaskID already exists in file and skip
                 $id = $task.TaskID
-                $result = $in | Select-XML -XPath "//Object/Property[text()='$id']"
+                $result = $in | Select-Xml -XPath "//Object/Property[text()='$id']"
                 if (-Not $result.node) {
                     #if not,import node
                     $imp = $in.ImportNode($newXML.objects.object, $true)
@@ -259,7 +256,7 @@ Function New-MyTask {
             #must be an empty XML file
             if ($PSCmdlet.ShouldProcess($task.name)) {
                 #create an XML declaration section
-                write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Creating XML declaration"
+                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Creating XML declaration"
                 $declare = $newxml.CreateXmlDeclaration("1.0", "UTF-8", "yes")
 
                 #replace declaration
@@ -274,7 +271,7 @@ Function New-MyTask {
 
         If ($Passthru) {
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Passing object to the pipeline."
-            (get-mytask).where( {$_.taskID -eq $task.taskid})
+            (Get-MyTask).where( { $_.taskID -eq $task.taskid })
         }
 
     } #Process
@@ -335,7 +332,7 @@ Function Set-MyTask {
 
         # Generate and set the ValidateSet
         if (Test-Path -Path $global:myTaskCategory) {
-            $arrSet = Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-Object {$_ -match "\w+"} | ForEach-Object {$_.Trim()}
+            $arrSet = Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-Object { $_ -match "\w+" } | ForEach-Object { $_.Trim() }
         }
         else {
             $arrSet = $script:myTaskDefaultCategories
@@ -354,13 +351,13 @@ Function Set-MyTask {
     Begin {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"
         #display PSBoundparameters formatted nicely for Verbose output
-        [string]$pb = ($PSBoundParameters | format-table -AutoSize | Out-String).TrimEnd()
+        [string]$pb = ($PSBoundParameters | Format-Table -AutoSize | Out-String).TrimEnd()
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] PSBoundparameters: `n$($pb.split("`n").Foreach({"$("`t"*4)$_"}) | Out-String) `n"
 
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Cleaning PSBoundParameters"
-        $PSBoundParameters.Remove("Verbose")  | Out-Null
-        $PSBoundParameters.Remove("WhatIf")   | Out-Null
-        $PSBoundParameters.Remove("Confirm")  | Out-Null
+        $PSBoundParameters.Remove("Verbose") | Out-Null
+        $PSBoundParameters.Remove("WhatIf") | Out-Null
+        $PSBoundParameters.Remove("Confirm") | Out-Null
         $PSBoundParameters.Remove("Passthru") | Out-Null
         $PSBoundParameters.Remove("ID") | Out-Null
 
@@ -387,14 +384,14 @@ Function Set-MyTask {
 
         #if using a name get the task from the XML file
         if ($Name) {
-            $node = ($in | Select-xml -XPath "//Object/Property[@Name='Name' and contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'$($name.toLower())')]").Node.ParentNode
+            $node = ($in | Select-Xml -XPath "//Object/Property[@Name='Name' and contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'$($name.toLower())')]").Node.ParentNode
         }
         else {
             if ($ID) {
                 #get the task by ID
-                $task = Get-MyTask -id $ID
+                $task = Get-MyTask -ID $ID
             }
-            $node = ($in | Select-xml -XPath "//Object/Property[@Name='TaskID' and text()='$($task.taskid)']").Node.ParentNode
+            $node = ($in | Select-Xml -XPath "//Object/Property[@Name='TaskID' and text()='$($task.taskid)']").Node.ParentNode
         }
 
         if (-Not $Node) {
@@ -409,7 +406,7 @@ Function Set-MyTask {
 
         #go through all PSBoundParameters other than Name or NewName
 
-        $PSBoundParameters.keys | Where-Object {$_ -notMatch 'name'} | ForEach-Object {
+        $PSBoundParameters.keys | Where-Object { $_ -notMatch 'name' } | ForEach-Object {
             #update the task property
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating $_ to $($PSBoundParameters.item($_))"
             $setting = $node.SelectSingleNode("Property[@Name='$_']")
@@ -509,13 +506,13 @@ Function Remove-MyTask {
                 }
                 Catch {
                     Write-Warning "Failed to find a task with a name of $Name"
-                    write-warning $_.exception.message
+                    Write-Warning $_.exception.message
                     #abort and bail out
                     return
                 }
             } #Name
             "ID" {
-                $TaskID = (Get-MyTask -id $ID).TaskID
+                $TaskID = (Get-MyTask -ID $ID).TaskID
                 if (-Not $TaskID) {
                     #bail out
                     return
@@ -532,7 +529,7 @@ Function Remove-MyTask {
 
         if ($node) {
             #remove it
-            write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Removing: $($node.Property | Out-String)"
+            Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Removing: $($node.Property | Out-String)"
 
             if ($PSCmdlet.ShouldProcess($TaskID)) {
                 $node.parentNode.RemoveChild($node) | Out-Null
@@ -597,7 +594,7 @@ Function Get-MyTask {
 
         # Generate and set the ValidateSet
         if (Test-Path -Path $global:myTaskCategory) {
-            $arrSet = Get-Content -Path $global:myTaskCategory | Where-Object {$_ -match "\w+"} | ForEach-Object {$_.Trim()}
+            $arrSet = Get-Content -Path $global:myTaskCategory | Where-Object { $_ -match "\w+" } | ForEach-Object { $_.Trim() }
         }
         else {
             $arrSet = $script:myTaskDefaultCategories
@@ -624,7 +621,7 @@ Function Get-MyTask {
 
         #import from the XML file
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Importing tasks from $mytaskPath"
-        $tasks = _ImportTasks | Sort-Object -property DueDate
+        $tasks = _ImportTasks | Sort-Object -Property DueDate
 
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Imported $($tasks.count) tasks"
     }
@@ -642,19 +639,19 @@ Function Get-MyTask {
             "Name" {
                 if ($Name -match "\w+") {
                     Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving task: $Name"
-                    $results = $tasks.Where( {$_.Name -like $Name})
+                    $results = $tasks.Where( { $_.Name -like $Name })
                 }
                 else {
                     #write all tasks to the pipeline
                     Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving all incomplete tasks"
-                    $results = $tasks.Where( {-Not $_.Completed})
+                    $results = $tasks.Where( { -Not $_.Completed })
                 }
             } #name
 
             "ID" {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving Task by ID: $ID"
                 #$results = $tasks.where( {$_.id -eq $ID})
-                $results = $tasks.where( {$_.id -match "^($($id -join '|'))$" })
+                $results = $tasks.where( { $_.id -match "^($($id -join '|'))$" })
             } #id
 
             "All" {
@@ -664,17 +661,17 @@ Function Get-MyTask {
 
             "Completed" {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving completed tasks"
-                $results = $tasks.Where( {$_.Completed})
+                $results = $tasks.Where( { $_.Completed })
             } #completed
 
             "Category" {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving tasks for category $Category"
-                $results = $tasks.Where( {$_.Category -eq $Category -AND (-Not $_.Completed)})
+                $results = $tasks.Where( { $_.Category -eq $Category -AND (-Not $_.Completed) })
             } #category
 
             "Days" {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving tasks due in $DaysDue days or before"
-                $results = $tasks.Where( {($_.DueDate -le (Get-Date).AddDays($DaysDue)) -AND (-Not $_.Completed)})
+                $results = $tasks.Where( { ($_.DueDate -le (Get-Date).AddDays($DaysDue)) -AND (-Not $_.Completed) })
             }
         } #switch
 
@@ -728,7 +725,7 @@ Function Show-MyTask {
         # Generate and set the ValidateSet
         if (Test-Path -Path $global:myTaskCategory) {
             $arrSet = Get-Content -Path $global:myTaskCategory -Encoding Unicode |
-                Where-Object {$_ -match "\w+"} | ForEach-Object {$_.Trim()}
+                Where-Object { $_ -match "\w+" } | ForEach-Object { $_.Trim() }
         }
         else {
             $arrSet = $script:myTaskDefaultCategories
@@ -915,13 +912,13 @@ Function Complete-MyTask {
             #find matching XML node and replace it
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Updating task file"
             #convert current task to XML
-            $new = ($task | Select-object -property Name,
+            $new = ($task | Select-Object -Property Name,
                 Description,
-                @{Name = 'DueDate'; Expression = {Get-Date -Date $task.DueDate -Format 's'}},
+                @{Name = 'DueDate'; Expression = { Get-Date -Date $task.DueDate -Format 's' } },
                 Category,
                 Progress,
-                @{Name = 'TaskCreated'; Expression = {Get-Date -Date $task.TaskCreated -Format 's'}},
-                @{Name = 'TaskModified'; Expression = {Get-Date -Date $task.TaskModified -Format 's'}},
+                @{Name = 'TaskCreated'; Expression = { Get-Date -Date $task.TaskCreated -Format 's' } },
+                @{Name = 'TaskModified'; Expression = { Get-Date -Date $task.TaskModified -Format 's' } },
                 TaskID,
                 Completed | ConvertTo-Xml).Objects.Object
 
@@ -979,7 +976,7 @@ Function Get-MyTaskCategory {
     Process {
         If (Test-Path -Path $global:myTaskCategory) {
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving user categories from $global:myTaskCategory"
-            Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-Object {$_ -match "\w+"}
+            Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-Object { $_ -match "\w+" }
         }
         else {
             #Display the defaults
@@ -1017,7 +1014,7 @@ Function Add-MyTaskCategory {
             Set-Content -Value $script:myTaskDefaultCategories -Path $global:myTaskCategory -Encoding Unicode
         }
         #get current contents
-        $current = Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-Object {$_ -match "\w+"}
+        $current = Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-Object { $_ -match "\w+" }
     } #begin
 
     Process {
@@ -1057,9 +1054,9 @@ Function Remove-MyTaskCategory {
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Starting: $($MyInvocation.Mycommand)"
 
         #get current contents
-        $current = Get-Content -Path $global:myTaskCategory -Encoding Unicode| Where-Object {$_ -match "\w+"}
+        $current = Get-Content -Path $global:myTaskCategory -Encoding Unicode | Where-Object { $_ -match "\w+" }
         #create backup
-        $back = Join-Path -path $mytaskhome -ChildPath MyTaskCategory.bak
+        $back = Join-Path -Path $mytaskhome -ChildPath MyTaskCategory.bak
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Creating backup copy"
         Copy-Item -Path $global:myTaskCategory -Destination $back -Force
     } #begin
@@ -1067,7 +1064,7 @@ Function Remove-MyTaskCategory {
     Process {
         foreach ($item in $Category) {
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Removing category $item"
-            $current = ($current).Where( {$_ -notcontains $item})
+            $current = ($current).Where( { $_ -notcontains $item })
         }
 
     } #process
@@ -1092,7 +1089,7 @@ Function Backup-MyTaskFile {
             HelpMessage = "Enter the filename and path for the backup xml file"
         )]
         [ValidateNotNullorEmpty()]
-        [string]$Destination = (Join-Path -Path $mytaskhome -ChildPath "MyTasks_Backup_$(Get-Date -format "yyyyMMdd").xml" ),
+        [string]$Destination = (Join-Path -Path $mytaskhome -ChildPath "MyTasks_Backup_$(Get-Date -Format "yyyyMMdd").xml" ),
         [switch]$Passthru
 
     )
@@ -1116,7 +1113,7 @@ Function Backup-MyTaskFile {
     Process {
         If (Test-Path -Path $myTaskPath) {
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Copy parameters"
-            Write-Verbose ($PSBoundParameters | format-list | Out-String)
+            Write-Verbose ($PSBoundParameters | Format-List | Out-String)
             Copy-Item @psBoundParameters
 
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Adding comment to backup XML file"
@@ -1174,13 +1171,13 @@ Function Save-MyTask {
         if ($Task) {
             $taskID = $task.TaskID
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Archiving task $($task.name) [$($task.taskID)]"
-            $completed = $in.Objects | Select-XML -XPath "//Object/Property[text()='$taskID']"
+            $completed = $in.Objects | Select-Xml -XPath "//Object/Property[text()='$taskID']"
         }
         else {
             #get completed tasks
             Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting completed tasks"
 
-            $completed = $In.Objects | Select-XML -XPath "//Property[@Name='Completed' and text()='True']"
+            $completed = $In.Objects | Select-Xml -XPath "//Property[@Name='Completed' and text()='True']"
         }
         if ($completed) {
             #save to $myTaskArchivePath
@@ -1242,7 +1239,7 @@ Function Set-MyTaskHome {
 
     Param(
         [Parameter(Mandatory, HelpMessage = "Enter the path to your new myTaskHome directory")]
-        [ValidateScript( {Test-Path $_})]
+        [ValidateScript( { Test-Path $_ })]
         [string]$Path,
         [switch]$Passthru
     )
@@ -1271,7 +1268,7 @@ Function Get-MyTaskHome {
     Param()
 
     [PSCustomObject]@{
-        PSTypeName = "myTaskPath"
+        PSTypeName        = "myTaskPath"
         myTaskHome        = $global:mytaskhome
         myTaskPath        = $global:myTaskPath
         myTaskArchivePath = $global:myTaskArchivePath
@@ -1312,7 +1309,7 @@ Function Get-MyTaskArchive {
 
         # Generate and set the ValidateSet
         if (Test-Path -Path $global:myTaskCategory) {
-            $arrSet = Get-Content -Path $global:myTaskCategory | Where-Object {$_ -match "\w+"} | ForEach-Object {$_.Trim()}
+            $arrSet = Get-Content -Path $global:myTaskCategory | Where-Object { $_ -match "\w+" } | ForEach-Object { $_.Trim() }
         }
         else {
             $arrSet = $script:myTaskDefaultCategories
@@ -1339,7 +1336,7 @@ Function Get-MyTaskArchive {
 
         #import from the XML file
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Importing tasks from $mytaskPath"
-        $tasks = _ImportTasks -Path $myTaskArchivePath | Sort-Object -property {$_.TaskModified -as [datetime]}
+        $tasks = _ImportTasks -Path $myTaskArchivePath | Sort-Object -Property { $_.TaskModified -as [datetime] }
 
         Write-Verbose "[$((Get-Date).TimeofDay) BEGIN  ] Imported $($tasks.count) tasks"
     }
@@ -1357,7 +1354,7 @@ Function Get-MyTaskArchive {
             "Name" {
                 if ($Name -match "\w+") {
                     Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving task: $Name"
-                    $results = $tasks.Where( {$_.Name -like $Name})
+                    $results = $tasks.Where( { $_.Name -like $Name })
                 }
                 else {
                     #write all tasks to the pipeline
@@ -1368,7 +1365,7 @@ Function Get-MyTaskArchive {
 
             "Category" {
                 Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Retrieving tasks for category $Category"
-                $results = $tasks.Where( {$_.Category -eq $Category})
+                $results = $tasks.Where( { $_.Category -eq $Category })
             } #category
 
         } #switch
@@ -1376,7 +1373,7 @@ Function Get-MyTaskArchive {
         #display tasks if found otherwise display a warning
         if ($results.count -ge 1) {
             $results.foreach( {
-                    $_.psobject.typenames.insert(0, "myTaskArchive")})
+                    $_.psobject.typenames.insert(0, "myTaskArchive") })
             $results
         }
         else {
