@@ -3,7 +3,7 @@
 ## v2.3.0
 
 + Updates to `Show-MyTask` to better handle long descriptions (Issue #40 and #41)
-+ Modified `Remove-MyTask` to remove by ID number (Issue #42)
++ Modified `Remove-MyTask` to remove by the ID number (Issue #42)
 + Added online help links
 + Updated `README.md`
 + Updated help documentation
@@ -18,8 +18,8 @@
 
 ## v2.1.0
 
-+ Renamed `Set-MyTaskPath` to `Set-MyTaskHome` and set original name as an alias. (Issue #38)
-+ Renamed `Get-MyTaskPath` to `Get-MyTaskHome` and set original name as an alias. (Issue #38)
++ Renamed `Set-MyTaskPath` to `Set-MyTaskHome` and set the original name as an alias. (Issue #38)
++ Renamed `Get-MyTaskPath` to `Get-MyTaskHome` and set the original name as an alias. (Issue #38)
 + Restructured module to better accommodate Desktop vs Core PSEditions (Issue #37)
 + Manifest updates
 + documentation updates
