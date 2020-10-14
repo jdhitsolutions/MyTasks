@@ -53,7 +53,7 @@ Get-MyTask [-Category <String>] [<CommonParameters>]
 
 This command reads MyTask items from the source XML file and creates a list of MyTask objects. The default behavior is to display uncompleted tasks for all categories due in the next 30 days. But you can limit the results through different parameters.
 
-Note that the the ID property will be assigned to all tasks in the source XML file, so depending on what parameters you use, you probably won't see a consecutive list of ID numbers.
+Note that the ID property will be assigned to all tasks in the source XML file, so depending on what parameters you use, you probably won't see a consecutive list of ID numbers.
 
 ## EXAMPLES
 
@@ -64,8 +64,8 @@ PS C:\> Get-MyTask
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-2   Order books               Month of Lunches       8/1/2017 True    Personal            0
-4   Apache Install            Ubuntu 16             9/13/2017 False   work               10
+2   Order books               Month of Lunches       8/1/2020 True    Personal            0
+4   Apache Install            Ubuntu 18             9/13/2020 False   work               10
 ```
 
 Get active tasks due in the next 30 days.
@@ -77,14 +77,14 @@ PS C:\> Get-MyTask -all
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-1   Update Server02                                 7/14/2017 False   work              100
-2   Order books               Month of Lunches       8/1/2017 True    Personal            0
-3   Update Server01                                 8/30/2017 False   Work              100
-4   Apache Install            Ubuntu 16             9/13/2017 False   work               10
-5   2018 Training Budget                            10/1/2017 False   Personal            0
-6   Conferences                                     10/7/2017 False   other               0
-7   Update Server03                                10/14/2017 False   work                0
-8   Finish DSC Training                            12/31/2017 False   Personal           80
+1   Update Server02                                 7/14/2020 False   work              100
+2   Order books               Month of Lunches       8/1/2020 True    Personal            0
+3   Update Server01                                 8/30/2020 False   Work              100
+4   Apache Install            Ubuntu 18             9/13/2020 False   work               10
+5   2021 Training Budget                            10/1/2020 False   Personal            0
+6   Conferences                                     10/7/2020 False   other               0
+7   Update Server03                                10/14/2020 False   work                0
+8   Finish DSC Training                            12/31/2020 False   Personal           80
 ```
 
 Get all tasks including completed.
@@ -92,12 +92,12 @@ Get all tasks including completed.
 ### EXAMPLE 3
 
 ```powershell
-PS C:\>get-mytask -Category work
+PS C:\> Get-MyTask -Category work
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-4   Apache Install            Ubuntu 16             9/13/2017 False   work               10
-7   Update Server03                                10/14/2017 False   work                0
+4   Apache Install            Ubuntu 18             9/13/2020 False   work               10
+7   Update Server03                                10/14/2020 False   work                0
 ```
 
 Get all active tasks in the Work category.
@@ -105,12 +105,12 @@ Get all active tasks in the Work category.
 ### EXAMPLE 4
 
 ```powershell
-PS C:\> get-mytask -daysdue 90
+PS C:\> Get-MyTask -daysdue 90
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-2   Order books               Month of Lunches       8/1/2017 True    Personal            0
-4   Apache Install            Ubuntu 16             9/13/2017 False   work               10
+2   Order books               Month of Lunches       8/1/2020 True    Personal            0
+4   Apache Install            Ubuntu 16             9/13/2020 False   work               10
 ```
 
 Get all active tasks due in the next 90 days.
@@ -118,18 +118,18 @@ Get all active tasks due in the next 90 days.
 ### EXAMPLE 5
 
 ```powershell
-PS C:\> get-mytask -id 4 | format-list -View all
+PS C:\> Get-MyTask -id 4 | format-list -View all
 
 
 ID           : 4
 Name         : Apache Install
-Description  : Ubuntu 16
-DueDate      : 9/13/2017 8:39:46 AM
+Description  : Ubuntu 18
+DueDate      : 9/13/2020 8:39:46 AM
 Overdue      : False
 Category     : work
 Progress     : 10
-TaskCreated  : 8/23/2017 8:39:46 AM
-TaskModified : 8/23/2017 8:41:56 AM
+TaskCreated  : 8/23/2020 8:39:46 AM
+TaskModified : 8/23/2020 8:41:56 AM
 Completed    : False
 TaskID       : c6fdf70c-a2f7-42c2-8e7d-93e4faa669fd
 ```
@@ -253,10 +253,10 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Show-MyTask]()
+[Show-MyTask](Show-MyTask.md)
 
-[New-MyTask]()
+[New-MyTask](New-MyTask.md)
 
-[Set-MyTask]()
+[Set-MyTask](Set-MyTask.md)
 
-[Complete-MyTask]()
+[Complete-MyTask](Complete-MyTask.md)

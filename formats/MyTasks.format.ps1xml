@@ -12,6 +12,7 @@ Any changes made to this file may be overwritten in future module updates
         <TypeName>MyTask</TypeName>
       </ViewSelectedBy>
       <TableControl>
+        <AutoSize/>
         <TableHeaders>
           <TableColumnHeader>
             <Label>ID</Label>
@@ -44,8 +45,8 @@ Any changes made to this file may be overwritten in future module updates
             <Alignment>Left</Alignment>
           </TableColumnHeader>
           <TableColumnHeader>
-            <Label>Progress</Label>
-            <Width>8</Width>
+            <Label>%</Label>
+            <Width>3</Width>
             <Alignment>Right</Alignment>
           </TableColumnHeader>
         </TableHeaders>
@@ -54,26 +55,117 @@ Any changes made to this file may be overwritten in future module updates
             <Wrap />
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>ID</PropertyName>
+                <ScriptBlock>
+                if ($_.progress -eq 100) {
+                  "$([char]0x1b)[92m$($_.ID)$([char]0x1b)[0m"
+                }
+                elseif ($_.overdue ) {
+                  "$([char]0x1b)[91m$($_.ID)$([char]0x1b)[0m"
+                }
+                elseif ((($_.DueDate - (Get-Date)).TotalHours -le 24) -AND (-not $_.complete)) {
+                  "$([char]0x1b)[38;5;208m$($_.ID)$([char]0x1b)[0m"
+                }
+                else {
+                  "$([char]0x1b)[97m$($_.ID)$([char]0x1b)[0m"
+                }
+                </ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Name</PropertyName>
+                <ScriptBlock>
+                if ($_.progress -eq 100) {
+                  "$([char]0x1b)[92m$($_.Name)$([char]0x1b)[0m"
+                }
+                elseif ($_.overdue ) {
+                  "$([char]0x1b)[91m$($_.Name)$([char]0x1b)[0m"
+                }
+                elseif ((($_.DueDate - (Get-Date)).TotalHours -le 24) -AND (-not $_.complete)) {
+                  "$([char]0x1b)[38;5;208m$($_.Name)$([char]0x1b)[0m"
+                }
+                else {
+                  "$([char]0x1b)[97m$($_.Name)$([char]0x1b)[0m"
+                }
+                </ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Description</PropertyName>
+              <Scriptblock>
+                if ($_.progress -eq 100) {
+                  "$([char]0x1b)[92m$($_.Description)$([char]0x1b)[0m"
+                }
+                elseif ($_.overdue ) {
+                  "$([char]0x1b)[91m$($_.Description)$([char]0x1b)[0m"
+                }
+                elseif ((($_.DueDate - (Get-Date)).TotalHours -le 24) -AND (-not $_.complete)) {
+                  "$([char]0x1b)[38;5;208m$($_.Description)$([char]0x1b)[0m"
+                }
+                else {
+                  "$([char]0x1b)[97m$($_.Description)$([char]0x1b)[0m"
+                }
+                </Scriptblock>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>DueDate</PropertyName>
-                <FormatString>{0:d}</FormatString>
+              <ScriptBlock>
+              $value = "{0:d}" -f $_.duedate
+               if ($_.progress -eq 100) {
+                  "$([char]0x1b)[92m$value$([char]0x1b)[0m"
+                }
+                elseif ($_.overdue ) {
+                  "$([char]0x1b)[91m$value$([char]0x1b)[0m"
+                }
+                elseif ((($_.DueDate - (Get-Date)).TotalHours -le 24) -AND (-not $_.complete)) {
+                  "$([char]0x1b)[38;5;208m$value$([char]0x1b)[0m"
+                }
+                else {
+                  "$([char]0x1b)[97m$value$([char]0x1b)[0m"
+                }
+              </ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>OverDue</PropertyName>
+                <Scriptblock>
+                if ($_.progress -eq 100) {
+                  "$([char]0x1b)[92m$($_.OverDue)$([char]0x1b)[0m"
+                }
+                elseif ($_.overdue ) {
+                  "$([char]0x1b)[91m$($_.OverDue)$([char]0x1b)[0m"
+                }
+                elseif ((($_.DueDate - (Get-Date)).TotalHours -le 24) -AND (-not $_.complete)) {
+                  "$([char]0x1b)[38;5;208m$($_.OverDue)$([char]0x1b)[0m"
+                }
+                else {
+                  "$([char]0x1b)[97m$($_.OverDue)$([char]0x1b)[0m"
+                }
+                </Scriptblock>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Category</PropertyName>
+                <Scriptblock>
+                if ($_.progress -eq 100) {
+                  "$([char]0x1b)[92m$($_.Category)$([char]0x1b)[0m"
+                }
+                elseif ($_.overdue ) {
+                  "$([char]0x1b)[91m$($_.Category)$([char]0x1b)[0m"
+                }
+                elseif ((($_.DueDate - (Get-Date)).TotalHours -le 24) -AND (-not $_.complete)) {
+                  "$([char]0x1b)[38;5;208m$($_.Category)$([char]0x1b)[0m"
+                }
+                else {
+                  "$([char]0x1b)[97m$($_.Category)$([char]0x1b)[0m"
+                }
+                </Scriptblock>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Progress</PropertyName>
+                <Scriptblock>
+                if ($_.progress -eq 100) {
+                  "$([char]0x1b)[92m$($_.Progress)$([char]0x1b)[0m"
+                }
+                elseif ($_.overdue ) {
+                  "$([char]0x1b)[91m$($_.Progress)$([char]0x1b)[0m"
+                }
+                elseif ((($_.DueDate - (Get-Date)).TotalHours -le 24) -AND (-not $_.complete)) {
+                  "$([char]0x1b)[38;5;208m$($_.Progress)$([char]0x1b)[0m"
+                }
+                else {
+                  "$([char]0x1b)[97m$($_.Progress)$([char]0x1b)[0m"
+                }
+                </Scriptblock>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

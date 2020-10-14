@@ -43,11 +43,11 @@ Use this command to mark a MyTask work item as completed. This will automaticall
 ### EXAMPLE 1
 
 ```powershell
-PS C:\> get-mytask -id 6 | Complete-MyTask -Passthru
+PS C:\> Get-MyTask -id 6 | Complete-MyTask -Passthru
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-6   Update Server03                                10/14/2017 False   work              100
+6   Update Server03                                10/14/2020 False   work              100
 ```
 
 Get MyTask with an ID of 6 and mark it as complete. By default nothing is written to the pipeline unless you use -Passthru.
@@ -63,7 +63,7 @@ Mark the task as completed and archive it to the myTasksArchive.xml file.
 ### EXAMPLE 3
 
 ```powershell
-PS C:\> Complete-MyTask -Name "update-resume" -CompletedDate "4/1/2017 4:00PM"
+PS C:\> Complete-MyTask -Name "update-resume" -CompletedDate "4/1/2020 4:00PM"
 ```
 
 Mark the task as completed using the specified date.
@@ -210,6 +210,6 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Set-MyTask]()
+[Set-MyTask](Set-MyTask.md)
 
-[Save-MyTask]()
+[Save-MyTask](Save-MyTask.md)

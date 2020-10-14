@@ -19,9 +19,9 @@ $script:myTaskDefaultCategories = "Work", "Personal", "Other", "Customer"
 #endregion
 
 #dot source functions
-. $psscriptroot\MyTasksFunctions.ps1
+. $psscriptroot\functions\MyTasksFunctions.ps1
 if ($psedition -eq 'Desktop') {
-    . $psscriptroot\emailfunctions.ps1
+    . $psscriptroot\functions\emailfunctions.ps1
 }
 
 $cmd = "Get-MyTask", "Set-MyTask", "Complete-MyTask", "Remove-MyTask"

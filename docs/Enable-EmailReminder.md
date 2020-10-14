@@ -264,6 +264,6 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Disable-EmailReminder]()
+[Disable-EmailReminder](Disable-EmailReminder.md)
 
-[Get-EmailReminder]()
+[Get-EmailReminder](Get-EmailReminder.md)

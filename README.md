@@ -2,7 +2,7 @@
 
 [![PSGallery Version](https://img.shields.io/powershellgallery/v/myTasks.png?style=for-the-badge&logo=powershell&label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/myTasks/) [![PSGallery Downloads](https://img.shields.io/powershellgallery/dt/MyTasks.png?style=for-the-badge&label=Downloads)](https://www.powershellgallery.com/packages/MyTasks/)
 
-This PowerShell module is designed as a task or simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell Core with a few limitations. You can install the latest version from the PowerShell Gallery. You will need the `-Scope`parameter for PowerShell Core.
+This PowerShell module is designed as a task or a simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell 7.x  with a few limitations. You can install the latest version from the PowerShell Gallery. You might want to need the `-Scope`parameter for PowerShell 7.x.
 
 ```powershell
 Install-Module MyTasks [-scope currentuser]
@@ -10,20 +10,12 @@ Install-Module MyTasks [-scope currentuser]
 
 Task data is stored in an XML file. Other configuration information is stored in simple text files. Here are a few highlights.
 
-## Class Based
+## A Class-Based Module
 
 This module uses a class definition for the task object and is designed to work on both Windows PowerShell and PowerShell Core.
 
 ```powershell
 Class MyTask {
-
-    <#
-    A class to define a task or to-do item
-    #>
-
-    #Properties
-    # ID and OverDue values are calculated at run time.
-
     [int]$ID
     [string]$Name
     [string]$Description
@@ -35,8 +27,9 @@ Class MyTask {
     hidden[datetime]$TaskCreated = (Get-Date)
     hidden[datetime]$TaskModified
     hidden[guid]$TaskID = (New-Guid)
+    # ID and OverDue values are calculated at run time.
 
-    #Methods
+    # Methods
 
     #set task as completed
     [void]CompleteTask([datetime]$CompletedDate) {
@@ -92,7 +85,7 @@ While you could use the object's properties and methods directly, you should use
 
 ## XML Data
 
-All of the task information is stored in an XML file. The commands in this module will read in, update, and remove items as needed using PowerShell commands such as `Select-XML`. By default these files are stored in your Documents folder (on Windows systems) or in Home (on Linux). You can change the default location by using the [Set-myTaskHome](docs/Set-MyTaskHome.md) command. This is helpful if you are sharing task information between computers via a service like Dropbox or OneDrive.
+All of the task information is stored in an XML file. The commands in this module will read in, update, and remove items as needed using PowerShell commands such as `Select-XML`. By default, these files are stored in your Documents folder (on Windows systems) or in the Home folder (on Linux). You can change the default location by using the [Set-myTaskHome](docs/Set-MyTaskHome.md) command. This is helpful if you are sharing task information between computers via a service like Dropbox or OneDrive.
 
 ```powershell
 Set-MyTaskHome -path C:\Users\Jeff\dropbox\mytasks\
@@ -110,7 +103,7 @@ The Task object includes a Category property. The module will define a default s
 + [Get-MyTaskCategory](docs/Get-MyTaskCategory.md)
 + [Remove-MyTaskCategory](docs/Remove-MyTaskCategory.md)
 
-Task information is stored in a text file in the $myTaskHome location.
+Task information is stored in a text file in the `$myTaskHome` location.
 
 ## Basic Usage
 
@@ -123,48 +116,50 @@ New-MyTask "return library books" -Category personal
 You can also specify a due date.
 
 ```powershell
-New-MyTask "Pluralsight" -duedate "2/1/2019" -description "renew subscription" -category other
+New-MyTask "Pluralsight" -duedate "2/1/2020" -description "renew subscription" -category other
 ```
 
 You can use `Set-MyTask` to modify a task.
 
 ```powershell
-Get-MyTask Pluralsight | Set-Mytask -DueDate 3/1/2019
+Get-MyTask Pluralsight | Set-Mytask -DueDate 3/1/2020
 ```
 
-Because the task has a Progress property, you can use [Set-MyTask](docs/Set-MyTask.md) to update that as well.
+Because the task has a Progress property, you can use [Set-MyTask](docs/Set-MyTask.md) to update that as well. This is intended to be used as a percentage complete.
 
 ```powershell
 Set-Mytask "book review" -Progress 60
 ```
 
-To view tasks you can use `Get-MyTask`. Normally, you will use [Get-MyTask](docs/Get-MyTask.md) to display tasks, all, some or a single item:
+Use `Get-MyTask` to view tasks. Normally, you will use [Get-MyTask](docs/Get-MyTask.md) to display all tasks, some tasks or a single item:
 
 ```powershell
-PS S:\> get-mytask -name MemoryTools
+PS S:\> Get-MyTask -name MemoryTools
 
 ID  Name         Description                DueDate OverDue Category  Progress
 --  ----         -----------                ------- ------- --------  --------
-8   MemoryTools  update module            7/22/2019 False   Projects        10
+8   MemoryTools  update module            7/22/2020 False   Projects        10
 ```
 
 The default behavior is to display incomplete tasks due in the next 30 days. Look at the help for `Get-MyTask` for more information.
 
-There is also a command called [Show-MyTask](docs/Show-MyTask.md) which is really nothing more than a wrapper to `Get-MyTask`. The "Show" command will write output directly to the host. Incomplete tasks that are overdue will be displayed in red text. Tasks that will be due in 24 hours will be displayed in yellow. If you select all tasks then completed items will be displayed in green. This command may not work as expected in the PowerShell ISE.
+This module has a custom format file that uses ANSI escape sequences to color-code tasks. Overdue tasks will be shown in red. Tasks due in the next 48 hours will be shown in orange.
 
-![show my tasks](images/show-mytask-1.png)
+![Get-MyTask](images/get-mytask.png)
 
-When a task is finished you can mark it as complete.
+This command may not work as expected in the PowerShell ISE or the VS Code PowerShell Integrated shell.
+
+When a task is finished, you can mark it as complete.
 
 ```powershell
 Complete-MyTask -name "order coffee"
 ```
 
-The task will remain but be marked as 100% complete. You can still see the task when using the -All parameter with `Get-MyTask` or `Show-MyTask`. At some point you might want to remove completed tasks from the master XML file. You can use [Remove-MyTask](docs/Remove-MyTask.md) to permanently delete them. Or use the `Archive-MyTask` command to move them to an archive xml file.
+The task will remain but be marked as 100% complete. You can still see the task when using the -All parameter with `Get-MyTask` or `Show-MyTask`. At some point you might want to remove completed tasks from the master XML file. You can use [Remove-MyTask](docs/Remove-MyTask.md) to permanently delete them. Or use the `Archive-MyTask` command to move them to an archive XML file.
 
 ## Format Views
 
-The module includes a `format.ps1xml` file that defines a default display when you run `Get-MyTask`. You will get a slightly different set of properties when you run `Get-MyTask | Format-List`. There is also a custom table view called Category which will create a table grouped by the Category property. You should sort the tasks first:
+The module includes a `format.ps1xml` file that defines a default display when you run `Get-MyTask`. You will get a slightly different set of properties when you run `Get-MyTask | Format-List`. There is also a custom table view called `Category` which will create a table grouped by the Category property. You should sort the tasks first:
 
 ```powershell
 Get-MyTask | Sort-Object Category | Format-Table -view category
@@ -173,7 +168,7 @@ Get-MyTask | Sort-Object Category | Format-Table -view category
 Or you can use the `DueDate` table view - sort on DueDate
 
 ```powershell
-Get-MyTask -days 180 | sort duedate | Format-table -view duedate
+Get-MyTask -days 180 | Sort-Object duedate | Format-Table -view duedate
 ```
 
 ![formatted views](images/show-mytask-2.png)
@@ -183,18 +178,18 @@ Get-MyTask -days 180 | sort duedate | Format-table -view duedate
 Over time your task file might get quite large. Even though the default behavior is to ignore completed tasks, you have an option to archive them to a separate XML file using `Save-MyTask` which has an alias of `Archive-MyTask`:
 
 ```powershell
-Get-Mytask -Completed | Archive-MyTask
+Get-MyTask -Completed | Archive-MyTask
 ```
 
 There is an option to archive tasks when you run [Complete-MyTask](docs/Complete-MyTask.md). Or you can completely delete a task with `Remove-MyTask`.
 
-Use the `Get-myTaskArchive` to view archived tasks.
+Use the `Get-MyTaskArchive` to view archived tasks.
 
 ## Email Reminders
 
 If you are running this module on Windows PowerShell that includes the PSScheduledJob module, you can create a scheduled PowerShell job that will send you a daily email with tasks that are due in 3 days or less. The default is a plain text message but you can also send it as HTML. Use the [Enable-EmailReminder](docs/Enable-EmailReminder.md) command to set up the job.
 
-You should read full help and examples for all commands as well as the [about_MyTasks](./docs/about_MyTasks.md) help file.
+You should read full help and examples for all commands as well as the [about_MyTasks](docs/about_MyTasks.md) help file.
 
 + [Add-MyTaskCategory](docs/Add-MyTaskCategory.md)
 + [Backup-MyTaskFile](docs/Backup-MyTaskFile.md)
@@ -216,6 +211,6 @@ You should read full help and examples for all commands as well as the [about_My
 
 ## Limitations
 
-Please post any issues, questions or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section.
+Please post any issues, questions, or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section of this module's GitHub repository.
 
-Last Updated 2019-08-28 15:54:42Z UTC
+Last Updated 2020-10-14 16:00:30Z

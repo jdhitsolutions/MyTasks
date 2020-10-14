@@ -8,7 +8,7 @@
     RootModule           = 'MyTasks.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '2.3.0'
+    ModuleVersion        = '2.4.0'
 
     CompatiblePSEditions = @("Desktop", "Core")
 
@@ -22,7 +22,7 @@
     CompanyName          = 'JDH Information Technology Solutions, Inc.'
 
     # Copyright statement for this module
-    Copyright            = '(c) 2016-2019 JDH Information Technology Solutions, Inc. All rights reserved.'
+    Copyright            = '(c) 2016-2020 JDH Information Technology Solutions, Inc. All rights reserved.'
 
     # Description of the functionality provided by this module
     Description          = 'A tool set for managing tasks or to-do projects in PowerShell. Task data is stored in XML and managed through a PowerShell class.'
@@ -58,27 +58,28 @@
     # TypesToProcess = @()
 
     # Format files (.ps1xml) to be loaded when importing this module
-    FormatsToProcess     = "MyTasks.format.ps1xml", "mytaskpath.format.ps1xml"
+    FormatsToProcess     = "formats\MyTasks.format.ps1xml", "formats\mytaskpath.format.ps1xml"
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     # NestedModules = @()
 
     # Functions to export from this module
 
-   FunctionsToExport    = if ($PSEdition -eq 'Desktop') {
+    FunctionsToExport    = if ($PSEdition -eq 'Desktop') {
 
-   @("New-MyTask", "Set-MyTask", "Remove-MyTask", "Get-MyTask",
-        "Show-MyTask", "Complete-MyTask", "Get-MyTaskCategory", "Add-MyTaskCategory",
-        "Remove-MyTaskCategory", "Backup-MyTaskFile", "Save-MyTask", "Enable-EmailReminder",
-        "Disable-EmailReminder", "Get-EmailReminder", "Set-MyTaskHome", "Get-MyTaskArchive",
-        "Get-MyTaskHome")
-
-} else {
         @("New-MyTask", "Set-MyTask", "Remove-MyTask", "Get-MyTask",
-            "Show-MyTask", "Complete-MyTask", "Get-MyTaskCategory", "Add-MyTaskCategory",
+            "Complete-MyTask", "Get-MyTaskCategory", "Add-MyTaskCategory",
+            "Remove-MyTaskCategory", "Backup-MyTaskFile", "Save-MyTask", "Enable-EmailReminder",
+            "Disable-EmailReminder", "Get-EmailReminder", "Set-MyTaskHome", "Get-MyTaskArchive",
+            "Get-MyTaskHome")
+
+    }
+    else {
+        @("New-MyTask", "Set-MyTask", "Remove-MyTask", "Get-MyTask",
+            "Complete-MyTask", "Get-MyTaskCategory", "Add-MyTaskCategory",
             "Remove-MyTaskCategory", "Backup-MyTaskFile", "Save-MyTask", "Set-MyTaskHome",
-            "Get-MyTaskArchive","Get-MyTaskHome")
-}
+            "Get-MyTaskArchive", "Get-MyTaskHome")
+    }
 
     # Cmdlets to export from this module
     # CmdletsToExport = '*'
@@ -88,8 +89,8 @@
     #'myTaskPath','myTaskDefaultCategories','myTaskArchivePath','mytaskhome','myTaskCategory'
 
     # Aliases to export from this module
-    AliasesToExport      = 'gmt', 'smt', 'shmt', 'rmt', 'cmt', 'nmt', 'Archive-MyTask', 'task',
-    'Get-MyTaskPath', 'Set-MyTaskPath'
+    AliasesToExport      = 'gmt', 'smt', 'rmt', 'cmt', 'nmt', 'Archive-MyTask', 'task',
+    'Get-MyTaskPath', 'Set-MyTaskPath', 'shmt', "Show-MyTask"
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()
@@ -106,7 +107,7 @@
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = 'XML', 'ToDo', 'Projects', 'Tasks'
+            Tags         =  'ToDo', 'projects', 'tasks', 'reminder'
 
             # A URL to the license for this module.
             LicenseUri   = 'https://github.com/jdhitsolutions/MyTasks/blob/master/LICENSE.txt'

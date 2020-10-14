@@ -34,7 +34,7 @@ PS C:\> backup-mytaskfile -Passthru
 
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
--a----        8/19/2017   6:19 PM          16461 MyTasks_Backup_20170819.xml
+-a----        8/19/2020   6:19 PM          16461 MyTasks_Backup_20200819.xml
 ```
 
 Create a backup copy of the source XML file to the default location,
@@ -45,13 +45,13 @@ Create a backup copy of the source XML file to the default location,
 PS C:\> Backup-MyTaskFile -Destination c:\work\taskback.xml
 ```
 
-Create a backup copy of the source XML file to specified file.
+Create a backup copy of the source XML file to the specified file.
 
 ## PARAMETERS
 
 ### -Destination
 
-Enter the filename and path for the backup xml file.
+Enter the filename and path for the backup XML file.
 
 ```yaml
 Type: String
@@ -125,4 +125,4 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Save-MyTask]()
+[Save-MyTask](Save-MyTask.md)

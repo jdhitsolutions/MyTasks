@@ -35,7 +35,7 @@ Remove-MyTask -InputObject <MyTask> [-WhatIf] [-Confirm] [<CommonParameters>]
 
 Use this command to permanently delete a MyTask work item. This will permanently delete it from the task source XML file. You can remove a task by name or use Get-MyTask to pipe a task object to this command.
 
-As an alternative to deleting tasks you can also archive them.
+As an alternative to deleting tasks, you can also archive them.
 
 ## EXAMPLES
 
@@ -44,7 +44,7 @@ As an alternative to deleting tasks you can also archive them.
 ```powershell
 PS C:\> remove-mytask -Name "Finish DSC Training" -whatif
 What if: Performing the operation "Copy File" on target "Item: C:\Users\Jeff\Documents\myTasks.xml Destination: C:\Users
-\Jeff\documents\MyTasks_Backup_201760822.xml".
+\Jeff\documents\MyTasks_Backup_202060822.xml".
 What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-9c7c-df55dd0d135a".
 ```
 
@@ -78,7 +78,7 @@ Accept wildcard characters: False
 
 ### -Name
 
-Enter task name.
+Enter the task name.
 
 ```yaml
 Type: String
@@ -156,4 +156,4 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Save-MyTask]()
+[Save-MyTask](Save-MyTask.md)

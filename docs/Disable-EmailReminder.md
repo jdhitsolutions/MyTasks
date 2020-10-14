@@ -19,7 +19,7 @@ Disable-EmailReminder [-WhatIf] [-Confirm] [<CommonParameters>]
 
 ## DESCRIPTION
 
-This command will delete the scheduled email reminder job.
+This command will delete the scheduled email reminder job. This command is only available in Windows PowerShell.
 
 ## EXAMPLES
 
@@ -84,6 +84,6 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Enable-EmailReminder]()
+[Enable-EmailReminder](Enable-EmailReminder.md)
 
-[Get-EmailReminder]()
+[Get-EmailReminder](Get-EmailReminder.md)

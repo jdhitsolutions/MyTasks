@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Update the myTask variables
+Update the myTask variables.
 
 ## SYNTAX
 
@@ -19,7 +19,7 @@ Set-MyTaskHome [-Path] <String> [-Passthru] [-WhatIf] [-Confirm] [<CommonParamet
 
 ## DESCRIPTION
 
-The MyTasks module relies on global variables to know where your task-related files are stored. The default on Windows systems is your Documents folder. In Linux it is your home folder. Use this command to modify the path. It will then update all of the related variables. If you specify an alternate path that relies on a PSDrive, the values will be converted to full file system paths.
+The MyTasks module relies on global variables to know where your task-related files are stored. The default on Windows systems is your Documents folder. In Linux, it is your home folder. Use this command to modify the path stored in the global variable. It will then update all of the related variables. If you specify an alternate path that relies on a PSDrive, the values will be converted to full file system paths.
 
 It is recommended that you modify your PowerShell profile to import this module and then run this command to reflect the correct location.
 
@@ -117,6 +117,6 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Get-MyTask]()
+[Get-MyTask](Get-MyTask.md)
 
-[Get-MyTaskHome]()
+[Get-MyTaskHome](Get-MyTaskHome.md)

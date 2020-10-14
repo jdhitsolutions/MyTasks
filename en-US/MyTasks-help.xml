@@ -10,7 +10,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>By default the MyTasks module ships with default categories of Work, Personal, Customer and other. But you can add your own categories. They will be stored in the Documents folder in a file called MyCategory.txt. It is recommended that you use the MyTaskCategory commands to modify this file. As soon as you add a custom category, the default categories are discarded. If you wish to use them, then add them back with this command. See examples.</maml:para>
+      <maml:para>By default the MyTasks module ships with default categories of Work, Personal, Customer and other. But you can add new categories. They will be stored in the Documents folder in a file called MyCategory.txt. It is recommended that you use the MyTaskCategory commands to modify this file. As soon as you add a custom category, the default categories are discarded. If you wish to use them, then add them back with this command. See examples.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -170,7 +170,7 @@ Team</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>Destination</maml:name>
           <maml:Description>
-            <maml:para>Enter the filename and path for the backup xml file.</maml:para>
+            <maml:para>Enter the filename and path for the backup XML file.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -218,7 +218,7 @@ Team</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>Destination</maml:name>
         <maml:Description>
-          <maml:para>Enter the filename and path for the backup xml file.</maml:para>
+          <maml:para>Enter the filename and path for the backup XML file.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -300,7 +300,7 @@ Team</dev:code>
 
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
--a----        8/19/2017   6:19 PM          16461 MyTasks_Backup_20170819.xml</dev:code>
+-a----        8/19/2020   6:19 PM          16461 MyTasks_Backup_20200819.xml</dev:code>
         <dev:remarks>
           <maml:para>Create a backup copy of the source XML file to the default location,</maml:para>
         </dev:remarks>
@@ -309,7 +309,7 @@ Mode                LastWriteTime         Length Name
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Backup-MyTaskFile -Destination c:\work\taskback.xml</dev:code>
         <dev:remarks>
-          <maml:para>Create a backup copy of the source XML file to specified file.</maml:para>
+          <maml:para>Create a backup copy of the source XML file to the specified file.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -677,11 +677,11 @@ Mode                LastWriteTime         Length Name
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; get-mytask -id 6 | Complete-MyTask -Passthru
+        <dev:code>PS C:\&gt; Get-MyTask -id 6 | Complete-MyTask -Passthru
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-6   Update Server03                                10/14/2017 False   work              100</dev:code>
+6   Update Server03                                10/14/2020 False   work              100</dev:code>
         <dev:remarks>
           <maml:para>Get MyTask with an ID of 6 and mark it as complete. By default nothing is written to the pipeline unless you use -Passthru.</maml:para>
         </dev:remarks>
@@ -695,7 +695,7 @@ ID  Name                      Description             DueDate OverDue Category  
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Complete-MyTask -Name "update-resume" -CompletedDate "4/1/2017 4:00PM"</dev:code>
+        <dev:code>PS C:\&gt; Complete-MyTask -Name "update-resume" -CompletedDate "4/1/2020 4:00PM"</dev:code>
         <dev:remarks>
           <maml:para>Mark the task as completed using the specified date.</maml:para>
         </dev:remarks>
@@ -726,7 +726,7 @@ ID  Name                      Description             DueDate OverDue Category  
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>This command will delete the scheduled email reminder job.</maml:para>
+      <maml:para>This command will delete the scheduled email reminder job. This command is only available in Windows PowerShell.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1217,7 +1217,7 @@ ID  Name                      Description             DueDate OverDue Category  
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Use this command to get information about email reminder job. This command requires the PSScheduledJob module.</maml:para>
+      <maml:para>Use this command to get information about the email reminder job. This command requires the PSScheduledJob module.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1264,11 +1264,11 @@ MailServer : mail.company.com
 Port       : 587
 UseSSL     : True
 AsHTML     : True
-LastRun    : 6/19/2018 8:00:08 AM
+LastRun    : 6/19/2020 8:00:08 AM
 LastState  : Completed
-Started    : 6/19/2018 8:00:06 AM
-Ended      : 6/19/2018 8:00:08 AM
-Result     : {[6/19/2018 8:00:08 AM] Message (Tasks Due in the Next 3 Days) sent to artd@company.com from artd@company.com}
+Started    : 6/19/2020 8:00:06 AM
+Ended      : 6/19/2020 8:00:08 AM
+Result     : {[6/19/2020 8:00:08 AM] Message (Tasks Due in the Next 3 Days) sent to artd@company.com from artd@company.com}
 Enabled    : True
 Errors     :
 Warnings   :</dev:code>
@@ -1303,7 +1303,7 @@ Warnings   :</dev:code>
     </command:details>
     <maml:description>
       <maml:para>This command reads MyTask items from the source XML file and creates a list of MyTask objects. The default behavior is to display uncompleted tasks for all categories due in the next 30 days. But you can limit the results through different parameters.</maml:para>
-      <maml:para>Note that the the ID property will be assigned to all tasks in the source XML file, so depending on what parameters you use, you probably won't see a consecutive list of ID numbers.</maml:para>
+      <maml:para>Note that the ID property will be assigned to all tasks in the source XML file, so depending on what parameters you use, you probably won't see a consecutive list of ID numbers.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1504,8 +1504,8 @@ Warnings   :</dev:code>
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-2   Order books               Month of Lunches       8/1/2017 True    Personal            0
-4   Apache Install            Ubuntu 16             9/13/2017 False   work               10</dev:code>
+2   Order books               Month of Lunches       8/1/2020 True    Personal            0
+4   Apache Install            Ubuntu 18             9/13/2020 False   work               10</dev:code>
         <dev:remarks>
           <maml:para>Get active tasks due in the next 30 days.</maml:para>
         </dev:remarks>
@@ -1516,56 +1516,56 @@ ID  Name                      Description             DueDate OverDue Category  
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-1   Update Server02                                 7/14/2017 False   work              100
-2   Order books               Month of Lunches       8/1/2017 True    Personal            0
-3   Update Server01                                 8/30/2017 False   Work              100
-4   Apache Install            Ubuntu 16             9/13/2017 False   work               10
-5   2018 Training Budget                            10/1/2017 False   Personal            0
-6   Conferences                                     10/7/2017 False   other               0
-7   Update Server03                                10/14/2017 False   work                0
-8   Finish DSC Training                            12/31/2017 False   Personal           80</dev:code>
+1   Update Server02                                 7/14/2020 False   work              100
+2   Order books               Month of Lunches       8/1/2020 True    Personal            0
+3   Update Server01                                 8/30/2020 False   Work              100
+4   Apache Install            Ubuntu 18             9/13/2020 False   work               10
+5   2021 Training Budget                            10/1/2020 False   Personal            0
+6   Conferences                                     10/7/2020 False   other               0
+7   Update Server03                                10/14/2020 False   work                0
+8   Finish DSC Training                            12/31/2020 False   Personal           80</dev:code>
         <dev:remarks>
           <maml:para>Get all tasks including completed.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>PS C:\&gt;get-mytask -Category work
+        <dev:code>PS C:\&gt; Get-MyTask -Category work
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-4   Apache Install            Ubuntu 16             9/13/2017 False   work               10
-7   Update Server03                                10/14/2017 False   work                0</dev:code>
+4   Apache Install            Ubuntu 18             9/13/2020 False   work               10
+7   Update Server03                                10/14/2020 False   work                0</dev:code>
         <dev:remarks>
           <maml:para>Get all active tasks in the Work category.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; get-mytask -daysdue 90
+        <dev:code>PS C:\&gt; Get-MyTask -daysdue 90
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-2   Order books               Month of Lunches       8/1/2017 True    Personal            0
-4   Apache Install            Ubuntu 16             9/13/2017 False   work               10</dev:code>
+2   Order books               Month of Lunches       8/1/2020 True    Personal            0
+4   Apache Install            Ubuntu 16             9/13/2020 False   work               10</dev:code>
         <dev:remarks>
           <maml:para>Get all active tasks due in the next 90 days.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; get-mytask -id 4 | format-list -View all
+        <dev:code>PS C:\&gt; Get-MyTask -id 4 | format-list -View all
 
 
 ID           : 4
 Name         : Apache Install
-Description  : Ubuntu 16
-DueDate      : 9/13/2017 8:39:46 AM
+Description  : Ubuntu 18
+DueDate      : 9/13/2020 8:39:46 AM
 Overdue      : False
 Category     : work
 Progress     : 10
-TaskCreated  : 8/23/2017 8:39:46 AM
-TaskModified : 8/23/2017 8:41:56 AM
+TaskCreated  : 8/23/2020 8:39:46 AM
+TaskModified : 8/23/2020 8:41:56 AM
 Completed    : False
 TaskID       : c6fdf70c-a2f7-42c2-8e7d-93e4faa669fd</dev:code>
         <dev:remarks>
@@ -1701,9 +1701,9 @@ TaskID       : c6fdf70c-a2f7-42c2-8e7d-93e4faa669fd</dev:code>
 
 ID  Name                      Description             Created    DueDate Completed  Category
 --  ----                      -----------             -------    ------- ---------  --------
-1   PSTweetChat                                      1/3/2018   1/4/2018 1/3/2018   work
-2   Training followup                                1/2/2018   1/5/2018 1/3/2018   Work
-3   QuickBooks                                       1/2/2018  1/15/2018 1/5/2018   Business
+1   PSTweetChat                                      1/3/2020   1/4/2020 1/3/2020   work
+2   Training followup                                1/2/2020   1/5/2020 1/3/2020   Work
+3   QuickBooks                                       1/2/2020  1/15/2020 1/5/2020   Business
 ...</dev:code>
         <dev:remarks>
           <maml:para>Display all archived tasks.</maml:para>
@@ -1715,10 +1715,10 @@ ID  Name                      Description             Created    DueDate Complet
 
 ID  Name                      Description             Created    DueDate Completed  Category
 --  ----                      -----------             -------    ------- ---------  --------
-8   Update-PSReleaseTools                           1/11/2018  1/18/2018 1/11/2018  project
-18  MyTasks                                          1/5/2018   2/4/2018 2/5/2018   Project
-27  MyReminder                update module          1/3/2018   8/1/2018 10/22/2018 Project
-28  MyNumber                  update module          1/3/2018   7/1/2018 10/22/2018 Project</dev:code>
+8   Update-PSReleaseTools                           1/11/2020  1/18/2020 1/11/2020  project
+18  MyTasks                                          1/5/2020   2/4/2020 2/5/2020   Project
+27  MyReminder                update module          1/3/2020   8/1/2020 10/22/2020 Project
+28  MyNumber                  update module          1/3/2020   7/1/2020 10/22/2020 Project</dev:code>
         <dev:remarks>
           <maml:para>Get completed tasks by category.</maml:para>
         </dev:remarks>
@@ -1749,7 +1749,7 @@ ID  Name                      Description             Created    DueDate Complet
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Use this command to display all of the current categories for the MyTasks module. If you have added custom categories then those categories will be displayed.</maml:para>
+      <maml:para>Use this command to display all of the current categories for the MyTasks module. If you have added custom categories, then those categories will be displayed.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1816,11 +1816,11 @@ Customer</dev:code>
       <command:verb>Get</command:verb>
       <command:noun>MyTaskHome</command:noun>
       <maml:description>
-        <maml:para>Get current values of the myTask variables</maml:para>
+        <maml:para>Get current values of the myTask variables.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>The myTasks module relies on a number of global variables to keep track of the necessary files. While you can use Get-Variable to see the current value, this command simplifies the entire process.</maml:para>
+      <maml:para>The myTasks module relies on several global variables to keep track of the necessary files. While you can use Get-Variable to see the current value, this command simplifies the entire process.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1885,11 +1885,11 @@ myTaskCategory    : C:\Users\Jeff\dropbox\mytasks\myTaskCategory.txt</dev:code>
       <command:verb>New</command:verb>
       <command:noun>MyTask</command:noun>
       <maml:description>
-        <maml:para>Create a new MyTask item</maml:para>
+        <maml:para>Create a new MyTask item.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Use this command to create a new task or work item. At a minimum you must provide a name and category. If you don't specify a deadline, either by a date or number of days, the default will be 7 days from now.</maml:para>
+      <maml:para>Use this command to create a new task or work item. At a minimum you must provide a name and category. If you don't specify a deadline, either by date or number of days, the default will be 7 days from now.</maml:para>
       <maml:para>The command will not write anything to the pipeline unless you use -Passthru. If you do, ignore the task ID. You won't get a valid ID until you run Get-MyTask.</maml:para>
     </maml:description>
     <command:syntax>
@@ -2024,7 +2024,7 @@ myTaskCategory    : C:\Users\Jeff\dropbox\mytasks\myTaskCategory.txt</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
           <maml:name>DueDate</maml:name>
           <maml:Description>
-            <maml:para>When you task is due to be completed.</maml:para>
+            <maml:para>When your task is due to be completed.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
           <dev:type>
@@ -2108,7 +2108,7 @@ myTaskCategory    : C:\Users\Jeff\dropbox\mytasks\myTaskCategory.txt</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
         <maml:name>DueDate</maml:name>
         <maml:Description>
-          <maml:para>When you task is due to be completed.</maml:para>
+          <maml:para>When your task is due to be completed.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
         <dev:type>
@@ -2198,14 +2198,14 @@ myTaskCategory    : C:\Users\Jeff\dropbox\mytasks\myTaskCategory.txt</dev:code>
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-0   Finish DSC Training                             9/21/2017 False   Personal            0</dev:code>
+0   Finish DSC Training                             9/21/2020 False   Personal            0</dev:code>
         <dev:remarks>
           <maml:para>Create a new task using the Training category that is due 30 days from now.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; task reboot-router "1/18/2018 5:00PM" other</dev:code>
+        <dev:code>PS C:\&gt; task reboot-router "1/18/2020 5:00PM" other</dev:code>
         <dev:remarks>
           <maml:para>Create a task using the alias and positional parameters for the task name, due date and category.</maml:para>
         </dev:remarks>
@@ -2218,10 +2218,6 @@ ID  Name                      Description             DueDate OverDue Category  
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-MyTask</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>Get-MyTaskCategory</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -2241,7 +2237,7 @@ ID  Name                      Description             DueDate OverDue Category  
     </command:details>
     <maml:description>
       <maml:para>Use this command to permanently delete a MyTask work item. This will permanently delete it from the task source XML file. You can remove a task by name or use Get-MyTask to pipe a task object to this command.</maml:para>
-      <maml:para>As an alternative to deleting tasks you can also archive them.</maml:para>
+      <maml:para>As an alternative to deleting tasks, you can also archive them.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2286,7 +2282,7 @@ ID  Name                      Description             DueDate OverDue Category  
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>Name</maml:name>
           <maml:Description>
-            <maml:para>Enter task name.</maml:para>
+            <maml:para>Enter the task name.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2372,7 +2368,7 @@ ID  Name                      Description             DueDate OverDue Category  
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>Name</maml:name>
         <maml:Description>
-          <maml:para>Enter task name.</maml:para>
+          <maml:para>Enter the task name.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2456,7 +2452,7 @@ ID  Name                      Description             DueDate OverDue Category  
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; remove-mytask -Name "Finish DSC Training" -whatif
 What if: Performing the operation "Copy File" on target "Item: C:\Users\Jeff\Documents\myTasks.xml Destination: C:\Users
-\Jeff\documents\MyTasks_Backup_201760822.xml".
+\Jeff\documents\MyTasks_Backup_202060822.xml".
 What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-9c7c-df55dd0d135a".</dev:code>
         <dev:remarks>
           <maml:para>The command supports Whatif.</maml:para>
@@ -2491,7 +2487,7 @@ What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>If you have created custom MyTask categories with Add-MyTaskCategory, and wish to delete them, use this command instead of manually modifying the MyTaskCategory.txt file. It is strongly recommended to not remove any category that is still in use with task in the source XML file. In other words, you should not remove any category if it is still being used.</maml:para>
+      <maml:para>If you have created custom MyTask categories with Add-MyTaskCategory, and wish to delete them, use this command instead of manually modifying the MyTaskCategory.txt file. It is strongly recommended to not remove any category that is still in use with a task stored in the source XML file. In other words, you should not remove any category if it is still being used.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2784,14 +2780,14 @@ What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; archive-mytask</dev:code>
+        <dev:code>PS C:\&gt; Archive-MyTask</dev:code>
         <dev:remarks>
           <maml:para>Using the alias, archive all completed tasks to myTaskArchive.xml.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; get-mytask -Category other | save-mytask -Path c:\work\myOther.xml -Passthru
+        <dev:code>PS C:\&gt; Get-MyTask -Category other | Save-MyTask -Path c:\work\myOther.xml -Passthru
 
 
     Directory: C:\work
@@ -2799,7 +2795,7 @@ What if: Performing the operation "Remove-MyTask" on target "2f252083-3c8e-4823-
 
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
--a----        8/23/2017   9:55 AM            833 myOther.xml</dev:code>
+-a----        8/23/2020   9:55 AM            833 myOther.xml</dev:code>
         <dev:remarks>
           <maml:para>Get all tasks in the Other category and save them to a new file. The tasks will be removed from the source file.</maml:para>
         </dev:remarks>
@@ -2834,8 +2830,7 @@ Mode                LastWriteTime         Length Name
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Use this command to change a MyTask work item. You can specify a task by name or ID, although it might be just as easy to pipe from Get-MyTask.</maml:para>
-      <maml:para>Use Complete-MyTask to mark an item as completed.</maml:para>
+      <maml:para>Use this command to change a MyTask work item. You can specify a task by name or ID, although it might be just as easy to pipe from Get-MyTask. Use Complete-MyTask to mark an item as completed.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2882,7 +2877,7 @@ Mode                LastWriteTime         Length Name
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ID</maml:name>
           <maml:Description>
-            <maml:para>Enter the task ID to identify task you wish to modify.</maml:para>
+            <maml:para>Enter the task ID to identify the task you wish to modify.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -3212,7 +3207,7 @@ Mode                LastWriteTime         Length Name
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ID</maml:name>
         <maml:Description>
-          <maml:para>Enter the task ID to identify task you wish to modify.</maml:para>
+          <maml:para>Enter the task ID to identify the task you wish to modify.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
@@ -3350,18 +3345,18 @@ Mode                LastWriteTime         Length Name
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; PS S:\&gt; Set-MyTask -Name "Finish DSC Training" -Progress 70 -duedate "12/31/2017" -Passthru
+        <dev:code>PS C:\&gt; Set-MyTask -Name "Finish DSC Training" -Progress 70 -duedate "12/31/2020" -Passthru
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-16  Finish DSC Training                            12/31/2017 False   Personal           70</dev:code>
+16  Finish DSC Training                            12/31/2020 False   Personal           70</dev:code>
         <dev:remarks>
           <maml:para>Set the progress value and a new due date for the 'Finish DSC Training' task.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; get-mytask -ID 9 | set-mytask -Progress 10 -Category Projects</dev:code>
+        <dev:code>PS C:\&gt; Get-MyTask -ID 9 | Set-MyTask -Progress 10 -Category Projects</dev:code>
         <dev:remarks>
           <maml:para>Get the task with ID 9 and pipe to Set-MyTask which changes the progress value and category.</maml:para>
         </dev:remarks>
@@ -3388,11 +3383,11 @@ ID  Name                      Description             DueDate OverDue Category  
       <command:verb>Set</command:verb>
       <command:noun>MyTaskHome</command:noun>
       <maml:description>
-        <maml:para>Update the myTask variables</maml:para>
+        <maml:para>Update the myTask variables.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>The MyTasks module relies on global variables to know where your task-related files are stored. The default on Windows systems is your Documents folder. In Linux it is your home folder. Use this command to modify the path. It will then update all of the related variables. If you specify an alternate path that relies on a PSDrive, the values will be converted to full file system paths.</maml:para>
+      <maml:para>The MyTasks module relies on global variables to know where your task-related files are stored. The default on Windows systems is your Documents folder. In Linux, it is your home folder. Use this command to modify the path stored in the global variable. It will then update all of the related variables. If you specify an alternate path that relies on a PSDrive, the values will be converted to full file system paths.</maml:para>
       <maml:para>It is recommended that you modify your PowerShell profile to import this module and then run this command to reflect the correct location.</maml:para>
     </maml:description>
     <command:syntax>
@@ -3540,157 +3535,6 @@ ID  Name                      Description             DueDate OverDue Category  
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-MyTaskHome</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-    </command:relatedLinks>
-  </command:command>
-  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-    <command:details>
-      <command:name>Show-MyTask</command:name>
-      <command:verb>Show</command:verb>
-      <command:noun>MyTask</command:noun>
-      <maml:description>
-        <maml:para>Display all active tasks with color highlights.</maml:para>
-      </maml:description>
-    </command:details>
-    <maml:description>
-      <maml:para>This command is very similar to Get-MyTask in terms of what it displays. However, this version writes to the console and uses Write-Host to colorize critical tasks. Those that are due in the next 24 hours will be displayed in yellow. Those that are overdue will be displayed in Red. If you use the -All parameter, any completed tasks will be displayed in Green.</maml:para>
-    </maml:description>
-    <command:syntax>
-      <command:syntaxItem>
-        <maml:name>Show-MyTask</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>All</maml:name>
-          <maml:Description>
-            <maml:para>Display all tasks including those that are completed.</maml:para>
-          </maml:Description>
-          <dev:type>
-            <maml:name>SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Show-MyTask</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Category</maml:name>
-          <maml:Description>
-            <maml:para>Display all tasks that belong to the specified category.</maml:para>
-          </maml:Description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">your defined categories</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Show-MyTask</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>DaysDue</maml:name>
-          <maml:Description>
-            <maml:para>Get tasks due in this number of days. This is the default behavior.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
-          <dev:type>
-            <maml:name>Int32</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>30</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-    </command:syntax>
-    <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>All</maml:name>
-        <maml:Description>
-          <maml:para>Display all tasks including those that are completed.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Category</maml:name>
-        <maml:Description>
-          <maml:para>Display all tasks that belong to the specified category.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>DaysDue</maml:name>
-        <maml:Description>
-          <maml:para>Get tasks due in this number of days. This is the default behavior.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
-        <dev:type>
-          <maml:name>Int32</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>30</dev:defaultValue>
-      </command:parameter>
-    </command:parameters>
-    <command:inputTypes>
-      <command:inputType>
-        <dev:type>
-          <maml:name>MyTask</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-    </command:inputTypes>
-    <command:returnValues>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>MyTask</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-    </command:returnValues>
-    <maml:alertSet>
-      <maml:alert>
-        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
-      </maml:alert>
-    </maml:alertSet>
-    <command:examples>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Show-MyTask</dev:code>
-        <dev:remarks>
-          <maml:para>You will get a colorized output of Get-MyTask for tasks due in the next 30 days.</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Show-MyTask -category Work</dev:code>
-        <dev:remarks>
-          <maml:para>You will get a colorized output of Get-MyTask for all items in the Work category.</maml:para>
-        </dev:remarks>
-      </command:example>
-    </command:examples>
-    <command:relatedLinks>
-      <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>http://bit.ly/2zqithc</maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>Get-MyTask</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>

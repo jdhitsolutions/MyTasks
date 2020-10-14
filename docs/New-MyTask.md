@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Create a new MyTask item
+Create a new MyTask item.
 
 ## SYNTAX
 
@@ -29,7 +29,7 @@ New-MyTask [-Name] <String> [-Days <Int32>] [-Description <String>] [-Passthru] 
 
 ## DESCRIPTION
 
-Use this command to create a new task or work item. At a minimum you must provide a name and category. If you don't specify a deadline, either by a date or number of days, the default will be 7 days from now.
+Use this command to create a new task or work item. At a minimum you must provide a name and category. If you don't specify a deadline, either by date or number of days, the default will be 7 days from now.
 
 The command will not write anything to the pipeline unless you use -Passthru. If you do, ignore the task ID. You won't get a valid ID until you run Get-MyTask.
 
@@ -42,7 +42,7 @@ PS C:\> New-MyTask -Name "Finish DSC Training" -days 30 -Category Personal -Pass
 
 ID  Name                      Description             DueDate OverDue Category     Progress
 --  ----                      -----------             ------- ------- --------     --------
-0   Finish DSC Training                             9/21/2017 False   Personal            0
+0   Finish DSC Training                             9/21/2020 False   Personal            0
 ```
 
 Create a new task using the Training category that is due 30 days from now.
@@ -50,7 +50,7 @@ Create a new task using the Training category that is due 30 days from now.
 ### EXAMPLE 2
 
 ```powershell
-PS C:\> task reboot-router "1/18/2018 5:00PM" other
+PS C:\> task reboot-router "1/18/2020 5:00PM" other
 ```
 
 Create a task using the alias and positional parameters for the task name, due date and category.
@@ -108,7 +108,7 @@ Accept wildcard characters: False
 
 ### -DueDate
 
-When you task is due to be completed.
+When your task is due to be completed.
 
 ```yaml
 Type: DateTime
@@ -198,8 +198,6 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Get-MyTask]()
+[Get-MyTask](Get-MyTask.md)
 
-[Get-MyTaskCategory]()
-
-[Set-MyTask]()
+[Set-MyTask](Set-MyTask.md)

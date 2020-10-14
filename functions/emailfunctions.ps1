@@ -27,7 +27,7 @@ Function Enable-EmailReminder {
         [Parameter(HelpMessage = "Send an HTML body email")]
         [switch]$AsHtml,
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {$_ -gt 0})]
+        [ValidateScript( { $_ -gt 0 })]
         [int]$Days = 3,
         [Parameter(Mandatory, HelpMessage = "Re-enter your local user credentials for the scheduled job task")]
         [ValidateNotNullOrEmpty()]
@@ -65,7 +65,7 @@ Function Enable-EmailReminder {
 
             Set-MyTaskPath -Path $myPath
             #get-variable mytask* | out-string | Write-Host
-            write-host "[$((Get-Date).ToString())] Getting tasks for the next $days days."
+            Write-Host "[$((Get-Date).ToString())] Getting tasks for the next $days days."
             $data = Get-MyTask -Days $Days
             if ($data) {
                 if ($hash.BodyAsHTML) {
@@ -90,7 +90,7 @@ table { width:95%;margin-left:5px; margin-bottom:20px;}
 <br>
 <H1>My Tasks</H1>
 "@
-                    [xml]$html = $data | ConvertTo-HTML -Fragment
+                    [xml]$html = $data | ConvertTo-Html -Fragment
 
                     #parse html to add color attributes
                     for ($i = 1; $i -le $html.table.tr.count - 1; $i++) {
@@ -106,12 +106,14 @@ table { width:95%;margin-left:5px; margin-bottom:20px;}
                         }
                     }
 
-                    $Body = ConvertTo-HTML -body $html.InnerXml -Head $head | Out-String
+                    $Body = ConvertTo-Html -Body $html.InnerXml -Head $head | Out-String
 
                 }
                 else {
                     Write-Host "[$((Get-Date).ToString())] Sending as TEXT" -ForegroundColor Green
-                    $body = $data | Out-string
+                    # 10/14/2020 Modified to explictly select properties because
+                    # default formatting uses ANSI which distorts the converted output.
+                    $body = $data | Select-Object -property ID, Name, Description, DueDate, OverDue | Format-Table | Out-String
                 }
             }
             else {
@@ -228,39 +230,46 @@ Function Get-EmailReminder {
     Process {
         Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting scheduled job myTasksEmail"
         if ((Get-Module PSScheduledJob -ListAvailable) -And (($PSVersionTable.Platform -eq 'Win32NT') -OR ($PSVersionTable.PSEdition -eq 'Desktop'))) {
-            $t = Get-ScheduledJob myTasksEmail
-
-            $hash = $t.InvocationInfo.Parameters[0].where( {$_.name -eq "argumentlist"}).value
-
             Try {
-                #get the last run
-                Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting last job run"
-                $last = Get-Job -name $t.name -Newest 1 -ErrorAction stop
+                $t = Get-ScheduledJob myTasksEmail -erroraction Stop
             }
             Catch {
-                $last = [PSCustomObject]@{
-                    PSEndTime = "11/30/1999" -as [datetime]
-                    State     = "The task has not yet run"
-                }
+                Write-Warning "Could not find the Scheduled Job myTasksEmail"
             }
-            [pscustomobject]@{
-                Task       = $t.Name
-                Frequency  = $t.JobTriggers.Frequency
-                At         = $t.JobTriggers.at.TimeOfDay
-                To         = $hash.To
-                From       = $hash.From
-                MailServer = $hash.SMTPServer
-                Port       = $hash.Port
-                UseSSL     = $hash.UseSSL
-                AsHTML     = $hash.BodyAsHTML
-                LastRun    = $last.PSEndTime
-                LastState  = $last.State
-                Started    = $last.psBeginTime
-                Ended      = $last.psEndTime
-                Result     = $last.output
-                Enabled    = $t.Enabled
-                Errors     = $last.Errors
-                Warnings   = $last.warnings
+
+            if ($t) {
+                $hash = $t.InvocationInfo.Parameters[0].where( { $_.name -eq "argumentlist" }).value
+
+                Try {
+                    #get the last run
+                    Write-Verbose "[$((Get-Date).TimeofDay) PROCESS] Getting last job run"
+                    $last = Get-Job -Name $t.name -Newest 1 -ErrorAction stop
+                }
+                Catch {
+                    $last = [PSCustomObject]@{
+                        PSEndTime = "11/30/1999" -as [datetime]
+                        State     = "The task has not yet run"
+                    }
+                }
+                [pscustomobject]@{
+                    Task       = $t.Name
+                    Frequency  = $t.JobTriggers.Frequency
+                    At         = $t.JobTriggers.at.TimeOfDay
+                    To         = $hash.To
+                    From       = $hash.From
+                    MailServer = $hash.SMTPServer
+                    Port       = $hash.Port
+                    UseSSL     = $hash.UseSSL
+                    AsHTML     = $hash.BodyAsHTML
+                    LastRun    = $last.PSEndTime
+                    LastState  = $last.State
+                    Started    = $last.psBeginTime
+                    Ended      = $last.psEndTime
+                    Result     = $last.output
+                    Enabled    = $t.Enabled
+                    Errors     = $last.Errors
+                    Warnings   = $last.warnings
+                }
             }
         }
         else {

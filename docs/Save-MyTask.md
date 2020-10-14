@@ -28,7 +28,7 @@ This command has an alias of Archive-MyTask.
 ### EXAMPLE 1
 
 ```powershell
-PS C:\> archive-mytask
+PS C:\> Archive-MyTask
 ```
 
 Using the alias, archive all completed tasks to myTaskArchive.xml.
@@ -36,7 +36,7 @@ Using the alias, archive all completed tasks to myTaskArchive.xml.
 ### EXAMPLE 2
 
 ```powershell
-PS C:\> get-mytask -Category other | save-mytask -Path c:\work\myOther.xml -Passthru
+PS C:\> Get-MyTask -Category other | Save-MyTask -Path c:\work\myOther.xml -Passthru
 
 
     Directory: C:\work
@@ -44,7 +44,7 @@ PS C:\> get-mytask -Category other | save-mytask -Path c:\work\myOther.xml -Pass
 
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
--a----        8/23/2017   9:55 AM            833 myOther.xml
+-a----        8/23/2020   9:55 AM            833 myOther.xml
 ```
 
 Get all tasks in the Other category and save them to a new file. The tasks will be removed from the source file.
@@ -145,8 +145,8 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Get-MyTask]()
+[Get-MyTask](Get-MyTask.md)
 
-[Complete-MyTask]()
+[Complete-MyTask](Complete-MyTask.md)
 
-[Get-MyTaskArchive]()
+[Get-MyTaskArchive](Get-MyTaskArchive.md)

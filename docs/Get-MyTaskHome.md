@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get current values of the myTask variables
+Get current values of the myTask variables.
 
 ## SYNTAX
 
@@ -19,7 +19,7 @@ Get-MyTaskHome [<CommonParameters>]
 
 ## DESCRIPTION
 
-The myTasks module relies on a number of global variables to keep track of the necessary files. While you can use Get-Variable to see the current value, this command simplifies the entire process.
+The myTasks module relies on several global variables to keep track of the necessary files. While you can use Get-Variable to see the current value, this command simplifies the entire process.
 
 ## EXAMPLES
 
@@ -59,4 +59,4 @@ http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 
-[Set-MyTaskHome]()
+[Set-MyTaskHome](Set-MyTasksHome.md)

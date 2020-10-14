@@ -129,10 +129,6 @@ InModuleScope MyTasks {
             $Task.Progress | Should -Be 80
         }
 
-        It 'Show-MyTask should write to the host' {
-            {Show-MyTask | Get-Member -ErrorAction Stop} | Should -Throw
-        }
-
         It 'should complete a task' {
             {Complete-Mytask -Name Test1 -ErrorAction Stop} | Should -Not -Throw
             (Get-MyTask -Completed | Measure-Object).Count | Should -Be 1

@@ -19,7 +19,7 @@ Remove-MyTaskCategory [-Category] <String[]> [-WhatIf] [-Confirm] [<CommonParame
 
 ## DESCRIPTION
 
-If you have created custom MyTask categories with Add-MyTaskCategory, and wish to delete them, use this command instead of manually modifying the MyTaskCategory.txt file. It is strongly recommended to not remove any category that is still in use with task in the source XML file. In other words, you should not remove any category if it is still being used.
+If you have created custom MyTask categories with Add-MyTaskCategory, and wish to delete them, use this command instead of manually modifying the MyTaskCategory.txt file. It is strongly recommended to not remove any category that is still in use with a task stored in the source XML file. In other words, you should not remove any category if it is still being used.
 
 ## EXAMPLES
 
@@ -95,6 +95,6 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Get-MyTaskCategory]()
+[Get-MyTaskCategory](Get-MyTaskCategory.md)
 
-[Add-MyTaskCategory]()
+[Add-MyTaskCategory](Add-MyTaskCategory.md)

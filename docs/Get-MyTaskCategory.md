@@ -19,7 +19,7 @@ Get-MyTaskCategory [<CommonParameters>]
 
 ## DESCRIPTION
 
-Use this command to display all of the current categories for the MyTasks module. If you have added custom categories then those categories will be displayed.
+Use this command to display all of the current categories for the MyTasks module. If you have added custom categories, then those categories will be displayed.
 
 ## EXAMPLES
 
@@ -55,6 +55,6 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Add-MyTaskCategory]()
+[Add-MyTaskCategory](Add-MyTaskCategory.md)
 
-[Remove-MyTaskCategory]()
+[Remove-MyTaskCategory](Remove-MyTaskCategory.md)

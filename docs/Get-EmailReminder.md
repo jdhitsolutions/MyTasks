@@ -19,7 +19,7 @@ Get-EmailReminder [<CommonParameters>]
 
 ## DESCRIPTION
 
-Use this command to get information about email reminder job. This command requires the PSScheduledJob module.
+Use this command to get information about the email reminder job. This command requires the PSScheduledJob module.
 
 ## EXAMPLES
 
@@ -37,11 +37,11 @@ MailServer : mail.company.com
 Port       : 587
 UseSSL     : True
 AsHTML     : True
-LastRun    : 6/19/2018 8:00:08 AM
+LastRun    : 6/19/2020 8:00:08 AM
 LastState  : Completed
-Started    : 6/19/2018 8:00:06 AM
-Ended      : 6/19/2018 8:00:08 AM
-Result     : {[6/19/2018 8:00:08 AM] Message (Tasks Due in the Next 3 Days) sent to artd@company.com from artd@company.com}
+Started    : 6/19/2020 8:00:06 AM
+Ended      : 6/19/2020 8:00:08 AM
+Result     : {[6/19/2020 8:00:08 AM] Message (Tasks Due in the Next 3 Days) sent to artd@company.com from artd@company.com}
 Enabled    : True
 Errors     :
 Warnings   :
@@ -67,6 +67,6 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Disable-EmailReminder]()
+[Disable-EmailReminder](Disable-EmailReminder.md)
 
-[Enable-EmailReminder]()
+[Enable-EmailReminder](Enable-EmailReminder.md)

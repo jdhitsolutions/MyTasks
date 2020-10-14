@@ -19,7 +19,7 @@ Add-MyTaskCategory [-Category] <String[]> [-WhatIf] [-Confirm] [<CommonParameter
 
 ## DESCRIPTION
 
-By default the MyTasks module ships with default categories of Work, Personal, Customer and other. But you can add your own categories. They will be stored in the Documents folder in a file called MyCategory.txt. It is recommended that you use the MyTaskCategory commands to modify this file. As soon as you add a custom category, the default categories are discarded. If you wish to use them, then add them back with this command. See examples.
+By default the MyTasks module ships with default categories of Work, Personal, Customer and other. But you can add new categories. They will be stored in the Documents folder in a file called MyCategory.txt. It is recommended that you use the MyTaskCategory commands to modify this file. As soon as you add a custom category, the default categories are discarded. If you wish to use them, then add them back with this command. See examples.
 
 ## EXAMPLES
 
@@ -110,6 +110,6 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Get-MyTaskCategory]()
+[Get-MyTaskCategory](Get-MyTaskCategory.md)
 
-[Remove-MyTaskCategory]()
+[Remove-MyTaskCategory](Remove-MyTaskCategory.md)

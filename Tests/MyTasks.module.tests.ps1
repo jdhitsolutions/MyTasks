@@ -9,11 +9,11 @@ Describe 'MyTasks' {
 
     $Module = Get-Module -Name MyTasks
     It 'should have 17 functions' {
-        $Module.ExportedFunctions.count | Should -Be 17
+        $Module.ExportedFunctions.count | Should -Be 16
     }
 
     It 'should have 10 aliases command' {
-        $Module.ExportedAliases.Count | Should -Be 10
+        $Module.ExportedAliases.Count | Should -Be 11
     }
 
     It 'should not export any variables' {
