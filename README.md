@@ -201,7 +201,6 @@ You should read full help and examples for all commands as well as the [about_My
 + [Remove-MyTaskCategory](docs/Remove-MyTaskCategory.md)
 + [Save-MyTask](docs/Save-MyTask.md)
 + [Set-MyTask](docs/Set-MyTask.md)
-+ [Show-MyTask](docs/Show-MyTask.md)
 + [Enable-EmailReminder](docs/Enable-EmailReminder.md)
 + [Disable-EmailReminder](docs/Disable-EmailReminder.md)
 + [Get-EmailReminder](docs/Get-EmailReminder.md)
