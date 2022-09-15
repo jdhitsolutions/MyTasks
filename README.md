@@ -2,7 +2,9 @@
 
 [![PSGallery Version](https://img.shields.io/powershellgallery/v/myTasks.png?style=for-the-badge&logo=powershell&label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/myTasks/) [![PSGallery Downloads](https://img.shields.io/powershellgallery/dt/MyTasks.png?style=for-the-badge&label=Downloads)](https://www.powershellgallery.com/packages/MyTasks/)
 
-This PowerShell module is designed as a task or a simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell 7.x  with a few limitations. You can install the latest version from the PowerShell Gallery. You might want to need the `-Scope`parameter for PowerShell 7.x.
+> :heavy_exclamation_mark: This module is __no longer active development__. It has been replaced by [PSWorkItem](https://github.com/jdhitsolutions/PSWorkItem). The PSWorkItem module uses the same concepts as MyTasks, but stores tasks, PSWorkItems in the new module, in a SQLite database. Installing PSWorkItem will also install the [MySQLite])https://github.com/jdhitsolutions/MySQLite/) module.
+
+This PowerShell module is designed as a task or a simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell 7.x  with a few limitations. You can install the latest version from the PowerShell Gallery. You might want to need the `-Scope` parameter for PowerShell 7.x.
 
 ```powershell
 Install-Module MyTasks [-scope currentuser]
@@ -207,9 +209,3 @@ You should read full help and examples for all commands as well as the [about_My
 + [Set-MyTaskHome](docs/Set-MyTaskHome.md)
 + [Get-MyTaskHome](docs/Get-MyTaskHome.md)
 + [Get-MyTaskArchive](docs/Get-MyTaskArchive.md)
-
-## Limitations
-
-Please post any issues, questions, or feature requests in the [Issues](https://github.com/jdhitsolutions/MyTasks/issues) section of this module's GitHub repository.
-
-Last Updated 2020-10-14 16:00:30Z
