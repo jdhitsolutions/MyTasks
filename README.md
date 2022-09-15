@@ -2,7 +2,7 @@
 
 [![PSGallery Version](https://img.shields.io/powershellgallery/v/myTasks.png?style=for-the-badge&logo=powershell&label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/myTasks/) [![PSGallery Downloads](https://img.shields.io/powershellgallery/dt/MyTasks.png?style=for-the-badge&label=Downloads)](https://www.powershellgallery.com/packages/MyTasks/)
 
-> :heavy_exclamation_mark: This module is __no longer active development__. It has been replaced by [PSWorkItem](https://github.com/jdhitsolutions/PSWorkItem). The PSWorkItem module uses the same concepts as MyTasks, but stores tasks, PSWorkItems in the new module, in a SQLite database. Installing PSWorkItem will also install the [MySQLite])https://github.com/jdhitsolutions/MySQLite/) module.
+> :heavy_exclamation_mark: The `MyTasks` module is __no longer under active development__. It has been replaced by [PSWorkItem](https://github.com/jdhitsolutions/PSWorkItem). The PSWorkItem module uses the same concepts as MyTasks, but stores tasks, PSWorkItems in the new module, in a SQLite database. Installing PSWorkItem will also install the [MySQLite])https://github.com/jdhitsolutions/MySQLite/) module.  All open issues for MyTasks will be closed.
 
 This PowerShell module is designed as a task or a simple To-Do manager. The module contains several commands for working with tasks. It should work with both Windows PowerShell and PowerShell 7.x  with a few limitations. You can install the latest version from the PowerShell Gallery. You might want to need the `-Scope` parameter for PowerShell 7.x.
 
